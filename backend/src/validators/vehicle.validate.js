@@ -28,6 +28,7 @@ const vehicleSchema = joi.object({
 })
 
 const validateVehicle = (req,res,next) => {
+    console.log(req.body)
     const {error} = vehicleSchema.validate(req.body);
     if(error){
         return res.status(400).json({
