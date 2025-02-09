@@ -16,8 +16,9 @@ app.use(express.json({ limit: "20kb" }));
 app.use(morgan('dev'));
 
 import vehicleRouter from './routes/vehicle.route.js';
+import ratingRouter from './routes/rating.route.js';
 app.use('/api/v1/vehicles', vehicleRouter);
-
+app.use('/api/v1/ratings', ratingRouter);
 
 
 
