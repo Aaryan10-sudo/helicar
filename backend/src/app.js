@@ -5,30 +5,25 @@ import { errorHandler } from './middlewares/apiError.js';
 
 const app = express();
 app.use(
-    cors({
-      origin: process.env.CORS_ORIGIN,
-      credentials: true,
-    })
-  );
+  cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+  })
+);
 
-
-app.use(express.json({ limit: "20kb" }));
+app.use(express.json({ limit: '20kb' }));
 app.use(morgan('dev'));
 
 import vehicleRouter from './routes/vehicle.route.js';
 import ratingRouter from './routes/rating.route.js';
+import roleRouter from './routes/role.route.js';
 app.use('/api/v1/vehicles', vehicleRouter);
 app.use('/api/v1/ratings', ratingRouter);
+app.use('/api/v1/role', roleRouter);
 
-
-
-
-
-app.use(errorHandler)
+app.use(errorHandler);
 app.get('/', (req, res) => {
-    res.send('Ok');
-    });
+  res.send('Ok');
+});
 
-
-
-export {app};
+export { app };

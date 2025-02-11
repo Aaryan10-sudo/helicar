@@ -1,4 +1,4 @@
-import Vehicle from "../models/vehicle.model.js";
+import Vehicle from '../models/vehicle.model.js';
 
 const createVehicle = async (vehicle) => {
   try {
@@ -8,7 +8,7 @@ const createVehicle = async (vehicle) => {
   }
 };
 
-const getVehicles = async ({
+const   getVehicles = async ({
   name,
   type,
   minPrice,
@@ -23,24 +23,24 @@ const getVehicles = async ({
     const query = {};
 
     if (name) {
-      query.name = { $regex: name, $options: "i" }; // case-insensitive search
+      query.name = { $regex: name, $options: 'i' }; // case-insensitive search
     }
 
     // Type: Exact match
     if (type) {
-      query.type = { $regex: type, $options: "i" }; // case-insensitive search
+      query.type = { $regex: type, $options: 'i' }; // case-insensitive search
     }
 
     if (minPrice || maxPrice) {
-      query["pricing.perDay"] = {};
-      if (minPrice) query["pricing.perDay"].$gte = minPrice;
-      if (maxPrice) query["pricing.perDay"].$lte = maxPrice;
+      query['pricing.perDay'] = {};
+      if (minPrice) query['pricing.perDay'].$gte = minPrice;
+      if (maxPrice) query['pricing.perDay'].$lte = maxPrice;
     }
 
     if (season) {
-      query["pricing.seasonalDiscounts.season"] = {
+      query['pricing.seasonalDiscounts.season'] = {
         $regex: season,
-        $options: "i",
+        $options: 'i',
       };
     }
 
@@ -49,19 +49,18 @@ const getVehicles = async ({
     }
 
     if (capacity) {
-      query["capacity.passengers"] = { $gte: capacity };
+      query['capacity.passengers'] = { $gte: capacity };
     }
 
     const totalVehicles = await Vehicle.countDocuments(query);
     const vehicles = await Vehicle.find(query)
       .limit(limit)
       .skip((page - 1) * limit);
-    
-    return { 
-      vehicles, 
-      totalPages: Math.ceil(totalVehicles / limit) 
+
+    return {
+      vehicles,
+      totalPages: Math.ceil(totalVehicles / limit),
     };
-    
   } catch (err) {
     throw err;
   }
