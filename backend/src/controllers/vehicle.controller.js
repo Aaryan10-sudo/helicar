@@ -31,7 +31,7 @@ const create = asyncHandler(async (req, res) => {
   }
 
   if (vehicleImage) {
-    vehicle.imageUrl = vehicleImage.url;
+    vehicle.imageUrl = vehicleImage.secure_url;
   }
   const newVehicle = await createVehicle(vehicle);
   return res
