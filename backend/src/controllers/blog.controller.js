@@ -67,7 +67,7 @@ const remove = asyncHandler(async(req,res)=>{
     const {blogId} = req.params;
     const deletedBlog = await deleteBlog(blogId);
     if(!deletedBlog){
-        throw new ApiError(404, "Blog not found")
+        throw new ApiError(404, "Blog not found");
     }
     return res.status(204).json(new ApiResponse("Blog deleted successfully", deletedBlog))
 })

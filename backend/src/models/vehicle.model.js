@@ -1,13 +1,18 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const vehicleSchema = mongoose.Schema({
     name:{
         type: String,
         required: true
-
     },
     type:{
-        type: String,
+        type: Schema.ObjectId,
+        ref: "VehicleType",
+        required: true
+    },
+    category:{
+        type:Schema.ObjectId,
+        ref: "Category",
         required: true
     },
     capacity:{
