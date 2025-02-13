@@ -64,7 +64,7 @@ const verify = asyncHandler(async (req, res) => {
     updatedAt: new Date(),
   };
   await createBooking(newBooking);
-
+ 
   return res.status(201).json(new ApiResponse("Booking confirmed"));
 });
 
