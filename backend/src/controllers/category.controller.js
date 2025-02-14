@@ -14,7 +14,7 @@ import {
 const create = asyncHandler(async (req, res) => {
   const category = req.body;
   const categoryExist = await getCategoryByName(category.name);
-  if (categoryExist) {
+  if (categoryExist.length > 0) {
     throw new ApiError(400, "Category with this name already axist");
   }
   const newCategory = await createCategory(category);
