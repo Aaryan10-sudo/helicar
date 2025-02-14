@@ -3,6 +3,7 @@ import joi from 'joi';
 const vehicleSchema = joi.object({
     name: joi.string().required(),
     type: joi.string().required(),
+    category: joi.string().required(),
     capacity: joi.object({
         passengers: joi.number().required(),
         luggage: joi.number().required()
