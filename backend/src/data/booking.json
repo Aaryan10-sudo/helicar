@@ -1,0 +1,19 @@
+{
+    "user":{
+        "fullName":"Sacar chaulagain",
+        "email":"sakarchaulagain@gmail.com",
+        "phone":"9848933484"
+    },
+    "vehicle":"67a48068a09b5e18bf69c6a7",
+    "pickup":{
+        "address":"Pokhara-4-Fewa lake",
+        "date":"2025-02-13",
+        "time":"10:00"
+    },
+     "dropoff":{
+        "address":"Gokarneshwor-8-Besigau",
+        "date":"2025-02-13",
+        "time":"10:00"
+    },
+    "message":"Fast fast"
+}
