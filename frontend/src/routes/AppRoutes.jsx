@@ -7,6 +7,11 @@ const AuthLayout = lazy(() => import("../components/layout/AuthLayout"));
 const Login = lazy(() => import("../pages/auth/Login"));
 const ForgotPassword = lazy(() => import("../pages/auth/ForgotPassword"));
 const ResetPassword = lazy(() => import("../pages/auth/ResetPassword"));
+<<<<<<< Updated upstream
+=======
+const ContactUs = lazy(() => import("../pages/user/Company"));
+const VehicleRental = lazy(() => import("../pages/user/VehicleRental"));
+>>>>>>> Stashed changes
 
 const CollegeDashboardLayout = lazy(
   () => import("../components/layout/CollegeDashboardLayout")
@@ -17,6 +22,11 @@ const AppRoutes = () => {
   return (
     <Suspense fallback={<RoutingLoader />}>
       <Routes>
+<<<<<<< Updated upstream
+=======
+        <Route path="/company" element={<ContactUs />} />
+        <Route path="/vehicle-rental" element={<VehicleRental />} />
+>>>>>>> Stashed changes
         {/* Auth Routes */}
         <Route element={<AuthLayout />}>
           <Route path="/" element={<Login />} />

@@ -5,6 +5,8 @@ import sms from "./sms.png";
 import lock from "./lock.png";
 import upload from "./upload.png";
 import reading from "./reading.png";
+import muktinathTemple from "./muktinathTemple.svg";
+import vehicle from "./vehicle.svg";
 
 export const assets = {
   leftSideImg,
@@ -14,4 +16,6 @@ export const assets = {
   lock,
   upload,
   reading,
+  muktinathTemple,
+  vehicle,
 };
