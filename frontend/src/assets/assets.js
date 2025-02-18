@@ -1,21 +1,13 @@
-import leftSideImg from "./leftSideImg.png";
-import eyeclosed from "./eyeclosed.png";
-import eyeopen from "./eyeopen.png";
-import sms from "./sms.png";
-import lock from "./lock.png";
-import upload from "./upload.png";
-import reading from "./reading.png";
 import muktinathTemple from "./muktinathTemple.svg";
 import vehicle from "./vehicle.svg";
+import contact1 from "./contact1.svg"
+import contactCar from "./contactCar.svg"
+import rightArrow from "./rightArrow.svg"
 
 export const assets = {
-  leftSideImg,
-  eyeclosed,
-  eyeopen,
-  sms,
-  lock,
-  upload,
-  reading,
   muktinathTemple,
   vehicle,
+  contact1,
+  contactCar,
+  rightArrow,
 };
