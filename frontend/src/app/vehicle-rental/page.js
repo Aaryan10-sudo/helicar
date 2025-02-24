@@ -1,53 +1,13 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import { assets } from "../../assets/assets";
 import Head from "next/head";
 import Image from "next/image";
+import useGetVehicle from "@/hooks/useVehicle";
+import VehicleSkeleton from "@/components/loader/vehicleSkeleton";
 
 const VehicleRental = () => {
-  const tours = [
-    {
-      title: "Muktinath Temple Tour",
-      image: assets.muktinathTemple,
-      luggages: 4,
-      people: 4,
-      transmission: "Manual",
-      price: 60,
-    },
-    {
-      title: "Pokhara City Tour",
-      image: assets.muktinathTemple,
-      luggages: 2,
-      people: 3,
-      transmission: "Automatic",
-      price: 40,
-    },
-    {
-      title: "Everest Base Camp Tour",
-      image: assets.muktinathTemple,
-      luggages: 5,
-      people: 5,
-      transmission: "Manual",
-      price: 100,
-    },
-    {
-      title: "Chitwan Jungle Safari",
-      image: assets.muktinathTemple,
-      luggages: 6,
-      people: 4,
-      transmission: "Automatic",
-      price: 70,
-    },
-    {
-      title: "Lumbini Pilgrimage Tour",
-      image: assets.muktinathTemple,
-      luggages: 3,
-      people: 2,
-      transmission: "Manual",
-      price: 50,
-    },
-  ];
-  const isLoading = false;
-  console.log;
+  const { loading, vehicles } = useGetVehicle();
 
   return (
     <>
@@ -62,7 +22,7 @@ const VehicleRental = () => {
         {/* Vehicle rental first */}
         <div
           className="flex flex-col items-center bg-cover bg-center py-12 lg:py-24 px-4 sm:px-6 lg:px-8 gap-8 md:gap-16 xl:gap-[500px]"
-          style={{ backgroundImage: `url(${assets.vehicle})` }}
+          style={{ backgroundImage: `url(${assets.vehicle.src})` }}
         >
           <div className="flex flex-col items-center w-full max-w-4xl xl:max-w-6xl gap-4">
             <h1 className="text-3xl sm:text-4xl font-Comfortaa md:text-5xl text-primary font-bold text-center">
@@ -134,54 +94,56 @@ const VehicleRental = () => {
             </h1>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {isLoading ? (
-              <>
-                <div className="w-full max-w-sm mx-auto p-4 sm:p-6 rounded-2xl shadow-xl transition-shadow">
-                  <div className="flex justify-center items-center h-full">
-                    <p className="font-bold text-2xl sm:text-3xl text-primary">
-                      Loading...
-                    </p>
+          
+          {loading ? (
+            // Show 6 skeleton placeholders while loading
+            [...Array(6)].map((_, index) => <VehicleSkeleton key={index} />)
+          ) : vehicles?.data?.vehicles?.length > 0 ? (
+            vehicles.data.vehicles.map((vehicle, index) => (
+              <div
+                key={index}
+                className="w-full max-w-sm mx-auto p-4 sm:p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow"
+              >
+                <div className="flex flex-col gap-4">
+                  <h2 className="font-bold font-Comfortaa text-primary text-xl sm:text-2xl">
+                    {vehicle.name}
+                  </h2>
+                  <Image
+                    src={assets.muktinathTemple.src}
+                    width={assets.muktinathTemple.width}
+                    height={assets.muktinathTemple.height}
+                    className="w-full h-48 object-cover rounded-lg"
+                    alt="Vehicle Image"
+                  />
+                  <div className="flex justify-between text-subheading text-sm">
+                    <span>{vehicle.capacity.luggage} Luggages</span>
+                    <span>{vehicle.capacity.passengers} People</span>
+                    <span>{vehicle.transmission}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div className="text-[#222121]">
+                      <span className="text-2xl sm:text-3xl font-bold">
+                        ${vehicle.pricing.perDay}/
+                      </span>
+                      <span className="text-sm ml-1">per day</span>
+                    </div>
+                    <button className="bg-[#045B8F] px-6 py-2 rounded-2xl text-white font-bold hover:bg-primary-dark transition-colors hover:cursor-pointer">
+                      Book Now
+                    </button>
                   </div>
                 </div>
-              </>
-            ) : (
-              tours.map((tour, index) => (
-                <div
-                  key={index}
-                  className="w-full max-w-sm mx-auto p-4 sm:p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow"
-                >
-                  <div className="flex flex-col gap-4">
-                    <h2 className="font-bold font-Comfortaa text-primary text-xl sm:text-2xl">
-                      {tour.title}
-                    </h2>
-                    <Image
-                      src={tour.image.src}
-                      width={tour.image.width}
-                      height={tour.image.height}
-                      className="w-full h-48 object-cover rounded-lg"
-                      alt="Tour Image"
-                    />
-
-                    <div className="flex justify-between text-subheading text-sm">
-                      <span>{tour.luggages} Luggages</span>
-                      <span>{tour.people} People</span>
-                      <span>{tour.transmission}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <div className="text-[#222121]">
-                        <span className="text-2xl sm:text-3xl font-bold">
-                          ${tour.price}/
-                        </span>
-                        <span className="text-sm ml-1">per day</span>
-                      </div>
-                      <button className="bg-[#045B8F] px-6 py-2 rounded-2xl text-white font-bold hover:bg-primary-dark transition-colors hover:cursor-pointer">
-                        Book Now
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
+              </div>
+            ))
+          ) : (
+            // Display when no vehicles are found
+            <div className="w-full max-w-sm mx-auto p-4 sm:p-6 rounded-2xl shadow-xl transition-shadow">
+              <div className="flex justify-center items-center h-full">
+                <p className="font-bold text-2xl sm:text-3xl text-red-500">
+                  No vehicles found.
+                </p>
+              </div>
+            </div>
+          )}
           </div>
         </div>
       </div>
