@@ -1,0 +1,28 @@
+name: Lint PR
+
+on:
+  pull_request:
+    branches:
+      - staging
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sucess-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Authenticate with GitHub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        run: echo "Using custom GITHUB_TOKEN"
+
+
+      - name: Run a sample step
+        run: echo "Workflow is running successfully!"
