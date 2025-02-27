@@ -9,6 +9,7 @@ import whyUs3 from "./whyUs3.svg"
 import women from "./women.svg"
 import star from "./star.svg"
 import blog from "./blog.svg"
+import navlogo from "./navlogo.svg"
 
 export const assets = {
   muktinathTemple,
@@ -22,4 +23,5 @@ export const assets = {
   women,
   star,
   blog,
+  navlogo
 };
