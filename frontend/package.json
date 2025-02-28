@@ -6,7 +6,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "vercel-build": "next build",
     "lint": "next lint"
   },
   "dependencies": {
@@ -27,6 +26,6 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "next": "^15.2.0",
-     "vercel": "^41.2.2"
+    "vercel": "^41.2.2"
   }
 }
