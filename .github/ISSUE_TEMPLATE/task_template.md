@@ -1,5 +1,5 @@
 ---
-name: Task template
+name: Task
 about: Capture details for the tasks
 title: ''
 labels: nnine

@@ -1,5 +1,5 @@
 ---
-name: Story Template
+name: Story
 about: Capture user requirements as a story that can be broken into tasks
 title: "[Story]: "
 labels: story, nnine

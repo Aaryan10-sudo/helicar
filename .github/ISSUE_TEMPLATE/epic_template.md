@@ -1,5 +1,5 @@
 ---
-name: Epic Template
+name: Epic
 about: Define a high-level initiative that consists of multiple stories and tasks
 title: "[Epic]: "
 labels: epic, nnine
