@@ -53,7 +53,7 @@ const Navbar = () => {
               className="flex items-center space-x-1"
               onMouseEnter={() => setDropdownOpen(true)}
               onMouseLeave={() => setDropdownOpen(false)}
-            >
+            > 
               <span className="font-Comfortaa font-medium leading-4 text-[#222121]">Heli Charter</span>
             </button>
             {dropdownOpen && (
