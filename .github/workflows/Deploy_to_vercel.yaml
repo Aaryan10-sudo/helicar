@@ -1,10 +1,9 @@
 name: Deploy to Vercel
+
 on:
   push:
     branches:
-      
       - "staging"
-
 
 jobs:
   Deploy-Preview:
@@ -20,15 +19,12 @@ jobs:
 
       - name: Install Vercel CLI
         run: npm install -g vercel
-      
-      # - name: Install dependencies
-      #   run: npm install
 
       - name: Deploy to Vercel Action
         uses: BetaHuhn/deploy-to-vercel-action@v1
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          WORKING_DIRECTORY: ./frontend
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          vercel_token: ${{ secrets.VERCEL_TOKEN }}
+          vercel_org_id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel_project_id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working_directory: ./frontend
