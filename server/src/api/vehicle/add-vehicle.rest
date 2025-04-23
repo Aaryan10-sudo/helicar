@@ -1,0 +1,18 @@
+POST http://localhost:3000/vehicle/create
+Content-Type: application/json
+
+{
+  "vehicleName": "Mini Bus",
+  "numberPlate": "BUS7181",
+  "vehicleCategory": "0737916a-f206-47f9-a145-c07a4f01c443",
+  "vehicleType": "472a1cd3-7106-47c4-b8ad-8954f15f63e2",
+  "features": {
+    "luggage": "18",
+    "seats": "10",
+    "transmission": "Manual" 
+  },
+  "vehicleImage": "https://imgs.search.brave.com/6UAsXujRWrSgo9qitsSFcU2taHL0ndCPYQTf7nWgqHE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/cmFqYXN0aGFudG91/cnBsYW5uZXIuY29t/L2ltYWdlcy9NaW5p/QnVzLVJlbnRhbC1O/ZXBhbC5qcGc",
+  "vehicleBrand": "KP OLI",
+  "vehicleDescription": "A reliable and fuel-efficient sedan.",
+  "vehiclePrice": "50000"
+}

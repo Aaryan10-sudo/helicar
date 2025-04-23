@@ -1,0 +1,32 @@
+[
+  {
+    "vehicleName": "Tata Nano",
+    "numberPlate": "NEYMAR2015",
+    "vehicleCategory": "89f279b6-9b60-412f-a170-72c2406c1faa",
+    "vehicleType": "fc9727ff-5030-48ee-baef-1aa7dc642f0a",
+    "features": {
+      "luggage": "4",
+      "seats": "2",
+      "transmission": "Manual"
+    },
+    "vehicleImage": "https://imgs.search.brave.com/P-sweGLQq89pPK6BBV69QL4P8liFjMIkt-VYQWss7tQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvODEx/NjkxMTAwL3Bob3Rv/L211bWJhaS1pbmRp/YS1tYXJjaC0yMy0y/MDA5LXRhdGEtbmFu/by1waG90b2dyYXBo/ZWQtYWZ0ZXItYmVp/bmctbGF1bmNoZWQt/aW4tbXVtYmFpLmpw/Zz9zPTYxMng2MTIm/dz0wJms9MjAmYz1s/WUFGMkZTNl9UQVdQ/MWJudUoxcXFjelp5/M1VTaE9SZTZxVTlp/cFJJZl9RPQ",
+    "vehicleBrand": "Tata",
+    "vehicleDescription": "A reliable and fuel-efficient sedan.",
+    "vehiclePrice": "10000"
+  },
+  {
+    "vehicleName": "Toyota Fortuner",
+    "numberPlate": "NEYMAR2016",
+    "vehicleCategory": "23028dc9-fb3e-4284-9779-0x`8098cdfe828",
+    "vehicleType": "ef471a1c-bf53-4e92-bd92-66d82618dc4f",
+    "features": {
+      "luggage": "8",
+      "seats": "4",
+      "transmission": "Automatic"
+    },
+    "vehicleImage": "https://imgs.search.brave.com/cvUnEMFCBDmJoCpvDq9w7xuZayvQtzNhuzZzJAJAzNM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGlt/Zy5jYXJkZWtoby5j/b20vaW1hZ2VzL2Nh/cmV4dGVyaW9yaW1h/Z2VzLzkzMHg2MjAv/VG95b3RhL0ZvcnR1/bmVyLzEwOTAzLzE2/OTA1NDQxNTE0NDAv/cmVhci1sZWZ0LXZp/ZXctMTIxLmpwZz9p/bXdpZHRoPTg5MCZp/bXBvbGljeT1yZXNp/emU",
+    "vehicleBrand": "Toyota",
+    "vehicleDescription": "A reliable and fuel-efficient sedan.",
+    "vehiclePrice": "90000"
+  }
+]

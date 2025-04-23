@@ -1,0 +1,106 @@
+doctype html
+html
+  head
+    title Vehicle Search
+    style.
+      body {
+        margin: 0;
+        padding: 2rem;
+        font-family: 'Segoe UI', sans-serif;
+        background: #fff;
+      }
+
+      .container {
+        padding: 1rem;
+        background: #f8f8f8;
+        border-radius: 10px;
+      }
+
+      .vehicle-types {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .vehicle-btn {
+        padding: 0.4rem 1rem;
+        background: #eee;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .vehicle-btn:hover {
+        background-color: #ddd;
+      }
+
+      .form-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: end;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      input[type="text"],
+      input[type="date"],
+      input[type="time"] {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        min-width: 180px;
+      }
+
+      .date-time {
+        display: flex;
+        gap: 0.3rem;
+      }
+
+      .show-btn {
+        background: linear-gradient(to right, #006ba6, #009acb);
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 0.6rem 1.5rem;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+  body
+    .container
+      .vehicle-types
+        button.vehicle-btn Tourist Bus
+        button.vehicle-btn Heli charter
+        button.vehicle-btn Car
+        button.vehicle-btn Toyota Hiace
+        button.vehicle-btn Jeep
+        button.vehicle-btn Bus
+
+      .form-section
+        .form-group
+          label(for="pickup") Pick-up
+          input#pickup(type="text", placeholder="Search client name, car, etc")
+
+        .form-group
+          label(for="return") Return
+          input#return(type="text", placeholder="Search client name, car, etc")
+
+        .form-group
+          label Pick-up date
+          .date-time
+            input(type="date", value="2025-04-24")
+            input(type="time", value="12:30")
+
+        .form-group
+          label Return Date
+          .date-time
+            input(type="date", value="2025-04-24")
+            input(type="time", value="12:30")
+
+        button.show-btn Show Cars

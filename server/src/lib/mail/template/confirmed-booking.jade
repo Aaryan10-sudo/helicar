@@ -1,0 +1,92 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Vehicle Booking Confirmation
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+      .email-container {
+        width: 100%;
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .email-header {
+        text-align: center;
+        background-color: #2C3E50;
+        color: #fff;
+        padding: 20px;
+        border-radius: 8px 8px 0 0;
+      }
+      .email-header h1 {
+        font-size: 24px;
+        margin: 0;
+      }
+      .email-body {
+        padding: 20px;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      .otp-box {
+        background-color: #ecf0f1;
+        border-left: 6px solid #3498db;
+        padding: 15px;
+        font-size: 18px;
+        margin-top: 20px;
+      }
+      .footer {
+        text-align: center;
+        font-size: 14px;
+        color: #7f8c8d;
+        margin-top: 30px;
+      }
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #3498db;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+      .button:hover {
+        background-color: #2980b9;
+      }
+
+  body
+    .email-container
+      .email-header
+        h1 Vehicle Booking Confirmation
+
+      .email-body
+        p Dear #{customerName},
+        p
+          | Thank you for booking with us! We are excited to confirm your vehicle booking for #{vehicleModel}.
+          br
+          | Your booking has been successfully processed, and we are ready to provide you with an amazing experience.
+          
+        .otp-box
+          p Your OTP for verifying your booking is:
+          h2 #{OTP}
+
+        p
+          | Please share this OTP with your driver at the time of pickup.
+        
+
+      .footer
+        p If you have any questions, feel free to contact us at our support team.
+
+        p
+          | &copy; #{new Date().getFullYear()} Helicar Booking. All rights reserved.
+

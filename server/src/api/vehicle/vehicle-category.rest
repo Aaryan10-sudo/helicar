@@ -1,0 +1,6 @@
+POST http://localhost:3000/vehicle-category/create
+Content-Type: application/json
+
+{
+    "name":"JEEP"
+}
