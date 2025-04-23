@@ -15,7 +15,7 @@ const page = () => {
   const [hiace, setHiace] = useState([]);
 
   const handleBookNow = (cardId) => {
-    router.push(`/booking/cars/form?cardId=${cardId}`);
+    router.push(`/complete-booking?cardId=${cardId}`);
   };
 
   const getAllHiace = async () => {

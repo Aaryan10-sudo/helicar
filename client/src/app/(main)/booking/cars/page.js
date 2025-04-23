@@ -15,7 +15,7 @@ const page = () => {
   const [cars, setCars] = useState([]);
 
   const handleBookNow = (cardId) => {
-    router.push(`/booking/cars/form?cardId=${cardId}`);
+    router.push(`/complete-booking?cardId=${cardId}`);
   };
 
   const getAllCars = async () => {
@@ -62,7 +62,7 @@ const page = () => {
                   >
                     <div className="relative w-full h-[60%]">
                       <img
-                        src={value.vehicleImage}
+                        src={`${value.vehicleImage}`}
                         alt="car"
                         className="w-full h-full object-cover rounded-tr-md rounded-tl-md"
                       />

@@ -3,6 +3,7 @@ import "../globals.css";
 import AdminSidebar from "@/components/layout/AdminSidebar";
 import AdminNavbar from "@/components/layout/AdminNavbar";
 import Navbar from "@/components/layout/navbar";
+import ProtectedAdmin from "./ProtectedAdmin";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,13 +36,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${comfortaa.variable} ${lexend.variable} font-lexend`}>
-        <section className="flex">
-          <AdminSidebar />
-          <div className="w-full">
-            <AdminNavbar />
-            {children}
-          </div>
-        </section>
+        <ProtectedAdmin>
+          <section className="flex">
+            <AdminSidebar />
+            <div className="w-full">
+              <AdminNavbar />
+              {children}
+            </div>
+          </section>
+        </ProtectedAdmin>
       </body>
     </html>
   );
