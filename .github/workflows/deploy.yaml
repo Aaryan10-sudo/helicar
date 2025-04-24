@@ -63,6 +63,11 @@ jobs:
           echo "Latest IP: $IP"
           echo "IP_ADDRESS=$IP" >> $GITHUB_ENV
 
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Create .env file in backend folder on EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ env.IP_ADDRESS }} << 'EOF'
