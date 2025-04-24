@@ -71,10 +71,10 @@ jobs:
       - name: Create .env file in backend folder on EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ env.IP_ADDRESS }} << 'EOF'
-            echo "DB_NAME=${{secrets.DB_NAME}}" > /home/ubuntu/helicarbooking/server/.env
+            echo "DB_NAME=${{secrets.DB_NAME}}" >> /home/ubuntu/helicarbooking/server/.env
             echo "DB_USERNAME=${{secrets.DB_USERNAME}}" >> /home/ubuntu/helicarcd booking/server/.env
             echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "DB_HOST=postgres" >> /home/ubuntu/helicarbooking/server/.env
+            echo "DB_HOST=postgres" > /home/ubuntu/helicarbooking/server/.env
             echo "DB_PORT=${{secrets.DB_PORT}}" >> /home/ubuntu/helicarbooking/server/.env
             echo "SSL=${{secrets.SSL}}" >> /home/ubuntu/helicarbooking/server/.env
             echo "DB_DIALECT=${{secrets.DB_DIALECT}}" >> /home/ubuntu/helicarbooking/server/.env
@@ -95,9 +95,6 @@ jobs:
             cd /home/ubuntu/helicarbooking           
             echo "Pulling latest code from origin develop..."
             git pull origin develop
-            
-            echo "Rebuilding and restarting containers..."
-            docker compose down
 
             echo "Cleaning up disk space..."
             echo "Removing dangling images..."
@@ -111,7 +108,9 @@ jobs:
 
             echo "Pulling latest Docker image..."
             sudo docker pull ${{ vars.DOCKERHUB_USERNAME }}/nnine-helicar-be:latest
-
+            
+            echo "Rebuilding and restarting containers..."
+            docker compose down
             docker compose up -d --build
 
             echo "Deployment successful. Running containers:"
