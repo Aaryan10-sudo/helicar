@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   postgres:
+    container_name: nnine-helicar-db
     image: postgres:15
     environment:
         - POSTGRES_DB=${DB_NAME}
@@ -12,8 +13,10 @@ services:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - helicar-network
+    restart: always
 
-  backend:
+  nnine-helicar-be:
+    container_name: nnine-helicar-be
     image: prina1/nnine-helicar-be:latest
     ports:
       - "3000:3000"  
@@ -40,6 +43,7 @@ services:
         - postgres
     networks:
         - helicar-network
+    restart: always
 
 volumes:
     postgres-data:
