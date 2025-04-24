@@ -18,7 +18,7 @@ jobs:
 
       - name: Build and Push Backend Image
         run: |
-          docker build -t ${{ vars.DOCKERHUB_USERNAME }}/nnine-helicar-be:latest -f ./backend/Dockerfile ./backend
+          docker build -t ${{ vars.DOCKERHUB_USERNAME }}/nnine-helicar-be:latest -f ./server/Dockerfile ./server
           docker push ${{ vars.DOCKERHUB_USERNAME }}/nnine-helicar-be:latest
 
   deploy-aws:
@@ -75,7 +75,7 @@ jobs:
             echo "DB_DIALECT=${{secrets.DB_DIALECT}}" >> /home/ubuntu/helicarbooking/server/.env
             echo "SECRET_KEY=${{secrets.SECRET_KEY}}" >> /home/ubuntu/helicarbooking/server/.env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "ADMIN_MAIL=${{ secretsADMIN_MAIL }}" >> /home/ubuntu/helicarbooking/server/.env
+            echo "ADMIN_MAIL=${{ secrets.ADMIN_MAIL }}" >> /home/ubuntu/helicarbooking/server/.env
             echo "CORS_ORIGIN=${{ secrets.CORS_ORIGIN }}" >> /home/ubuntu/helicarbooking/server/.env
             echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> /home/ubuntu/helicarbooking/server/.env
             echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> /home/ubuntu/helicarbooking/server/.env
