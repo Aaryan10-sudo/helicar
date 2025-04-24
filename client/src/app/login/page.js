@@ -1,11 +1,13 @@
 "use client";
 import { baseURL } from "@/config/config";
+import Loader from "@/ui/Loader";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const LoginForm = () => {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [loader, setLoader] = useState(false);
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -15,15 +17,18 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoader(true);
       const result = await axios({
         url: `${baseURL}/admin/login`,
         method: "POST",
         data: form,
       });
+      setLoader(false);
       router.push("/admin/");
       localStorage.setItem("token", result.data.data.token);
     } catch (error) {
       console.error(error.message);
+      setLoader(false);
     }
   };
 
@@ -67,9 +72,9 @@ const LoginForm = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 rounded-lg transition duration-300"
+          className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 rounded-lg transition duration-300 flex justify-center items-center"
         >
-          Log In
+          {loader ? <Loader /> : "Log In"}
         </button>
       </form>
     </div>

@@ -1,13 +1,14 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import vehicleImage from "../../assets/heroBg.png";
+import vehicleImage from "../../assets/herosection.jpg";
+import Booking from "./Booking";
 const Hero = () => {
   return (
     <section
-      className="flex flex-col items-center bg-cover bg-center min-h-[816px] px-4 sm:px-6 lg:px-8 py-[196px]"
+      className="flex flex-col gap-[50px] items-center bg-cover bg-center min-h-[816px] px-4 sm:px-6 lg:px-8 py-[196px]"
       style={{
-        backgroundImage: `url(${vehicleImage?.src || "/default-hero.jpg"})`,
+        backgroundImage: `url(${vehicleImage?.src || "/default-hero.jpg"}) `,
       }}
     >
       {/* Centered Container */}
@@ -29,27 +30,9 @@ const Hero = () => {
             adventure starts here!
           </p>
         </header>
-
-        {/* Button Section */}
-        <div className="w-full flex justify-center">
-          <div className="flex items-center gap-6 md:gap-14">
-            <a
-              href="/about"
-              className="relative overflow-hidden bg-[#045B8F] px-6 py-2 rounded-2xl font-Comfortaa text-white font-bold transition-all duration-300 ease-in-out hover:cursor-pointer 
-  before:absolute before:inset-0 before:bg-gradient-to-r before:from-blue-100 before:to-blue-[#045B8F] before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
-            >
-              Learn More
-            </a>
-
-            <a
-              href="/booking"
-              className="px-6 hover:bg-[#045B8F] hover:text-white duration-1000 ease-in-out py-2 rounded-2xl font-Comfortaa text-[#045B8F] border-[1px] border-[#045B8F] font-bold hover:bg-primary-dark transition-colors hover:cursor-pointer"
-            >
-              E- Booking
-            </a>
-          </div>
-        </div>
       </div>
+
+      <Booking />
     </section>
   );
 };

@@ -1,8 +1,20 @@
+"use client";
 import Bellicon from "@/ui/Bellicon";
 import DownArrowIcon from "@/ui/DownArrowIcon";
-import React from "react";
+import LogoutIcon from "@/ui/LogoutIcon";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 const AdminNavbar = () => {
+  const [menu, setMenu] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      localStorage.removeItem("token");
+      router.push("/");
+    } catch (error) {}
+  };
   return (
     <>
       <nav className=" text-white shadow-md h-[70px] w-full flex items-center justify-end px-12 gap-5">
@@ -19,7 +31,21 @@ const AdminNavbar = () => {
             className="h-full w-full object-cover"
           />
         </span>
-        <DownArrowIcon className="cursor-pointer" />
+
+        <button className="cursor-pointer" onClick={() => setMenu(!menu)}>
+          <DownArrowIcon className="cursor-pointer" />
+        </button>
+
+        {menu ? (
+          <div className="shadow-md absolute top-[60px] z-50 h-[80px] w-[150px] flex justify-center items-center">
+            <button
+              className="text-red-600 flex justify-center items-center font-bold gap-2 cursor-pointer"
+              onClick={handleLogout}
+            >
+              Log Out <LogoutIcon />
+            </button>
+          </div>
+        ) : null}
       </nav>
     </>
   );

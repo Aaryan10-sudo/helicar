@@ -1,4 +1,4 @@
-POST http://localhost:3000/admin/login
+POST https://helicarbooking.nnine.training/admin/login
 Content-Type: application/json
 
 {

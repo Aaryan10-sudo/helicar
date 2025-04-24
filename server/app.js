@@ -14,8 +14,13 @@ const vehicleTypeRouter = require("./src/routes/vehicle-type.routes");
 const vehicleRouter = require("./src/routes/vehicle.routes");
 const fileRouter = require("./src/routes/file.route");
 const bookingRouter = require("./src/routes/booking.route");
+const {
+  testPostgresConnection,
+} = require("./src/config/db/postgres/connectPostgres");
 
 const app = express();
+
+testPostgresConnection();
 
 app.set("views", path.join(__dirname, "/src/views"));
 app.set("view engine", "jade");
@@ -23,7 +28,6 @@ app.use(
   cors({
     origin: process.env.CORS_ORIGIN,
     credentials: false,
-   
   })
 );
 

@@ -2,8 +2,10 @@
 
 import { baseURL } from "@/config/config";
 import CalenderIcon from "@/ui/CalenderIcon";
+import ClockIcon from "@/ui/ClockIcon";
 import Loader from "@/ui/Loader";
 import LocationIcon from "@/ui/LocationIcon";
+import PassengerIcon from "@/ui/PassengerIcon";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
@@ -213,6 +215,19 @@ const BookingForm = () => {
                   </p>
                 </div>
               </div>
+              <span className="flex gap-2">
+                <LocationIcon />
+                <div>From : Kathmandu || To : Pokhara</div>
+              </span>
+              <span className="mt-[10px] flex gap-2">
+                <CalenderIcon />
+                <div>April 24 - April 25</div>
+              </span>
+
+              <span className="mt-[10px] flex gap-2">
+                Passenger Seat:
+                <div>{selectedCar.features.seats}</div>
+              </span>
             </div>
           )}
         </section>

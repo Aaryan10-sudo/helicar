@@ -20,17 +20,17 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="h-[88px] w-full bg-white flex items-center shadow-md px-10">
-      <div className="flex justify-between items-center w-full">
+    <nav className="h-[88px] w-full bg-white flex items-center shadow-md px-10 sticky top-0 z-50">
+      <div className="flex justify-between items-center w-full ">
         {/* Logo */}
-        <div className=" font-bold">
+        <Link className=" font-bold" href={"/"}>
           <Image
             src={assets.navlogo.src}
             height={assets.navlogo.height}
             width={assets.navlogo.width}
             alt="navlogo"
           />
-        </div>
+        </Link>
 
         {/* Mobile Menu Button */}
         <button
@@ -64,49 +64,7 @@ const Navbar = () => {
               Vehicle Rental
             </Link>
           </li>
-          <li className="relative" ref={dropdownRef}>
-            <button
-              className="flex items-center space-x-1"
-              onMouseEnter={() => setDropdownOpen(true)}
-              onMouseLeave={() => setDropdownOpen(false)}
-            >
-              <span className="font-Comfortaa font-medium leading-4 text-[#222121]">
-                Heli Charter
-              </span>
-            </button>
-            {dropdownOpen && (
-              <ul
-                className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg py-2"
-                onMouseEnter={() => setDropdownOpen(true)}
-                onMouseLeave={() => setDropdownOpen(false)}
-              >
-                <li className="px-4 py-2 hover:bg-gray-100">
-                  <Link
-                    className="font-Comfortaa font-medium leading-4 text-[#222121]"
-                    href="/heli-charter/option1"
-                  >
-                    Option 1
-                  </Link>
-                </li>
-                <li className="px-4 py-2 hover:bg-gray-100">
-                  <Link
-                    className="font-Comfortaa font-medium leading-4 text-[#222121]"
-                    href="/heli-charter/option2"
-                  >
-                    Option 2
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </li>
-          <li>
-            <Link
-              href="/day-tours"
-              className="font-Comfortaa font-medium leading-4 text-[#222121]"
-            >
-              Day Tours
-            </Link>
-          </li>
+
           <li>
             <Link
               href="/company"
@@ -128,7 +86,7 @@ const Navbar = () => {
               href="/online-payment"
               className="font-Comfortaa font-medium leading-4 text-[#222121]"
             >
-              Online Payment
+              Trekking
             </Link>
           </li>
         </ul>
