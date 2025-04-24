@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    environment:
+        - POSTGRES_DB=${DB_NAME}
+        - POSTGRES_USER=${DB_USERNAME}
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+        - "${DB_PORT}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - helicar-network
+
+  backend:
+    image: prina1/nnine-helicar-be:latest
+    ports:
+      - "3000:3000"  
+    env_file:
+      - /home/ubuntu/helicarbooking/server/.env
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=postgres
+      - DB_PORT=${DB_PORT}
+      - SSL=${SSL}
+      - DB_DIALECT=${DB_DIALECT}
+      - SECRET_KEY=${SECRET_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - ADMIN_MAIL=${ADMIN_MAIL}
+      - CORS_ORIGIN=${CORS_ORIGIN}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - SMTP_EMAIL=${SMTP_EMAIL}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}    
+    depends_on:
+        - postgres
+    networks:
+        - helicar-network
+
+volumes:
+    postgres-data:
+
+networks:
+    helicar-network:
+      driver: bridge
