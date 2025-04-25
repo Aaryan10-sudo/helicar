@@ -18,10 +18,7 @@ const postgres = new Sequelize(
         logging: false,
         timezone: "+05:45",
         dialectOptions: {
-          ssl: {
-            rejectUnauthorized: false,
-            ca: SSL,
-          },
+          ssl: SSL === 'true' ? { require: true, rejectUnauthorized: false } : false
         },
 }) 
 
