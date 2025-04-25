@@ -1,0 +1,1 @@
+DELETE http://localhost:3000/admin/delete?id=7295beed-3c4c-4a36-a502-57d8055324bd

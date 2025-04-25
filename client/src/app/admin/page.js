@@ -4,11 +4,9 @@ import React from "react";
 
 const page = () => {
   return (
-    <main>
-      <section className=" w-full flex justify-between items-center">
-        <Dashboard />
-      </section>
-    </main>
+    <section className="w-full flex justify-between items-center">
+      <Dashboard />
+    </section>
   );
 };
 

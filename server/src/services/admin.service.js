@@ -57,8 +57,41 @@ async function getAllAdminsService() {
   }
 }
 
+async function changePasswordService(password, id) {
+  console.log(password);
+  console.log(id);
+  try {
+    const hashedPassword = await hashPassword(password);
+    const result = await Admin.update(
+      { password: hashedPassword },
+      { where: { id: id } }
+    );
+    return result;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+async function deleteAdminService(id) {
+  try {
+    const result = await Admin.destroy({
+      where: { id },
+    });
+
+    if (result === 0) {
+      throw new Error("Admin not found or already deleted");
+    }
+
+    return result;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
 module.exports = {
   createAdminService,
   loginAdminService,
   getAllAdminsService,
+  changePasswordService,
+  deleteAdminService,
 };

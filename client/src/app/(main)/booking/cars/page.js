@@ -40,13 +40,13 @@ const page = () => {
   }, []);
 
   return (
-    <div className="bg-[#f8f9fa] text-black w-full h-auto py-[10px]">
+    <div className="bg-[#f8f9fa] text-black w-full h-auto py-[10px] ">
       <main>
         <section>
-          <h2 className="text-3xl font-semibold border-b px-[120px] py-[30px] border-gray-400">
+          <h2 className="text-3xl font-semibold border-b px-[50px] py-[30px] border-gray-400">
             Which car do you want to ride?
           </h2>
-          <div className="flex items-center justify-between gap-5 flex-wrap flex-row-4 w-full">
+          <div className="flex items-center justify-between gap-5 flex-wrap flex-row-4 w-full px-[50px]">
             {loading ? (
               [...Array(8)].map((_, index) => <VehicleSkeleton key={index} />)
             ) : cars.length < 1 ? (

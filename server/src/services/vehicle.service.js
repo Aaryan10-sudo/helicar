@@ -96,6 +96,31 @@ async function getSpecificVehicleService(id) {
   }
 }
 
+async function updateVehicleService(id, updateData) {
+  try {
+    const [rowsUpdated, [updatedVehicle]] = await Vehicle.update(updateData, {
+      where: { id },
+      returning: true,
+    });
+
+    return updatedVehicle;
+  } catch (error) {
+    console.error("Error updating vehicle:", error.message);
+    throw error;
+  }
+}
+
+async function deleteVehicleService(id) {
+  try {
+    const result = await Vehicle.destroy({
+      where: { id },
+    });
+    return result;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
 module.exports = {
   createVehicleService,
   getAllVehicleService,
@@ -104,4 +129,6 @@ module.exports = {
   getAllHiaceService,
   getAllBusService,
   getSpecificVehicleService,
+  updateVehicleService,
+  deleteVehicleService,
 };

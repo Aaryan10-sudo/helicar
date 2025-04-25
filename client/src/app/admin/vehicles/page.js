@@ -6,11 +6,13 @@ import PaidIcon from "@/ui/PaidIcon";
 import UpdateIcon from "@/ui/UpdateIcon";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 const page = () => {
   const [details, setDetails] = useState([]);
+  const router = useRouter();
 
   const statusColor = {
     Cancelled: "bg-red-100 text-red-600",
@@ -23,7 +25,21 @@ const page = () => {
     Paid: "bg-blue-100 text-blue-600",
   };
 
-  const handleDelete = () => {
+  const deleteVehicle = async (id) => {
+    try {
+      const result = await axios({
+        url: `${baseURL}/vehicle/delete?id=${id}`,
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleDelete = (id) => {
     try {
       Swal.fire({
         title: "Are you sure?",
@@ -42,6 +58,8 @@ const page = () => {
           });
         }
       });
+      deleteVehicle(id);
+      handleDetails();
     } catch (error) {
       console.log(error.message);
     }
@@ -57,6 +75,7 @@ const page = () => {
       setDetails(result.data.data);
     } catch (error) {}
   };
+
   useEffect(() => {
     handleDetails();
   }, []);
@@ -154,12 +173,17 @@ const page = () => {
               </td>
 
               <td className=" p-2 border-b border-gray-500 text-center">
-                <button className="cursor-pointer">
+                <button
+                  className="cursor-pointer"
+                  onClick={() => {
+                    router.push(`/admin/vehicles/update?vehicleId=${ride.id}`);
+                  }}
+                >
                   <UpdateIcon />
                 </button>
                 <button
                   className="cursor-pointer mx-[10px]"
-                  onClick={() => handleDelete()}
+                  onClick={() => handleDelete(ride.id)}
                 >
                   <DeleteIcon />
                 </button>

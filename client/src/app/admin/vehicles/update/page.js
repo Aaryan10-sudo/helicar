@@ -3,13 +3,12 @@ import { baseURL } from "@/config/config";
 import GalleryIcon from "@/ui/GalleryIcon";
 import Tick from "@/ui/Tick";
 import Vehicle from "@/ui/Vehicle";
-import VehicleIcon from "@/ui/VehicleIcon";
 import axios from "axios";
-import Image from "next/image";
-import React, { useState, useCallback, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-const page = () => {
+const UpdateForm = () => {
   const [vehicleName, setVehicleName] = useState("");
   const [vehicleDescription, setVehicleDescription] = useState("");
   const [seats, setSeats] = useState("");
@@ -27,6 +26,11 @@ const page = () => {
   const [showTypeModal, setShowTypeModal] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const [newType, setNewType] = useState("");
+  const searchParams = useSearchParams();
+
+  const vehicleId = searchParams.get("vehicleId");
+
+  console.log(vehicleId);
 
   const getAllVehicleCategory = async () => {
     try {
@@ -38,6 +42,27 @@ const page = () => {
       setVehicleCategories(result.data.data);
     } catch (error) {
       console.log(error.message);
+    }
+  };
+
+  const getVehicleDetails = async () => {
+    try {
+      const response = await axios.get(`${baseURL}/vehicle/get/${vehicleId}`);
+      let data = response.data.data;
+      console.log(data);
+      setVehicleName(data.vehicleName);
+      setVehicleDescription(data.vehicleDescription);
+      setSeats(data.features.seats);
+      setLuggage(data.features.luggage);
+      setTransmission(data.features.transmission);
+      setVehicleBrand(data.vehicleBrand);
+      setNumberPlate(data.numberPlate);
+      setVehiclePrice(data.vehiclePrice);
+      setVehicleImage(data.vehicleImage);
+      setVehicleCategory(data.category.name);
+      setVehicleType(data.type.name);
+    } catch (error) {
+      console.error("Error fetching vehicle details:", error);
     }
   };
 
@@ -89,6 +114,7 @@ const page = () => {
   useEffect(() => {
     getAllVehicleCategory();
     getAllVehicleType();
+    getVehicleDetails();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -113,14 +139,24 @@ const page = () => {
     };
     try {
       const result = await axios({
-        url: `${baseURL}/vehicle/create`,
-        method: "POST",
+        url: `${baseURL}/vehicle/update/${vehicleId}`,
+        method: "PUT",
         data: formData,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log(result);
+      setVehicleName("");
+      setVehicleDescription("");
+      setSeats("");
+      setLuggage("");
+      setTransmission("");
+      setVehicleBrand("");
+      setNumberPlate("");
+      setVehiclePrice("");
+      setVehicleImage("");
+      setVehicleCategory("");
+      setVehicleType("");
     } catch (error) {
       console.log(error.message);
     }
@@ -154,14 +190,14 @@ const page = () => {
       <section className="flex justify-between">
         <h1 className="font-bold text-2xl flex items-center gap-2">
           <Vehicle />
-          Add New Vehicle
+          Update Vehicle
         </h1>
         <button
           type="submit"
           className="bg-blue-500 w-[150px] h-[40px] rounded-[20px] text-white cursor-pointer flex items-center justify-center gap-2"
         >
           <Tick />
-          Add Vehicle
+          Update Vehicle
         </button>
       </section>
 
@@ -174,6 +210,7 @@ const page = () => {
           <input
             placeholder="Maruti Suzuki Swift"
             className="bg-gray-200 h-[40px] w-full p-2 rounded-md"
+            value={vehicleName}
             onChange={(e) => setVehicleName(e.target.value)}
           />
           <br />
@@ -182,6 +219,7 @@ const page = () => {
           <br />
           <textarea
             placeholder="Product Description..."
+            value={vehicleDescription}
             className="bg-gray-200 h-[100px] w-full p-2 rounded-md"
             onChange={(e) => setVehicleDescription(e.target.value)}
           />
@@ -193,6 +231,7 @@ const page = () => {
               <p>Seats:</p>
               <input
                 type="number"
+                value={seats}
                 className="bg-gray-200 w-[200px] p-[10px] rounded-md"
                 placeholder="0"
                 onChange={(e) => setSeats(e.target.value)}
@@ -204,6 +243,7 @@ const page = () => {
                 type="number"
                 className="bg-gray-200 w-[200px] p-[10px] rounded-md"
                 placeholder="0"
+                value={luggage}
                 onChange={(e) => setLuggage(e.target.value)}
               />
             </div>
@@ -231,6 +271,7 @@ const page = () => {
               <input
                 placeholder="Brand"
                 className="bg-gray-200 h-[40px] w-[320px] p-2 rounded-md"
+                value={vehicleBrand}
                 onChange={(e) => setVehicleBrand(e.target.value)}
               ></input>
             </div>
@@ -240,6 +281,7 @@ const page = () => {
               <input
                 placeholder="MH312323H"
                 className="bg-gray-200 h-[40px] w-[320px] p-2 rounded-md"
+                value={numberPlate}
                 onChange={(e) => setNumberPlate(e.target.value)}
               ></input>
             </div>
@@ -254,6 +296,7 @@ const page = () => {
               <br />
               <input
                 placeholder="0.00"
+                value={vehiclePrice}
                 className="bg-gray-200 h-[40px] w-[200px] p-2 rounded-md"
                 onChange={(e) => setVehiclePrice(e.target.value)}
               />
@@ -434,6 +477,14 @@ const page = () => {
         </div>
       )}
     </form>
+  );
+};
+
+const page = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <UpdateForm />
+    </Suspense>
   );
 };
 

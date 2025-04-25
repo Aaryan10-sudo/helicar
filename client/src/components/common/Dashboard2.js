@@ -3,7 +3,7 @@ import VehicleStatusChart from "./VehicleStatusChart";
 
 const Dashboard2 = () => {
   return (
-    <div className="w-[700px] flex justify-center h-auto">
+    <div className="flex justify-center h-auto">
       <VehicleStatusChart />
     </div>
   );

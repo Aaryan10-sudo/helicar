@@ -2,6 +2,8 @@ const {
   createAdminService,
   loginAdminService,
   getAllAdminsService,
+  changePasswordService,
+  deleteAdminService,
 } = require("../services/admin.service");
 
 exports.createAdmin = async (req, res, next) => {
@@ -66,5 +68,40 @@ exports.getAllAdmins = async (req, res, next) => {
       .json({ message: "Admins fetched successfully", data: result });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+exports.changePassword = async (req, res, next) => {
+  const id = req._id;
+  const password = req.body.password;
+
+  console.log(password);
+
+  try {
+    const result = await changePasswordService(password, id);
+    res.status(200).json({
+      success: true,
+      message: "Password Changed Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.deleteAdmin = async (req, res, next) => {
+  const id = req.query.id;
+
+  try {
+    const result = await deleteAdminService(id);
+    res.status(200).json({
+      success: true,
+      message: "Admin deleted successfully",
+      data: result,
+    });
+  } catch (error) {
+    throw new Error(error.message);
   }
 };

@@ -1,7 +1,7 @@
-POST https://helicarbooking.nnine.training/admin/login
+POST http://localhost:3000/admin/login
 Content-Type: application/json
 
 {
     "email":"lazyfox916@gmail.com",
-    "password":"Helicar"
+    "password":"aaryan"
 }

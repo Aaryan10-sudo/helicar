@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${comfortaa.variable} ${lexend.variable} font-lexend`}>
         <ProtectedAdmin>
-          <section className="flex">
+          <section className="flex w-full">
             <AdminSidebar />
             <div className="w-full">
               <AdminNavbar />

@@ -1,7 +1,4 @@
-import React from "react";
-import mustangImage from "../../assets/mustang.jpg";
-import luklaImage from "../../assets/lukla.jpg";
-import pokharaImage from "../../assets/pokhara.jpg";
+import PopularDestinationCard from "./PopularDestinationCard";
 
 const PopularDestination = () => {
   return (
@@ -18,45 +15,7 @@ const PopularDestination = () => {
         </p>
       </section>
       <div className="flex justify-between gap-5">
-        <div
-          className="bg-black w-[370px] h-[440px] rounded-lg bg-cover flex flex-col justify-end overflow-hidden"
-          style={{
-            backgroundImage: `url(${mustangImage?.src || "/default-hero.jpg"})`,
-          }}
-        >
-          <div
-            className="w-full h-[80px] flex justify-center items-center"
-            style={{ backgroundColor: "rgba(226, 232, 240, 0.55)" }}
-          >
-            <h1 className="text-[30px] font-medium text-black">Mustang</h1>
-          </div>
-        </div>
-        <div
-          className="bg-black w-[370px] h-[440px] rounded-lg bg-cover flex flex-col justify-end overflow-hidden"
-          style={{
-            backgroundImage: `url(${luklaImage?.src || "/default-hero.jpg"})`,
-          }}
-        >
-          <div
-            className="w-full h-[80px] flex justify-center items-center"
-            style={{ backgroundColor: "rgba(226, 232, 240, 0.55)" }}
-          >
-            <h1 className="text-[30px] font-medium text-black">Lukla</h1>
-          </div>
-        </div>
-        <div
-          className="bg-black w-[370px] h-[440px] rounded-lg bg-cover flex flex-col justify-end overflow-hidden"
-          style={{
-            backgroundImage: `url(${pokharaImage?.src || "/default-hero.jpg"})`,
-          }}
-        >
-          <div
-            className="w-full h-[80px] flex justify-center items-center"
-            style={{ backgroundColor: "rgba(226, 232, 240, 0.55)" }}
-          >
-            <h1 className="text-[30px] font-medium text-black">Pokhara</h1>
-          </div>
-        </div>
+        <PopularDestinationCard />
       </div>
     </main>
   );

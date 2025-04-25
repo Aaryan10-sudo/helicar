@@ -1,29 +1,12 @@
 import React from "react";
 import blogImage from "../../assets/blogImag.jpg";
 import ArrowIcon from "@/ui/ArrowIcon";
-
-const blog = [
-  {
-    date: "Jul 12, 2020",
-    title: "Chitwan Sauraha Tours",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua labore et dolore ut labore et dolore magna.",
-  },
-  {
-    date: "Aug 15, 2021",
-    title: "Pokhara Adventure",
-    text: "Explore the beauty of Pokhara with its serene lakes, breathtaking mountain views, and thrilling adventures. A perfect getaway for nature lovers.",
-  },
-  {
-    date: "Sep 10, 2022",
-    title: "Kathmandu Heritage Walk",
-    text: "Discover the rich cultural heritage of Kathmandu with its ancient temples, bustling markets, and vibrant traditions.",
-  },
-];
+import { Blog } from "@/lib/data";
 
 const BlogCard = () => {
   return (
     <section className="flex gap-10 flex-wrap justify-center">
-      {blog.map((value, index) => (
+      {Blog.map((value, index) => (
         <div
           key={index}
           className="w-[370px] h-[475px] shadow-xl rounded-xl overflow-hidden"

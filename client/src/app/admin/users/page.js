@@ -1,19 +1,20 @@
 "use client";
-import React, { useState, useCallback, useEffect } from "react";
-import { Dialog } from "@headlessui/react";
-import AddUserIcon from "@/ui/AddUserIcon";
-import { useDropzone } from "react-dropzone";
-import axios from "axios";
-import DeleteIcon from "@/ui/DeleteIcon";
-import UpdateIcon from "@/ui/UpdateIcon";
-import GalleryIcon from "@/ui/GalleryIcon";
-import UserIcon from "@/ui/UserIcon";
 import { baseURL } from "@/config/config";
+import DeleteIcon from "@/ui/DeleteIcon";
+import Loader from "@/ui/Loader";
+import UpdateIcon from "@/ui/UpdateIcon";
+import UserIcon from "@/ui/UserIcon";
+import { Dialog } from "@headlessui/react";
+import axios from "axios";
+import { useCallback, useEffect, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import Swal from "sweetalert2";
 
 const roles = ["Admin", "Driver", "Manager"];
 
 const UsersPanel = () => {
   const [users, setUsers] = useState([]);
+  const [loader, setLoader] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -21,8 +22,70 @@ const UsersPanel = () => {
     email: "",
     password: "",
     role: "",
-    profileImage: null,
   });
+
+  const deleteAdmin = async (id) => {
+    try {
+      const result = await axios({
+        url: `${baseURL}/admin/delete?id=${id}`,
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+    } catch (error) {}
+  };
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: `Product deleted successfully`,
+          icon: "success",
+        });
+        deleteAdmin(id);
+        getAllAdmin();
+      }
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = {
+      ...formData,
+      profileImage,
+    };
+    console.log(data);
+    try {
+      setLoader(true);
+      const result = await axios({
+        method: "POST",
+        url: `${baseURL}/admin/create`,
+        data: data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(result);
+      getAllAdmin();
+      setIsOpen(false);
+      setFormData("");
+      setProfileImage("");
+      setLoader(false);
+    } catch (error) {
+      console.log(error.message);
+      setLoader(false);
+    }
+  };
 
   const getAllAdmin = async () => {
     try {
@@ -49,7 +112,7 @@ const UsersPanel = () => {
     data.append("document", fileData);
     try {
       let result = await axios({
-        url: `${process.env.NEXT_BASE_PUBLIC_URL}/file/single`,
+        url: `${baseURL}/file/single`,
         method: "POST",
         data: data,
       });
@@ -68,20 +131,6 @@ const UsersPanel = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setUsers((prev) => [...prev, formData]);
-    setFormData({
-      name: "",
-      email: "",
-      password: "",
-      role: "",
-      profileImage: null,
-    });
-    console.log("User added:", formData);
-    setIsOpen(false);
   };
 
   return (
@@ -124,10 +173,10 @@ const UsersPanel = () => {
               </td>
               <td className="p-3 text-black ">Active</td>
               <td className="mx-[20px]">
-                <button className="">
-                  <UpdateIcon />
-                </button>
-                <button className="mx-[20px]">
+                <button
+                  className="mx-[20px] cursor-pointer"
+                  onClick={() => handleDelete(u.id)}
+                >
                   <DeleteIcon />
                 </button>
               </td>
@@ -215,9 +264,9 @@ const UsersPanel = () => {
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 text-white"
+                  className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 text-white flex justify-center items-center"
                 >
-                  Save
+                  {loader ? <Loader /> : "Save"}
                 </button>
               </div>
             </form>

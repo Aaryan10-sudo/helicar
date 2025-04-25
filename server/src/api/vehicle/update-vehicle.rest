@@ -1,0 +1,6 @@
+PUT http://localhost:3000/vehicle/update/1b23c7d6-db4d-4952-9080-ccba73edd518
+Content-Type: application/json
+
+{
+    "vehicleName":"Maruti Swift Arena"
+}
