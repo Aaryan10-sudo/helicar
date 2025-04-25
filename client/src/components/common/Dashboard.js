@@ -10,10 +10,10 @@ import Dashboard2 from "./Dashboard2";
 const Dashboard = () => {
   return (
     <main className="m-[30px] px-[30px] py-[10px] rounded-xl flex justify-between w-full">
-      <div>
+      <div className="w-[60%]">
         <h1 className="text-[30px] font-bold">Dashboard</h1>
-        <span className="my-[10px] flex justify-between w-[800px]">
-          <div className="bg-blue-700  w-[230px] rounded-lg p-[10px]">
+        <span className="my-[10px] flex justify-between w-[100%]">
+          <div className="bg-blue-700  w-[30%] rounded-lg p-[10px]">
             <div className="bg-white h-[50px] w-[80px] rounded-md flex justify-center items-center">
               <EarningIcon />
             </div>
@@ -22,7 +22,7 @@ const Dashboard = () => {
             </h1>
             <h2 className="text-white font-medium">Earning</h2>
           </div>
-          <div className="bg-red-600 w-[230px] rounded-lg p-[10px]">
+          <div className="bg-red-600 w-[30%] rounded-lg p-[10px]">
             <div className="bg-white h-[50px] w-[80px] rounded-md flex justify-center items-center">
               <PassengerIcon />
             </div>
@@ -31,7 +31,7 @@ const Dashboard = () => {
             </h1>
             <h2 className="text-white font-medium">Passengers</h2>
           </div>
-          <div className="bg-yellow-500 w-[230px] rounded-lg p-[10px]">
+          <div className="bg-yellow-500 w-[30%] rounded-lg p-[10px]">
             <div className="bg-white h-[50px] w-[80px] rounded-md flex justify-center items-center">
               <Booking />
             </div>

@@ -38,7 +38,7 @@ const Page = () => {
   }, [vehicleName]);
 
   return (
-    <section className="p-10">
+    <section className="p-16">
       {/* Vehicle Type Buttons */}
       <div className="flex flex-wrap gap-2 mb-4">
         {vehicleTypes.map((type) => (
@@ -60,9 +60,9 @@ const Page = () => {
       </div>
 
       {/* Vehicle Cards */}
-      <span className="flex justify-start flex-wrap gap-4">
+      <span className="flex justify-start flex-wrap gap-5">
         {vehicle.map((value, index) => (
-          <div className="w-[400px] h-[400px] shadow-xl" key={index}>
+          <div className="w-[370px] h-[400px] shadow-xl" key={index}>
             {/* Vehicle Image */}
             <div
               className="bg-black h-[250px] bg-center bg-cover"

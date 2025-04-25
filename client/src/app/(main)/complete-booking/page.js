@@ -2,13 +2,11 @@
 
 import { baseURL } from "@/config/config";
 import CalenderIcon from "@/ui/CalenderIcon";
-import ClockIcon from "@/ui/ClockIcon";
 import Loader from "@/ui/Loader";
 import LocationIcon from "@/ui/LocationIcon";
-import PassengerIcon from "@/ui/PassengerIcon";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import Swal from "sweetalert2";

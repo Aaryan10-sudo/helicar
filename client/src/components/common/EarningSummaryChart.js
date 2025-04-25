@@ -22,7 +22,7 @@ const data = [
 
 const EarningSummaryChart = () => {
   return (
-    <div className="bg-white p-4 rounded-2xl shadow-md w-full max-w-[800px]">
+    <div className="bg-white p-4 rounded-2xl shadow-md w-full ">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Earning Summary</h2>
         <button className="text-sm px-3 py-1 bg-gray-100 rounded-md">
