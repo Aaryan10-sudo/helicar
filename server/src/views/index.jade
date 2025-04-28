@@ -2,91 +2,108 @@ doctype html
 html(lang="en")
   head
     meta(charset="UTF-8")
-    meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title New Vehicle Booking Notification
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Helicar Booking - Information
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css")
     style.
+      * {
+        box-sizing: border-box;
+      }
       body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f9;
-        color: #333;
         margin: 0;
-        padding: 0;
+        padding: 2rem;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(to right, #f8f9fa, #e0e0e0);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100vh;
+        text-align: center;
       }
-      .email-container {
-        width: 100%;
-        max-width: 600px;
-        margin: 20px auto;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
+      img {
+        height: auto;
+        width: 200px;
+        margin-bottom: 1.5rem;
+      }
+      h1 {
+        color: #2c3e50;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+      p {
+        color: #555;
+        font-size: 1.2rem;
+        max-width: 800px;
+        margin: 1rem 0;
+      }
+      .social-icons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        justify-content: center;
+      }
+      .social-icons a {
+        color: #2c3e50;
+        font-size: 1.8rem;
+        transition: color 0.3s ease;
+      }
+      .social-icons a:hover {
+        color: #0077b6;
+      }
+      .contact-section {
+        margin-top: 3rem;
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 12px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        width: 100%;
       }
-      .logo {
-        text-align: center;
-        margin-bottom: 30px;
+      .contact-section h2 {
+        margin-bottom: 1rem;
+        color: #2c3e50;
       }
-      .logo img {
-        max-width: 150px;
+      .contact-section p {
+        margin: 0.5rem 0;
+        font-size: 1rem;
+        color: #666;
       }
-      .email-header {
-        text-align: center;
-        background-color: #087DC2;
-        color: #fff;
-        padding: 20px;
-        border-radius: 8px 8px 0 0;
+      @media (max-width: 600px) {
+        body {
+          padding: 1rem;
+        }
+        h1 {
+          font-size: 2rem;
+        }
+        p {
+          font-size: 1rem;
+        }
+        img {
+          width: 150px;
+        }
+        .social-icons a {
+          font-size: 1.5rem;
+        }
       }
-      .email-header h1 {
-        font-size: 24px;
-        margin: 0;
-      }
-      .email-body {
-        padding: 20px;
-        font-size: 16px;
-        line-height: 1.6;
-      }
-      .booking-details {
-        background-color: #ecf0f0;
-        border-left: 6px solid #FADE03;
-        padding: 15px;
-        margin-top: 20px;
-      }
-      .footer {
-        text-align: center;
-        font-size: 14px;
-        color: #7f8c8d;
-        margin-top: 30px;
-      }
+  body 
+    img(src='https://helicarbooking.com/wp-content/uploads/2020/07/logo.png', alt="Helicar Booking Logo")
+    h1 Helicar Booking
+    p Welcome to Helicar Booking — your one-stop platform for hassle-free car bookings! Explore the best deals, choose your perfect ride, and travel comfortably with us.
+    p Whether it's a business trip, a weekend getaway, or your daily commute, Helicar Booking ensures a smooth and reliable experience every time.
 
-  body
-    .email-container
-      .email-header
-      .logo
-        img(src='https://helicarbooking.com/wp-content/uploads/2020/07/logo.png', alt='Company Logo')
-        h1 New Vehicle Booking Notification
+    .social-icons
+      a(href="https://facebook.com", target="_blank")
+        i(class="fab fa-facebook")
+      a(href="https://twitter.com", target="_blank")
+        i(class="fab fa-twitter")
+      a(href="https://instagram.com", target="_blank")
+        i(class="fab fa-instagram")
+      a(href="https://linkedin.com", target="_blank")
+        i(class="fab fa-linkedin")
 
-      .email-body
-        p Hello Admin,
-        p
-          | A new vehicle booking has been placed by Aaryan Sharma.
-          br
-          | Below are the booking details:
-
-        .booking-details
-          p
-            | Customer Name: Aaryan Sharma
-          p
-            | Vehicle Name: Maruti Suzuki 
-          
-          p
-            | Booking Date: #{new Date().toLocaleDateString('en-GB')}
-          p
-            | Contact Number: 9788342928
-        
-        p
-          | Please ensure that the booking is processed smoothly.
-
-      .footer
-        p This is an automated notification. No action is required unless follow-up is necessary.
-
-        p
-          | &copy; #{new Date().getFullYear()} Helicar Booking. All rights reserved.
+    .contact-section
+      h2 Contact Us
+      p 📍 Location: Chabahil, Kathmandu, Nepal
+      p 📞 Phone: +977 9764849910
+      p ✉️ Email: support@helicarbooking.com
