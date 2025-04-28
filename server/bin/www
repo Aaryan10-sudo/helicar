@@ -8,7 +8,6 @@ const app = require("../app");
 const createInitialAdmin = require("../src/utils/createInitialAdmin");
 const debug = require("debug")("express:server");
 const http = require("http");
-const connectPostgres = require("../src/config/db/postgres/connectPostgres");
 const os = require("os");
 
 /**

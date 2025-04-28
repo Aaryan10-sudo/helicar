@@ -1,4 +1,7 @@
-const { confirmedBooking } = require("../lib/mail/send.mail");
+const {
+  confirmedBooking,
+  adminBookingNotification,
+} = require("../lib/mail/send.mail");
 const {
   createBookingService,
   getAllBookingService,
@@ -15,6 +18,11 @@ exports.createBooking = async (req, res, next) => {
         username: result.passengerInfo.firstName,
         receiver: result.passengerInfo.email,
         OTP: OTP,
+      });
+      await adminBookingNotification({
+        customerName: result.passengerInfo.firstName,
+        vehicleName: result.vehicleName,
+        contactNumber: result.passengerInfo.phone,
       });
     } catch (error) {
       res.status(400).json({

@@ -4,6 +4,8 @@ const {
   getAllBooking,
 } = require("../controller/booking.controller");
 const validateBooking = require("../validator/booking.validate");
+const isAuthenticated = require("../middleware/isAuthenticated");
+const { isAuthorized } = require("../middleware/isAuthorized");
 
 const router = express.Router();
 

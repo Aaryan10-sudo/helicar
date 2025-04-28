@@ -179,7 +179,7 @@ const page = () => {
             <th className="p-2">Booking ID</th>
             <th className="p-2">Booking Date</th>
             <th className="p-2">Client Name</th>
-            <th className="p-2">Bus Number</th>
+            <th className="p-2">Vehicle</th>
             <th className="p-2">Plan</th>
             <th className="p-2">Date</th>
             <th className="p-2">Driver</th>
@@ -209,7 +209,7 @@ const page = () => {
                   className="line-clamp-1 max-w-[150px] overflow-hidden"
                   title={ride.vehicleId}
                 >
-                  {ride.id}
+                  {ride.vehicleName}
                 </div>
               </td>
               <td className="p-2 border-b border-gray-500">1d</td>

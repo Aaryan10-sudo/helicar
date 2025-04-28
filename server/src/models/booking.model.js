@@ -12,8 +12,8 @@ Booking.init(
       allowNull: false,
     },
     bookingDate: {
-      type: DataTypes.DATE,
-      defaultValue: Date.now(),
+      type: DataTypes.STRING,
+      defaultValue: new Date().toLocaleDateString("en-GB"),
       allowNull: false,
     },
     pickupDate: {
@@ -47,6 +47,10 @@ Booking.init(
         model: "Vehicles",
         key: "id",
       },
+    },
+    vehicleName: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {

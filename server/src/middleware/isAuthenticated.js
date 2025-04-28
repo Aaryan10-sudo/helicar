@@ -8,7 +8,7 @@ async function isAuthenticated(req, res, next) {
     if (!tokenString) {
       return res.status(401).json({
         success: false,
-        message: "Authorization token missing"
+        message: "Authorization token missing",
       });
     }
 
@@ -21,7 +21,7 @@ async function isAuthenticated(req, res, next) {
     if (!result) {
       return res.status(401).json({
         success: false,
-        message: "Invalid Token"
+        message: "Invalid Token",
       });
     }
 
@@ -31,10 +31,9 @@ async function isAuthenticated(req, res, next) {
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
-      error: error.message
+      error: error.message,
     });
   }
 }
-
 
 module.exports = isAuthenticated;

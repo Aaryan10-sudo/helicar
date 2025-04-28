@@ -43,6 +43,7 @@ const BookingForm = () => {
       status: "confirmed",
       paymentStatus: "pending",
       vehicleId: cardId,
+      vehicleName: selectedCar.vehicleName,
     };
 
     try {

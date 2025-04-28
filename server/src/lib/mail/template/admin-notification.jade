@@ -3,7 +3,7 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title Vehicle Booking Confirmation
+    title New Vehicle Booking Notification
     style.
       body {
         font-family: Arial, sans-serif;
@@ -21,7 +21,7 @@ html(lang="en")
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
-       .logo {
+      .logo {
         text-align: center;
         margin-bottom: 30px;
       }
@@ -44,11 +44,10 @@ html(lang="en")
         font-size: 16px;
         line-height: 1.6;
       }
-      .otp-box {
+      .booking-details {
         background-color: #ecf0f0;
         border-left: 6px solid #FADE03;
         padding: 15px;
-        font-size: 18px;
         margin-top: 20px;
       }
       .footer {
@@ -57,45 +56,36 @@ html(lang="en")
         color: #7f8c8d;
         margin-top: 30px;
       }
-      .button {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #3498db;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 4px;
-        font-weight: bold;
-        margin-top: 20px;
-      }
-      .button:hover {
-        background-color: #2980b9;
-      }
 
   body
     .email-container
       .email-header
       .logo
         img(src='https://helicarbooking.com/wp-content/uploads/2020/07/logo.png', alt='Company Logo')
-        h1 Vehicle Booking Confirmation
+        h1 New Vehicle Booking Notification
 
       .email-body
-        p Dear #{customerName},
+        p Hello Admin,
         p
-          | Thank you for booking with us! We are excited to confirm your vehicle booking for #{vehicleModel}.
+          | A new vehicle booking has been placed by #{customerName}.
           br
-          | Your booking has been successfully processed, and we are ready to provide you with an amazing experience.
-          
-        .otp-box
-          p Your OTP for verifying your booking is:
-          h2 #{OTP}
+          | Below are the booking details:
 
-        p
-          | Please share this OTP with your driver at the time of pickup.
+        .booking-details
+          p
+            | Customer Name: #{customerName}
+          p
+            | Vehicle Name: #{vehicleName}
+          p
+            | Booking Date: #{new Date().toLocaleDateString('en-GB')}
+          p
+            | Contact Number: #{contactNumber}
         
+        p
+          | Please ensure that the booking is processed smoothly.
 
       .footer
-        p If you have any questions, feel free to contact us at our support team.
+        p This is an automated notification. No action is required unless follow-up is necessary.
 
         p
           | &copy; #{new Date().getFullYear()} Helicar Booking. All rights reserved.
-
