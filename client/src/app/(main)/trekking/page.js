@@ -30,16 +30,13 @@ const page = () => {
             </p>
           </header>
 
-          {/* Image */}
-          <div className="flex justify-center gap-10">
-            <Image
-              src={assets.contact1.src} // Use .src
+          <div className="flex justify-center items-center gap-10 w-full">
+            <img
+              src={assets.contact1.src}
               alt="Contact our company for more information."
-              width={300}
-              height={300}
-              className="w-full max-w-[600px] md:max-w-[1190px] h-auto"
+              className="w-full max-w-[900px] h-auto"
             />
-            <span className="text-black flex justify-center items-center px-[10px] font-semibold text-[20px]">
+            <p className=" text-black w-[400px] 2xl:line-clamp-13 line-clamp-12 font-bold text-[18px] ">
               Trekking in Nepal is indeed a remarkable experience, offering a
               unique blend of natural beauty, cultural diversity, and warm
               hospitality from the local people. Here are some key points that
@@ -55,7 +52,7 @@ const page = () => {
               can encounter a wide variety of plant and animal species, from
               rhododendron forests to rare wildlife like snow leopards and red
               pandas.
-            </span>
+            </p>
           </div>
         </article>
         <section className="px-10">
