@@ -83,7 +83,7 @@ const Navbar = () => {
           </li>
           <li>
             <Link
-              href="/online-payment"
+              href="/trekking"
               className="font-Comfortaa font-medium leading-4 text-[#222121]"
             >
               Trekking
