@@ -93,16 +93,16 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ env.IP_ADDRESS }} << 'EOF'
             cd /home/ubuntu/helicarbooking           
-            echo "Pulling latest code from origin develop..."
-            git pull origin develop
+            echo "Pulling latest code from origin staging..."
+            git pull origin staging
 
             echo "Cleaning up disk space..."
             echo "Removing dangling images..."
             docker image prune -f
- 
+
             echo "Removing unused containers..."
             docker container prune -f
- 
+
             echo "Removing unused volumes..."
             docker volume prune -f
 
