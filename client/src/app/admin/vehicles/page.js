@@ -25,6 +25,17 @@ const page = () => {
     Paid: "bg-blue-100 text-blue-600",
   };
 
+  const handleDetails = async () => {
+    try {
+      let result = await axios({
+        method: "GET",
+        url: `${baseURL}/vehicle/get`,
+      });
+      console.log(result.data.data);
+      setDetails(result.data.data);
+    } catch (error) {}
+  };
+
   const deleteVehicle = async (id) => {
     try {
       const result = await axios({
@@ -63,17 +74,6 @@ const page = () => {
     } catch (error) {
       console.log(error.message);
     }
-  };
-
-  const handleDetails = async () => {
-    try {
-      let result = await axios({
-        method: "GET",
-        url: `${baseURL}/vehicle/get`,
-      });
-      console.log(result.data.data);
-      setDetails(result.data.data);
-    } catch (error) {}
   };
 
   useEffect(() => {

@@ -16,7 +16,13 @@ const { isAuthorized } = require("../middleware/isAuthorized");
 
 const router = express.Router();
 
-router.post("/create", isAuthenticated, isAuthorized(["admin"]), createVehicle);
+router.post(
+  "/create",
+  validateVehicle,
+  isAuthenticated,
+  isAuthorized(["admin"]),
+  createVehicle
+);
 router.get("/get", getAllVehicle);
 router.get("/get/cars", getAllCars);
 router.get("/get/jeeps", getAllJeeps);

@@ -4,6 +4,7 @@ import Loader from "@/ui/Loader";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 const LoginForm = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -26,14 +27,24 @@ const LoginForm = () => {
       setLoader(false);
       router.push("/admin/");
       localStorage.setItem("token", result.data.data.token);
+      toast.success("User login successful");
     } catch (error) {
-      console.error(error.message);
       setLoader(false);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Unable to connect to the server");
+      }
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-blue-900 to-black">
+      <ToastContainer />
       <form
         onSubmit={handleSubmit}
         className="bg-white rounded-2xl shadow-xl px-10 py-8 w-full max-w-sm"

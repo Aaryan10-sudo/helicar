@@ -2,7 +2,6 @@
 import { baseURL } from "@/config/config";
 import DeleteIcon from "@/ui/DeleteIcon";
 import Loader from "@/ui/Loader";
-import UpdateIcon from "@/ui/UpdateIcon";
 import UserIcon from "@/ui/UserIcon";
 import { Dialog } from "@headlessui/react";
 import axios from "axios";

@@ -22,7 +22,6 @@ exports.createVehicle = async (req, res, next) => {
     vehicleDescription,
     vehiclePrice,
   } = req.body;
-  console.log(req.body);
   try {
     const result = await createVehicleService({
       vehicleName,

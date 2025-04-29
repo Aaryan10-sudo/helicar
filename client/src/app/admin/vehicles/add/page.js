@@ -1,32 +1,39 @@
 "use client";
 import { baseURL } from "@/config/config";
 import GalleryIcon from "@/ui/GalleryIcon";
+import Loader from "@/ui/Loader";
 import Tick from "@/ui/Tick";
 import Vehicle from "@/ui/Vehicle";
-import VehicleIcon from "@/ui/VehicleIcon";
 import axios from "axios";
-import Image from "next/image";
-import React, { useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { toast, ToastContainer } from "react-toastify";
 
 const page = () => {
-  const [vehicleName, setVehicleName] = useState("");
-  const [vehicleDescription, setVehicleDescription] = useState("");
-  const [seats, setSeats] = useState("");
-  const [luggage, setLuggage] = useState("");
-  const [transmission, setTransmission] = useState("");
-  const [vehicleBrand, setVehicleBrand] = useState("");
-  const [vehiclePrice, setVehiclePrice] = useState("");
-  const [vehicleImage, setVehicleImage] = useState("");
-  const [vehicleCategory, setVehicleCategory] = useState("");
-  const [vehicleType, setVehicleType] = useState("");
-  const [numberPlate, setNumberPlate] = useState("");
+  const [formData, setFormData] = useState({
+    vehicleName: "",
+    vehicleDescription: "",
+    features: {
+      seats: "",
+      luggage: "",
+      transmission: "",
+    },
+    vehicleBrand: "",
+    vehiclePrice: "",
+    vehicleImage: "",
+    vehicleCategory: "",
+    vehicleType: "",
+    numberPlate: "",
+  });
   const [vehicleCategories, setVehicleCategories] = useState([]);
   const [vehicleTypes, setVehicleTypes] = useState([]);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showTypeModal, setShowTypeModal] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const [newType, setNewType] = useState("");
+  const [loader, setLoader] = useState(false);
+
+  console.log(formData);
 
   const getAllVehicleCategory = async () => {
     try {
@@ -34,7 +41,6 @@ const page = () => {
         url: `${baseURL}/vehicle-category/get`,
         method: "GET",
       });
-      console.log(result);
       setVehicleCategories(result.data.data);
     } catch (error) {
       console.log(error.message);
@@ -47,11 +53,29 @@ const page = () => {
         url: `${baseURL}/vehicle-type/get`,
         method: "GET",
       });
-      console.log(result.data.data);
       setVehicleTypes(result.data.data);
       getAllVehicleCategory();
     } catch (error) {
       console.log(error.message);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (["seats", "luggage", "transmission"].includes(name)) {
+      setFormData((prev) => ({
+        ...prev,
+        features: {
+          ...prev.features,
+          [name]: value,
+        },
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     }
   };
 
@@ -65,7 +89,6 @@ const page = () => {
       });
       setShowCategoryModal(false);
       await getAllVehicleCategory();
-      console.log(result);
     } catch (error) {
       console.log(error.message);
     }
@@ -79,7 +102,6 @@ const page = () => {
         url: `${baseURL}/vehicle-type/create`,
         data: { name },
       });
-      console.log(result);
       getAllVehicleType();
     } catch (error) {
       console.log(error.message);
@@ -93,25 +115,8 @@ const page = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = {
-      vehicleName,
-      vehicleDescription,
-      features: {
-        seats: seats,
-        luggage: luggage,
-        transmission: transmission,
-      },
-      seats,
-      luggage,
-      transmission,
-      vehicleBrand,
-      vehiclePrice,
-      vehicleImage,
-      vehicleCategory,
-      vehicleType,
-      numberPlate,
-    };
     try {
+      setLoader(true);
       const result = await axios({
         url: `${baseURL}/vehicle/create`,
         method: "POST",
@@ -120,11 +125,37 @@ const page = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log(result);
+      setFormData({
+        vehicleName: "",
+        vehicleDescription: "",
+        features: {
+          seats: "",
+          luggage: "",
+          transmission: "",
+        },
+        vehicleBrand: "",
+        vehiclePrice: "",
+        vehicleImage: "",
+        vehicleCategory: "",
+        vehicleType: "",
+        numberPlate: "",
+      });
+      setLoader(false);
+      console.log(formData);
+
+      toast.success("Vehicle added successfully");
     } catch (error) {
-      console.log(error.message);
+      setLoader(false);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Unable to connect to the server");
+      }
     }
-    console.log(formData);
   };
 
   const onDrop = useCallback(async (acceptedFiles) => {
@@ -137,8 +168,10 @@ const page = () => {
         method: "POST",
         data: data,
       });
-      console.log(result);
-      setVehicleImage(result.data.result);
+      setFormData((prev) => ({
+        ...prev,
+        vehicleImage: result.data.result,
+      }));
     } catch (error) {
       console.log(error.response?.data?.message || "Something went wrong");
       console.log(error.message);
@@ -151,6 +184,7 @@ const page = () => {
 
   return (
     <form className="m-[30px]" onSubmit={handleSubmit}>
+      <ToastContainer />
       <section className="flex justify-between">
         <h1 className="font-bold text-2xl flex items-center gap-2">
           <Vehicle />
@@ -160,8 +194,13 @@ const page = () => {
           type="submit"
           className="bg-blue-500 w-[150px] h-[40px] rounded-[20px] text-white cursor-pointer flex items-center justify-center gap-2"
         >
-          <Tick />
-          Add Vehicle
+          {loader ? (
+            <Loader />
+          ) : (
+            <>
+              <Tick /> Add Vehicle
+            </>
+          )}
         </button>
       </section>
 
@@ -172,18 +211,22 @@ const page = () => {
           <label>Vehicle Name</label>
           <br />
           <input
+            name="vehicleName"
             placeholder="Maruti Suzuki Swift"
             className="bg-gray-200 h-[40px] w-full p-2 rounded-md"
-            onChange={(e) => setVehicleName(e.target.value)}
+            value={formData.vehicleName}
+            onChange={handleChange}
           />
           <br />
           <br />
           <label>Vehicle Description</label>
           <br />
           <textarea
+            name="vehicleDescription"
             placeholder="Product Description..."
             className="bg-gray-200 h-[100px] w-full p-2 rounded-md"
-            onChange={(e) => setVehicleDescription(e.target.value)}
+            value={formData.vehicleDescription}
+            onChange={handleChange}
           />
           <br />
           <br />
@@ -192,33 +235,37 @@ const page = () => {
             <div>
               <p>Seats:</p>
               <input
+                name="seats"
                 type="number"
                 className="bg-gray-200 w-[200px] p-[10px] rounded-md"
                 placeholder="0"
-                onChange={(e) => setSeats(e.target.value)}
+                value={formData.features.seats}
+                onChange={handleChange}
               />
             </div>
             <div>
               <p>Luggage:</p>
               <input
-                type="number"
+                name="luggage"
                 className="bg-gray-200 w-[200px] p-[10px] rounded-md"
                 placeholder="0"
-                onChange={(e) => setLuggage(e.target.value)}
+                value={formData.features.luggage}
+                onChange={handleChange}
               />
             </div>
             <div>
               <label className="block mb-1 font-semibold">Transmission:</label>
               <select
+                name="transmission"
                 className="bg-gray-200 w-[200px] p-[10px] rounded-md"
-                onChange={(e) => setTransmission(e.target.value)}
-                value={transmission}
+                value={formData.features.transmission}
+                onChange={handleChange}
               >
                 <option value="" disabled>
                   Select transmission
                 </option>
-                <option value="manual">Manual</option>
-                <option value="automatic">Automatic</option>
+                <option value="Manual">Manual</option>
+                <option value="Automatic">Automatic</option>
               </select>
             </div>
           </span>
@@ -229,18 +276,22 @@ const page = () => {
               <label>Vehicle Brand</label>
               <br />
               <input
+                name="vehicleBrand"
                 placeholder="Brand"
                 className="bg-gray-200 h-[40px] w-[320px] p-2 rounded-md"
-                onChange={(e) => setVehicleBrand(e.target.value)}
+                value={formData.vehicleBrand}
+                onChange={handleChange}
               ></input>
             </div>
             <div>
               <label>Number Plate</label>
               <br />
               <input
+                name="numberPlate"
                 placeholder="MH312323H"
                 className="bg-gray-200 h-[40px] w-[320px] p-2 rounded-md"
-                onChange={(e) => setNumberPlate(e.target.value)}
+                value={formData.numberPlate}
+                onChange={handleChange}
               ></input>
             </div>
           </span>
@@ -253,9 +304,11 @@ const page = () => {
               <label>Base Price :</label>
               <br />
               <input
+                name="vehiclePrice"
                 placeholder="0.00"
                 className="bg-gray-200 h-[40px] w-[200px] p-2 rounded-md"
-                onChange={(e) => setVehiclePrice(e.target.value)}
+                value={formData.vehiclePrice}
+                onChange={handleChange}
               />
             </span>
 
@@ -280,9 +333,9 @@ const page = () => {
             >
               <input {...getInputProps()} />
               <div className="w-full rounded-lg flex justify-center items-center h-full">
-                {vehicleImage ? (
+                {formData.vehicleImage ? (
                   <img
-                    src={vehicleImage}
+                    src={formData.vehicleImage}
                     className="w-full h-full overflow-hidden"
                   />
                 ) : (
@@ -302,9 +355,10 @@ const page = () => {
               </label>
 
               <select
+                name="vehicleCategory"
                 className="bg-gray-100 w-[170px] p-2.5 rounded-md focus:outline-none mb-4"
-                onChange={(e) => setVehicleCategory(e.target.value)}
-                value={vehicleCategory}
+                onChange={handleChange}
+                value={formData.vehicleCategory}
               >
                 <option value="" disabled>
                   Select Category
@@ -335,9 +389,10 @@ const page = () => {
               </label>
 
               <select
+                name="vehicleType"
                 className="bg-gray-100 w-[170px] p-2.5 rounded-md focus:outline-none mb-4"
-                onChange={(e) => setVehicleType(e.target.value)}
-                value={vehicleType}
+                onChange={handleChange}
+                value={formData.vehicleType}
               >
                 <option value="" disabled>
                   Select Type
@@ -384,7 +439,6 @@ const page = () => {
               <button
                 className="bg-blue-500 text-white px-3 py-1 rounded"
                 onClick={() => {
-                  // You can call your backend here with axios
                   console.log("New Category:", newCategory);
 
                   addCategory();
@@ -420,7 +474,6 @@ const page = () => {
               <button
                 className="bg-blue-500 text-white px-3 py-1 rounded"
                 onClick={() => {
-                  // You can call your backend here with axios
                   console.log("New Type:", newType);
                   setShowTypeModal(false);
                   addType();
