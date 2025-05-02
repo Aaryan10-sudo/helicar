@@ -31,8 +31,11 @@ const AdminNavbar = () => {
         />
       </span>
 
-      <button className="cursor-pointer" onClick={() => setMenu(!menu)}>
-        <DownArrowIcon className="cursor-pointer" />
+      <button
+        className="cursor-pointer text-black"
+        onClick={() => setMenu(!menu)}
+      >
+        <DownArrowIcon className="cursor-pointer text-black" />
       </button>
 
       {menu ? (

@@ -23,106 +23,6 @@ const page = () => {
   useEffect(() => {
     getBookings();
   }, []);
-  const bookings = [
-    {
-      id: 1,
-      bookingId: "BL-WZ1001",
-      bookingDate: "April 1, 2025",
-      clientName: "Haray Ram Ram",
-      busNumber: "BA2 Kha622",
-      plan: "2 Days",
-      dateFrom: "April 1, 2025",
-      dateTo: "April 3, 2025",
-      driverStatus: <CancelledIcon />,
-      payment: "$50",
-      paymentStatus: "Pending",
-      status: "Cancelled",
-    },
-    {
-      id: 2,
-      bookingId: "BL-WZ1001",
-      bookingDate: "April 1, 2025",
-      clientName: "Haray Ram Ram",
-      busNumber: "BA2 Kha622",
-      plan: "2 Days",
-      dateFrom: "April 1, 2025",
-      dateTo: "April 3, 2025",
-      driverStatus: <PaidIcon />,
-      payment: "$50",
-      paymentStatus: "Paid",
-      status: "Ongoing",
-    },
-    {
-      id: 3,
-      bookingId: "BL-WZ1001",
-      bookingDate: "April 1, 2025",
-      clientName: "Haray Ram Ram",
-      busNumber: "BA2 Kha622",
-      plan: "2 Days",
-      dateFrom: "April 1, 2025",
-      dateTo: "April 3, 2025",
-      driverStatus: <PaidIcon />,
-      payment: "$50",
-      paymentStatus: "Paid",
-      status: "Returned",
-    },
-    {
-      id: 4,
-      bookingId: "BL-WZ1001",
-      bookingDate: "April 1, 2025",
-      clientName: "Haray Ram Ram",
-      busNumber: "BA2 Kha622",
-      plan: "2 Days",
-      dateFrom: "April 1, 2025",
-      dateTo: "April 3, 2025",
-      driverStatus: <PaidIcon />,
-      payment: "$50",
-      paymentStatus: "Paid",
-      status: "Returned",
-    },
-    {
-      id: 5,
-      bookingId: "BL-WZ1001",
-      bookingDate: "April 1, 2025",
-      clientName: "Haray Ram Ram",
-      busNumber: "BA2 Kha622",
-      plan: "2 Days",
-      dateFrom: "April 1, 2025",
-      dateTo: "April 3, 2025",
-      driverStatus: <PaidIcon />,
-      payment: "$50",
-      paymentStatus: "Paid",
-      status: "Returned",
-    },
-    {
-      id: 6,
-      bookingId: "BL-WZ1001",
-      bookingDate: "April 1, 2025",
-      clientName: "Haray Ram Ram",
-      busNumber: "BA2 Kha622",
-      plan: "2 Days",
-      dateFrom: "April 1, 2025",
-      dateTo: "April 3, 2025",
-      driverStatus: <PaidIcon />,
-      payment: "$50",
-      paymentStatus: "Paid",
-      status: "Returned",
-    },
-    {
-      id: 7,
-      bookingId: "BL-WZ1001",
-      bookingDate: "April 1, 2025",
-      clientName: "Haray Ram Ram",
-      busNumber: "BA2 Kha622",
-      plan: "2 Days",
-      dateFrom: "April 1, 2025",
-      dateTo: "April 3, 2025",
-      driverStatus: <PaidIcon />,
-      payment: "$50",
-      paymentStatus: "Paid",
-      status: "Returned",
-    },
-  ];
 
   const statusColor = {
     Cancelled: "bg-red-100 text-red-600",
@@ -188,59 +88,64 @@ const page = () => {
           </tr>
         </thead>
         <tbody>
-          {bookingDetails.map((ride) => (
-            <tr key={ride.id} className="text-sm">
-              <td className="p-2 border-b border-gray-500">
-                <div
-                  className="line-clamp-1 max-w-[150px] overflow-hidden"
-                  title={ride.id}
-                >
-                  {ride.id}
-                </div>
-              </td>
-              <td className="p-2 border-b border-gray-500">
-                {ride.bookingDate}
-              </td>
-              <td className="p-2 border-b border-gray-500">
-                {ride.passengerInfo.firstName} {ride.passengerInfo.lastName}
-              </td>
-              <td className="p-2 border-b border-gray-500">
-                <div
-                  className="line-clamp-1 max-w-[150px] overflow-hidden"
-                  title={ride.vehicleId}
-                >
-                  {ride.vehicleName}
-                </div>
-              </td>
-              <td className="p-2 border-b border-gray-500">1d</td>
-              <td className="p-2 border-b border-gray-500">
-                {ride.pickupDate} <span className="text-gray-500">to</span>{" "}
-                {ride.returnDate}
-              </td>
-              <td className="p-2 border-b border-gray-500 text-center">
-                <PaidIcon />
-              </td>
-              <td className="p-2 border-b border-gray-500 flex items-center gap-2">
-                {ride.payment}
-                <div
-                  className={`inline-block px-2 py-1.5 rounded-md font-medium ${
-                    paymentColor[ride.paymentStatus]
-                  }`}
-                >
-                  {ride.paymentStatus}
-                </div>
-              </td>
-              <td className="p-2 border-b border-gray-500">
-                <div
-                  className={`inline-block px-2 py-1 rounded-md font-medium ${
-                    statusColor[ride.status]
-                  }`}
-                >
-                  {ride.status}
-                </div>
-              </td>
-            </tr>
-          ))}
+          {bookingDetails.length === 0 ? (
+            <p className="p-3 text-xl text-gray-400">No Bookings found</p>
+          ) : (
+            bookingDetails.map((ride) => (
+              <tr key={ride.id} className="text-sm">
+                <td className="p-2 border-b border-gray-500">
+                  <div
+                    className="line-clamp-1 max-w-[150px] overflow-hidden"
+                    title={ride.id}
+                  >
+                    {ride.id}
+                  </div>
+                </td>
+                <td className="p-2 border-b border-gray-500">
+                  {ride.bookingDate}
+                </td>
+                <td className="p-2 border-b border-gray-500">
+                  {ride.passengerInfo.firstName} {ride.passengerInfo.lastName}
+                </td>
+                <td className="p-2 border-b border-gray-500">
+                  <div
+                    className="line-clamp-1 max-w-[150px] overflow-hidden"
+                    title={ride.vehicleId}
+                  >
+                    {ride.vehicleName}
+                  </div>
+                </td>
+                <td className="p-2 border-b border-gray-500">1d</td>
+                <td className="p-2 border-b border-gray-500">
+                  {ride.pickupDate.split("T")[0]}{" "}
+                  <span className="text-gray-500">-</span>{" "}
+                  {ride.returnDate.split("T")[0]}
+                </td>
+                <td className="p-2 border-b border-gray-500 text-center">
+                  <PaidIcon />
+                </td>
+                <td className="p-2 border-b border-gray-500 flex items-center gap-2">
+                  {ride.payment}
+                  <div
+                    className={`inline-block px-2 py-1.5 rounded-md font-medium ${
+                      paymentColor[ride.paymentStatus]
+                    }`}
+                  >
+                    {ride.paymentStatus}
+                  </div>
+                </td>
+                <td className="p-2 border-b border-gray-500">
+                  <div
+                    className={`inline-block px-2 py-1 rounded-md font-medium ${
+                      statusColor[ride.status]
+                    }`}
+                  >
+                    {ride.status}
+                  </div>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

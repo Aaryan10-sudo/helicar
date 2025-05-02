@@ -19,7 +19,7 @@ const useGetVehicle = () => {
           setVehicles(result); // ✅ Store fetched vehicles
         }
       } catch (error) {
-        notifyError("Failed to fetch vehicles.");
+        // notifyError("Failed to fetch vehicles.");
       } finally {
         setLoading(false);
       }

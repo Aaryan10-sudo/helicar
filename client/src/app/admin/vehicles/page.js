@@ -51,29 +51,29 @@ const page = () => {
   };
 
   const handleDelete = (id) => {
-    try {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
-        if (result.isConfirmed) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteVehicle(id);
           Swal.fire({
             title: "Deleted!",
-            text: "Your Vehicle has been deleted.",
+            text: "Your enquiry has been deleted.",
             icon: "success",
           });
+          handleDetails();
+        } catch (error) {
+          console.log("Error deleting enquiry:", error.message);
         }
-      });
-      deleteVehicle(id);
-      handleDetails();
-    } catch (error) {
-      console.log(error.message);
-    }
+      }
+    });
   };
 
   useEffect(() => {
@@ -135,61 +135,71 @@ const page = () => {
           </tr>
         </thead>
         <tbody>
-          {details.map((ride) => (
-            <tr key={ride.id} className="text-sm">
-              <td className="p-2 border-b border-gray-500">
-                <div
-                  className="line-clamp-1 max-w-[150px] overflow-hidden"
-                  title={ride.id}
+          {details.length === 0 ? (
+            <p className="p-3 text-xl text-gray-400">No vehicle found</p>
+          ) : (
+            details.map((ride) => (
+              <tr key={ride.id} className="text-sm">
+                <td className="p-2 border-b border-gray-500">
+                  <div
+                    className="line-clamp-1 max-w-[150px] overflow-hidden"
+                    title={ride.id}
+                  >
+                    {ride.id}
+                  </div>
+                </td>
+
+                <td className="p-2 border-b border-gray-500 text-center">
+                  {ride.vehicleName}
+                </td>
+                <td className="p-2 border-b border-gray-500 text-center">
+                  {ride.numberPlate}
+                </td>
+
+                <td
+                  className={`p-2 border-b border-gray-500 font-medium text-center ${
+                    ride.vehicleStatus === "Occupied"
+                      ? "text-red-600"
+                      : "text-green-600"
+                  }`}
                 >
-                  {ride.id}
-                </div>
-              </td>
+                  {ride.vehicleStatus}
+                </td>
 
-              <td className="p-2 border-b border-gray-500 text-center">
-                {ride.vehicleName}
-              </td>
-              <td className="p-2 border-b border-gray-500 text-center">
-                {ride.numberPlate}
-              </td>
+                <td className="p-2 border-b border-gray-500 text-center">
+                  {ride.vehiclePrice}
+                </td>
+                <td className="p-2 border-b border-gray-500 text-center">
+                  {ride.category.name}
+                </td>
+                <td className="p-2 border-b border-gray-500 text-center">
+                  {ride.type.name}
+                </td>
+                <td className="p-2 border-b border-gray-500 text-center">
+                  {ride.vehicleBrand}
+                </td>
 
-              <td
-                className={`p-2 border-b border-gray-500 font-medium text-center ${ride.vehicleStatus === "Occupied" ? "text-red-600" : "text-green-600"}`}
-              >
-                {ride.vehicleStatus}
-              </td>
-
-              <td className="p-2 border-b border-gray-500 text-center">
-                {ride.vehiclePrice}
-              </td>
-              <td className="p-2 border-b border-gray-500 text-center">
-                {ride.category.name}
-              </td>
-              <td className="p-2 border-b border-gray-500 text-center">
-                {ride.type.name}
-              </td>
-              <td className="p-2 border-b border-gray-500 text-center">
-                {ride.vehicleBrand}
-              </td>
-
-              <td className=" p-2 border-b border-gray-500 text-center">
-                <button
-                  className="cursor-pointer"
-                  onClick={() => {
-                    router.push(`/admin/vehicles/update?vehicleId=${ride.id}`);
-                  }}
-                >
-                  <UpdateIcon />
-                </button>
-                <button
-                  className="cursor-pointer mx-[10px]"
-                  onClick={() => handleDelete(ride.id)}
-                >
-                  <DeleteIcon />
-                </button>
-              </td>
-            </tr>
-          ))}
+                <td className="p-2 border-b border-gray-500 text-center">
+                  <button
+                    className="cursor-pointer"
+                    onClick={() => {
+                      router.push(
+                        `/admin/vehicles/update?vehicleId=${ride.id}`
+                      );
+                    }}
+                  >
+                    <UpdateIcon />
+                  </button>
+                  <button
+                    className="cursor-pointer mx-[10px]"
+                    onClick={() => handleDelete(ride.id)}
+                  >
+                    <DeleteIcon />
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

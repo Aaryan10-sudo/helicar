@@ -59,7 +59,7 @@ const AdminSidebar = () => {
     {
       title: "Enquiry",
       icon: <EnquiryIcon />,
-      path: "/admin/enqiry",
+      path: "/admin/enquiry",
     },
     {
       title: "Review",

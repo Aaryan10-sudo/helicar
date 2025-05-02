@@ -9,7 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { toast, ToastContainer } from "react-toastify";
 
-const page = () => {
+const AddVehiclePage = () => {
   const [formData, setFormData] = useState({
     vehicleName: "",
     vehicleDescription: "",
@@ -25,6 +25,7 @@ const page = () => {
     vehicleType: "",
     numberPlate: "",
   });
+
   const [vehicleCategories, setVehicleCategories] = useState([]);
   const [vehicleTypes, setVehicleTypes] = useState([]);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
@@ -33,14 +34,9 @@ const page = () => {
   const [newType, setNewType] = useState("");
   const [loader, setLoader] = useState(false);
 
-  console.log(formData);
-
   const getAllVehicleCategory = async () => {
     try {
-      const result = await axios({
-        url: `${baseURL}/vehicle-category/get`,
-        method: "GET",
-      });
+      const result = await axios.get(`${baseURL}/vehicle-category/get`);
       setVehicleCategories(result.data.data);
     } catch (error) {
       console.log(error.message);
@@ -49,10 +45,7 @@ const page = () => {
 
   const getAllVehicleType = async () => {
     try {
-      const result = await axios({
-        url: `${baseURL}/vehicle-type/get`,
-        method: "GET",
-      });
+      const result = await axios.get(`${baseURL}/vehicle-type/get`);
       setVehicleTypes(result.data.data);
       getAllVehicleCategory();
     } catch (error) {
@@ -80,51 +73,41 @@ const page = () => {
   };
 
   const addCategory = async () => {
-    const name = newCategory;
     try {
-      const result = await axios({
-        method: "POST",
-        url: `${baseURL}/vehicle-category/create`,
-        data: { name },
+      await axios.post(`${baseURL}/vehicle-category/create`, {
+        name: newCategory,
       });
       setShowCategoryModal(false);
+      setNewCategory("");
       await getAllVehicleCategory();
+      toast.success("Category added!");
     } catch (error) {
-      console.log(error.message);
+      toast.error("Failed to add category");
     }
   };
 
   const addType = async () => {
-    const name = newType;
     try {
-      const result = await axios({
-        method: "POST",
-        url: `${baseURL}/vehicle-type/create`,
-        data: { name },
-      });
-      getAllVehicleType();
+      await axios.post(`${baseURL}/vehicle-type/create`, { name: newType });
+      setShowTypeModal(false);
+      setNewType("");
+      await getAllVehicleType();
+      toast.success("Type added!");
     } catch (error) {
-      console.log(error.message);
+      toast.error("Failed to add type");
     }
   };
-
-  useEffect(() => {
-    getAllVehicleCategory();
-    getAllVehicleType();
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoader(true);
-      const result = await axios({
-        url: `${baseURL}/vehicle/create`,
-        method: "POST",
-        data: formData,
+      const result = await axios.post(`${baseURL}/vehicle/create`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+
       setFormData({
         vehicleName: "",
         vehicleDescription: "",
@@ -140,9 +123,8 @@ const page = () => {
         vehicleType: "",
         numberPlate: "",
       });
-      setLoader(false);
-      console.log(formData);
 
+      setLoader(false);
       toast.success("Vehicle added successfully");
     } catch (error) {
       setLoader(false);
@@ -163,24 +145,22 @@ const page = () => {
     let data = new FormData();
     data.append("document", fileData);
     try {
-      let result = await axios({
-        url: `${baseURL}/file/single`,
-        method: "POST",
-        data: data,
-      });
+      let result = await axios.post(`${baseURL}/file/single`, data);
       setFormData((prev) => ({
         ...prev,
         vehicleImage: result.data.result,
       }));
     } catch (error) {
       console.log(error.response?.data?.message || "Something went wrong");
-      console.log(error.message);
     }
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-  });
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+  useEffect(() => {
+    getAllVehicleCategory();
+    getAllVehicleType();
+  }, []);
 
   return (
     <form className="m-[30px]" onSubmit={handleSubmit}>
@@ -418,6 +398,7 @@ const page = () => {
         </div>
       </section>
 
+      {/* Add New Category Modal */}
       {showCategoryModal && (
         <div className="fixed inset-0 bg-transparent bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[300px]">
@@ -431,19 +412,16 @@ const page = () => {
             />
             <div className="flex justify-end gap-2">
               <button
+                type="button"
                 className="bg-gray-300 px-3 py-1 rounded"
                 onClick={() => setShowCategoryModal(false)}
               >
                 Cancel
               </button>
               <button
+                type="button"
                 className="bg-blue-500 text-white px-3 py-1 rounded"
-                onClick={() => {
-                  console.log("New Category:", newCategory);
-
-                  addCategory();
-                  setNewCategory("");
-                }}
+                onClick={addCategory}
               >
                 Add
               </button>
@@ -452,7 +430,7 @@ const page = () => {
         </div>
       )}
 
-      {/* Type Modal */}
+      {/* Add New Type Modal */}
       {showTypeModal && (
         <div className="fixed inset-0 bg-transparent bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[300px]">
@@ -466,19 +444,16 @@ const page = () => {
             />
             <div className="flex justify-end gap-2">
               <button
+                type="button"
                 className="bg-gray-300 px-3 py-1 rounded"
                 onClick={() => setShowTypeModal(false)}
               >
                 Cancel
               </button>
               <button
+                type="button"
                 className="bg-blue-500 text-white px-3 py-1 rounded"
-                onClick={() => {
-                  console.log("New Type:", newType);
-                  setShowTypeModal(false);
-                  addType();
-                  setNewType("");
-                }}
+                onClick={addType}
               >
                 Add
               </button>
@@ -490,4 +465,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default AddVehiclePage;

@@ -23,13 +23,13 @@ export const metadata = {
 const comfortaa = Comfortaa({
   variable: "--font-comfortaa",
   subsets: ["latin"],
-  weight: ["400", "500", "700"], // or any you need
+  weight: ["400", "500", "700"],
 });
 
 const lexend = Lexend({
   variable: "--font-lexend",
   subsets: ["latin"],
-  weight: ["400", "500", "700"], // adjust as needed
+  weight: ["400", "500", "700"],
 });
 
 export default function RootLayout({ children }) {
@@ -37,11 +37,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${comfortaa.variable} ${lexend.variable} font-lexend`}>
         <ProtectedAdmin>
-          <section className="flex w-full">
+          <section className="flex w-full h-screen overflow-hidden">
             <AdminSidebar />
-            <div className="w-full">
+            <div className="flex flex-col flex-1 h-screen overflow-hidden">
               <AdminNavbar />
-              {children}
+              <div className="flex-1 overflow-y-auto px-4 py-2">{children}</div>
             </div>
           </section>
         </ProtectedAdmin>
