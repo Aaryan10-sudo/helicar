@@ -37,7 +37,7 @@ const page = () => {
   }, []);
 
   return (
-    <div className="bg-[#f8f9fa] text-black w-full h-auto py-[10px]">
+    <div className="bg-[#f8f9fa] text-black w-full h-auto py-[10px] min-h-screen">
       <main>
         <section>
           <h2 className="text-3xl font-semibold border-b px-[120px] py-[30px] border-gray-400">

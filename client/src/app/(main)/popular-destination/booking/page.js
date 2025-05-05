@@ -16,7 +16,7 @@ const Page = () => {
   ];
 
   const [vehicle, setVehicle] = useState([]);
-  const [vehicleName, setVehicleName] = useState("cars"); // Default selected
+  const [vehicleName, setVehicleName] = useState("cars");
   const [selectedVehicle, setSelectedVehicle] = useState("Cars");
   const router = useRouter();
 
@@ -38,8 +38,7 @@ const Page = () => {
   }, [vehicleName]);
 
   return (
-    <section className="p-16">
-      {/* Vehicle Type Buttons */}
+    <section className="p-16 min-h-screen">
       <div className="flex flex-wrap gap-2 mb-4">
         {vehicleTypes.map((type) => (
           <button
@@ -59,11 +58,9 @@ const Page = () => {
         ))}
       </div>
 
-      {/* Vehicle Cards */}
       <span className="flex justify-start flex-wrap gap-5">
         {vehicle.map((value, index) => (
           <div className="w-[370px] h-[400px] shadow-xl" key={index}>
-            {/* Vehicle Image */}
             <div
               className="bg-black h-[250px] bg-center bg-cover"
               style={{
@@ -71,7 +68,6 @@ const Page = () => {
               }}
             ></div>
 
-            {/* Vehicle Info */}
             <div className="p-2 flex items-center gap-3.5 justify-between flex-col w-full">
               <div className="mt-2 flex items-center text-gray-500 justify-between gap-3">
                 <p className="flex items-center justify-center gap-1">
