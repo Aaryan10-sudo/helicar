@@ -99,7 +99,7 @@ const page = () => {
                           <button
                             onClick={() => handleBookNow(value.id)}
                             type="submit"
-                            className="bg-blue-600 cursor-pointer hover:bg-blue-700 transition-all text-white px-4 py-2 rounded-full mt-2"
+                            className="bg-primary cursor-pointer hover:bg-blue-700 transition-all text-white px-4 py-2 rounded-full mt-2"
                           >
                             Book now
                           </button>

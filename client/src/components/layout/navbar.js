@@ -21,8 +21,7 @@ const Navbar = () => {
 
   return (
     <nav className="h-[88px] w-full bg-white flex items-center shadow-md px-10 sticky top-0 z-50">
-      <div className="flex justify-between items-center w-full ">
-        {/* Logo */}
+      <div className="flex justify-between items-center w-full max-w-[1700px] mx-auto">
         <Link className=" font-bold" href={"/"}>
           <Image
             src={assets.navlogo.src}
@@ -32,7 +31,6 @@ const Navbar = () => {
           />
         </Link>
 
-        {/* Mobile Menu Button */}
         <button
           className="lg:hidden block focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -40,7 +38,6 @@ const Navbar = () => {
           ☰
         </button>
 
-        {/* Navigation Links */}
         <ul
           className={`lg:flex ml-10 gap-11 items-center space-x-6 text-lg font-medium ${
             menuOpen
@@ -93,7 +90,7 @@ const Navbar = () => {
 
         <Link
           href={"/login"}
-          className=" bg-blue-500 text-white px-10 py-2 rounded-lg font-bold"
+          className=" bg-primary text-white px-10 py-2 rounded-lg font-bold"
         >
           Log In
         </Link>

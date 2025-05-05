@@ -14,7 +14,7 @@ const PopularDestination = () => {
           adventure starts here!
         </p>
       </section>
-      <div className="flex justify-between gap-5">
+      <div className="w-full">
         <PopularDestinationCard />
       </div>
     </main>

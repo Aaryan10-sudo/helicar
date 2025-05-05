@@ -50,7 +50,7 @@ export default function Page() {
               onClick={() => setSelectedVehicle(type)}
               className={`px-4 py-2 rounded-full font-medium transition ${
                 selectedVehicle === type
-                  ? "bg-blue-600 text-white"
+                  ? "bg-primary text-white"
                   : "bg-gray-200 hover:bg-gray-300"
               }`}
             >

@@ -5,9 +5,8 @@ import React from "react";
 
 const OurMission = () => {
   return (
-    <section className="flex flex-col md:flex-row justify-center items-center w-full px-5 md:px-10 h-auto md:h-[537px] gap-10">
-      {/* Left Column: Mission Text */}
-      <article className="w-full md:w-1/2 flex flex-col gap-6 justify-center px-4">
+    <section className="flex flex-col md:flex-row justify-center items-center w-full px-5 md:px-10 h-auto md:h-[537px] max-w-[1700px] mx-auto">
+      <article className="  flex flex-col gap-6 justify-center px-4">
         <h2 className="font-Comfortaa font-bold text-primary text-[36px] md:text-[48px] text-left">
           Our Mission
         </h2>
@@ -33,7 +32,6 @@ const OurMission = () => {
         </Link>
       </article>
 
-      {/* Right Column: Car Image */}
       <div className="w-full md:w-1/2 flex justify-center items-center">
         <Image
           src={assets.contactCar.src}

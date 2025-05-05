@@ -1,11 +1,15 @@
 import mustangImage from "../assets/mustang.jpg";
 import luklaImage from "../assets/lukla.jpg";
 import pokharaImage from "../assets/pokhara.jpg";
+import chandragiriImage from "../assets/chandragiri.jpg";
+import swayambhuImage from "../assets/swayambhu.jpg";
 
 export const Destination = [
   { id: 1, name: "Mustang", image: mustangImage },
   { id: 2, name: "Lukla", image: luklaImage },
   { id: 3, name: "Pokhara", image: pokharaImage },
+  { id: 4, name: "Chandragiri", image: chandragiriImage },
+  { id: 5, name: "Swayambhu Nath", image: swayambhuImage },
 ];
 
 export const Blog = [

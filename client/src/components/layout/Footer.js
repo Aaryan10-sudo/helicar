@@ -10,7 +10,7 @@ import React from "react";
 const Footer = () => {
   return (
     <footer className="bg-[#D7E9FB] w-full h-[350px] ">
-      <section className="px-20 py-[50px] flex justify-between border border-transparent border-b-black">
+      <section className=" py-[50px] flex justify-between border border-transparent border-b-black max-w-[1700px] mx-auto">
         {" "}
         <ul className="flex flex-col justify-center gap-2 cursor-pointer">
           <h1 className="font-bold text-[30px]">Company</h1>
