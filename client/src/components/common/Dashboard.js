@@ -9,7 +9,7 @@ import Dashboard2 from "./Dashboard2";
 
 const Dashboard = () => {
   return (
-    <main className="m-[30px] px-[30px] py-[10px] rounded-xl flex justify-between w-full font-Comfortaa">
+    <main className="m-[30px] px-[30px] py-[10px] rounded-xl flex justify-between w-full ">
       <div className="w-[60%]">
         <h1 className="text-[30px] font-bold">Dashboard</h1>
         <span className="my-[10px] flex justify-between w-[100%]">

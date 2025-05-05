@@ -56,7 +56,7 @@ const page = () => {
           </div>
         </article>
         <section className="px-10">
-          <h1 className="text-blue-600  font-bold text-[40px] flex justify-center items-center">
+          <h1 className="text-blue-600  font-bold text-[40px] flex justify-center items-center font-Comfortaa">
             Trekking Packages
           </h1>
           <TrekkingCard />

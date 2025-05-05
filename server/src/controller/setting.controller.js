@@ -37,9 +37,10 @@ exports.getAllSettingController = async (req, res, next) => {
 };
 
 exports.updateSettingController = async (req, res, next) => {
-  const { id, data } = req.body;
+  const id = req.query.id;
+  const data = req.body;
   try {
-    const result = await updateSettingService({ id, data });
+    const result = await updateSettingService(id, data);
     res.status(200).json({
       success: true,
       message: "Setting Updated Successfully",

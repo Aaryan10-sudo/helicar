@@ -9,7 +9,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#D7E9FB] w-full h-[350px] ">
+    <footer className="bg-[#D7E9FB] w-full h-[350px] font-Comfortaa">
       <section className=" py-[50px] flex justify-between border border-transparent border-b-black max-w-[1700px] mx-auto">
         {" "}
         <ul className="flex flex-col justify-center gap-2 cursor-pointer">

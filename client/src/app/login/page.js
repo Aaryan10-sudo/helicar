@@ -49,7 +49,7 @@ const LoginForm = () => {
         onSubmit={handleSubmit}
         className="bg-white rounded-2xl shadow-xl px-10 py-8 w-full max-w-sm"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 font-Comfortaa">
           Login
         </h2>
 

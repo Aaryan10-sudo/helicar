@@ -19,13 +19,13 @@ async function getAllSettingService() {
   }
 }
 
-async function updateSettingService({ id, data }) {
+async function updateSettingService(id, data) {
   try {
-    const isValidSetting = await Setting.findOne({ where: { id: id } });
+    const isValidSetting = await Setting.findOne({ where: { id } });
     if (!isValidSetting) {
       throw new Error("Invalid Id");
     }
-    return await Setting.update({ data: data }, { where: { id } });
+    return await Setting.update(data, { where: { id } });
   } catch (error) {
     throw new Error(error.message);
   }
