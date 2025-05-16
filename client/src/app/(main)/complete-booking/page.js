@@ -4,6 +4,13 @@ import { baseURL } from "@/config/config";
 import CalenderIcon from "@/ui/CalenderIcon";
 import Loader from "@/ui/Loader";
 import LocationIcon from "@/ui/LocationIcon";
+import Loggages from "@/ui/Loggages";
+import PassengerIcon from "@/ui/PassengerIcon";
+import PassengerIcons from "@/ui/PassengerIcons";
+import PeopleIcon from "@/ui/PeopleIcon";
+import TransmissionIcon from "@/ui/TransmissionIcon";
+import ViberIcon from "@/ui/ViberIcon";
+import WhatsappIcon from "@/ui/WhatsappIcon";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
@@ -158,7 +165,7 @@ const BookingForm = () => {
                 />
               </div>
               <div className="col-span-2">
-                <label className="mb-1 font-medium">Message:</label>
+                <label className="mb-1 font-medium">Details:</label>
                 <textarea
                   rows={3}
                   placeholder="Enter a message..."
@@ -191,44 +198,87 @@ const BookingForm = () => {
               {loader ? <Loader /> : "Book Now"}
             </button>
           </form>
+          <div className="w-[40%]">
+            {selectedCar && (
+              <div className="w-full mt-10 bg-white p-3 rounded-lg shadow-md">
+                <div className="flex  gap-5 w-full pb-3">
+                  <div className="w-[350px] object-cover h-[200px] overflow-hidden">
+                    <img
+                      src={selectedCar.vehicleImage}
+                      alt={selectedCar.vehicleName}
+                      className="object-cover rounded w-full h-full"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <h3 className="text-[25px] font-medium">
+                      {selectedCar.vehicleName}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-1">
+                      {selectedCar.vehicleDescription}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Number plate: {selectedCar.numberPlate}
+                    </p>
+                    <br />
 
-          {selectedCar && (
-            <div className="w-[40%] mt-10 bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-start justify-between gap-5 w-full">
-                <div className="w-[350px] object-cover h-[200px] overflow-hidden">
-                  <img
-                    src={selectedCar.vehicleImage}
-                    alt={selectedCar.vehicleName}
-                    className="object-cover rounded w-full h-full"
-                  />
+                    <div className=" flex items-center justify-between gap-2 w-[300px]">
+                      <h2 className="text-md font-bold flex gap-1 text-subheading">
+                        <Loggages />
+                        {selectedCar.features.luggage}
+                      </h2>
+                      <p className="text-subheading text-md flex gap-1 line-clamp-2">
+                        <PeopleIcon />
+                        {selectedCar.features.seats}
+                      </p>
+                      <p className="text-subheading text-md flex gap-1 font-semibold">
+                        <TransmissionIcon />
+                        {selectedCar.features.transmission}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold mt-4">
-                    {selectedCar.vehicleName}
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-1">
-                    {selectedCar.vehicleDetails}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Number plate: {selectedCar.numberPlate}
-                  </p>
-                </div>
+                <span className="flex gap-2">
+                  <LocationIcon />
+                  <div>From : Kathmandu || To : Pokhara</div>
+                </span>
+                <span className="mt-[10px] flex gap-2">
+                  <CalenderIcon />
+                  <div>April 24 - April 25</div>
+                </span>
+
+                <span className="mt-[10px] flex gap-2">
+                  <PassengerIcons />
+                  <div>Passenger : {selectedCar.features.seats}</div>
+                </span>
               </div>
-              <span className="flex gap-2">
-                <LocationIcon />
-                <div>From : Kathmandu || To : Pokhara</div>
-              </span>
-              <span className="mt-[10px] flex gap-2">
-                <CalenderIcon />
-                <div>April 24 - April 25</div>
-              </span>
+            )}
 
-              <span className="mt-[10px] flex gap-2">
-                Passenger Seat:
-                <div>{selectedCar.features.seats}</div>
+            <div className="py-5">
+              <h1 className="font-bold text-[25px]">Contact us</h1>
+              <span className="flex gap-5 items-center text-white">
+                <a
+                  href="https://wa.me/9801102579"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <button className="bg-[#25D366] w-[150px] h-[40px] flex items-center justify-center gap-1 cursor-pointer rounded-sm">
+                    <WhatsappIcon />
+                    Whatsapp
+                  </button>
+                </a>
+                <a
+                  href="viber://chat?number=9801102579"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <button className="bg-[#665CAC] w-[150px] h-[40px] flex items-center justify-center gap-1 cursor-pointer rounded-sm">
+                    <ViberIcon />
+                    Viber
+                  </button>
+                </a>
               </span>
             </div>
-          )}
+          </div>
         </section>
       </main>
     </div>

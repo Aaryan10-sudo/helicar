@@ -1,13 +1,50 @@
 "use client";
-import React, { useEffect } from "react";
-import { assets } from "../../../assets/assets";
+import VehicleSkeleton from "@/components/loader/vehicleSkeleton";
+import { baseURL } from "@/config/config";
+import useGetVehicle from "@/hooks/useVehicle";
+import BusIcon from "@/ui/BusIcon";
+import CarIcon from "@/ui/CarIcon";
+import HiaceIcon from "@/ui/HiaceIcon";
+import Loggages from "@/ui/Loggages";
+import PeopleIcon from "@/ui/PeopleIcon";
+import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
-import useGetVehicle from "@/hooks/useVehicle";
-import VehicleSkeleton from "@/components/loader/vehicleSkeleton";
+import { useEffect, useState } from "react";
+import { assets } from "../../../assets/assets";
+import TransmissionIcon from "@/ui/TransmissionIcon";
+import JeepIcon from "@/ui/JeepIcon";
 
 const VehicleRental = () => {
-  const { loading, vehicles } = useGetVehicle();
+  const { loading } = useGetVehicle();
+  const [allVehicles, setAllVehicles] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  const filterButton = [
+    { title: "All", icon: null },
+    { title: "Car", icon: <CarIcon /> },
+    { title: "Hiace", icon: <HiaceIcon /> },
+    { title: "Bus", icon: <BusIcon /> },
+    { title: "Jeep", icon: <JeepIcon /> },
+  ];
+
+  useEffect(() => {
+    const getAllVehicles = async () => {
+      try {
+        const result = await axios.get(`${baseURL}/vehicle/get`);
+        setAllVehicles(result.data.data);
+      } catch (error) {
+        console.error("Error fetching vehicles:", error.message);
+      }
+    };
+    getAllVehicles();
+  }, []);
+
+  // Filter vehicles by selected category
+  const filteredVehicles = allVehicles.filter((vehicle) => {
+    if (selectedCategory === "all") return true;
+    return vehicle?.type?.name?.toLowerCase() === selectedCategory;
+  });
 
   return (
     <>
@@ -18,8 +55,9 @@ const VehicleRental = () => {
           content="Rent cars and helicopters in Nepal for your next adventure. Explore Muktinath, Everest, Pokhara, and more with our top-rated rental service."
         />
       </Head>
-      <div className="flex flex-col gap-8 lg:gap-12">
-        {/* Vehicle rental first */}
+
+      <div className="flex flex-col gap-8 lg:gap-12 min-h-screen">
+        {/* Hero Section */}
         <div
           className="flex flex-col items-center bg-cover bg-center py-12 lg:py-24 px-4 sm:px-6 lg:px-8 gap-8 md:gap-16 xl:gap-[500px]"
           style={{ backgroundImage: `url(${assets.vehicle.src})` }}
@@ -31,119 +69,89 @@ const VehicleRental = () => {
             <p className="text-subheading text-sm sm:text-base font-light leading-3 text-justify max-w-[785px]">
               Lorem ipsum dolor sit amet consectetur. Malesuada a purus eu
               dignissim morbi egestas interdum viverra. Ac sed in egestas mattis
-              eros. Lorem ipsum dolor sit amet consectetur. Malesuada a purus eu
-              dignissim morbi egestas interdum viverra. Ac sed in egestas mattis
               eros.
             </p>
           </div>
-          <div className="bg-white flex flex-col sm:flex-row gap-4 sm:gap-6 rounded-xl w-full max-w-6xl p-4 sm:p-6 shadow-2xl">
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-              <div className="flex flex-col gap-2">
-                <label className="font-comfortaa font-normal text-sm">
-                  Services
-                </label>
-                <select className="w-full h-10 px-3 border border-gray-300 rounded-md font-[400px] text-subheading leading-4 appearance-none">
-                  <option value="">Car</option>
-                  <option value="">Heli</option>
-                </select>
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="font-comfortaa font-normal text-sm">
-                  Vehicles Category
-                </label>
-                <select className="w-full h-10 px-3 border border-gray-300 font-[400px] text-subheading leading-4 rounded-md appearance-none">
-                  <option value="">Car</option>
-                  <option value="">Heli</option>
-                </select>
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="font-comfortaa font-normal text-sm">
-                  Price Range
-                </label>
-                <select className="w-full h-10 px-3 border border-gray-300 font-[400px] text-subheading leading-4 rounded-md appearance-none">
-                  <option value="">Car</option>
-                  <option value="">Heli</option>
-                </select>
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="font-comfortaa font-normal text-sm">
-                  Sort By
-                </label>
-                <select className="w-full h-10 px-3 border border-gray-300 font-[400px] text-subheading leading-4 rounded-md appearance-none">
-                  <option value="">Price High to low</option>
-                  <option value="">Car</option>
-                  <option value="">Heli</option>
-                </select>
-              </div>
-            </div>
-            <div className="sm:self-end w-full max-w-[110px] self-end sm:w-auto ">
-              <button className="bg-primary hover:cursor-pointer w-full sm:w-32 rounded-2xl h-10 flex items-center justify-center gap-2.5 hover:bg-primary-dark transition-colors">
-                <p className="font-comfortaa text-white font-bold text-sm sm:text-base">
-                  Search
-                </p>
-              </button>
-            </div>
-          </div>
         </div>
 
-        {/* Popular Vehicles Section */}
-        <div className="px-4 sm:px-6 lg:px-8 w-full max-w-7xl mx-auto py-12 lg:py-20">
+        {/* Filter Buttons */}
+        <div className="px-4 sm:px-6 lg:px-8 w-full max-w-7xl mx-auto">
           <div className="mb-8 lg:mb-12">
-            <h1 className="text-3xl sm:text-left font-Comfortaa sm:text-4xl md:text-5xl text-primary font-bold">
+            <h1 className="text-3xl sm:text-left font-Comfortaa sm:text-4xl md:text-5xl text-primary font-bold mb-4">
               Popular Vehicles:
             </h1>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {loading ? (
-              // Show 6 skeleton placeholders while loading
-              [...Array(6)].map((_, index) => <VehicleSkeleton key={index} />)
-            ) : vehicles?.data?.vehicles?.length > 0 ? (
-              vehicles.data.vehicles.map((vehicle, index) => (
-                <div
-                  key={index}
-                  className="w-full max-w-sm mx-auto p-4 sm:p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow"
+            <div className="flex gap-4 flex-wrap">
+              {filterButton.map(({ title, icon }) => (
+                <button
+                  key={title.toLowerCase()}
+                  onClick={() => setSelectedCategory(title.toLowerCase())}
+                  className={`flex items-center gap-2 cursor-pointer px-4 py-2 rounded-full ${
+                    selectedCategory === title.toLowerCase()
+                      ? "bg-primary text-white"
+                      : "bg-gray-200 hover:bg-gray-300 transition-all text-black"
+                  } transition`}
                 >
-                  <div className="flex flex-col gap-4">
-                    <h2 className="font-bold font-Comfortaa text-primary text-xl sm:text-2xl">
-                      {vehicle.name}
-                    </h2>
+                  {icon}
+                  {title}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {loading ? (
+            <VehicleSkeleton />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-5 gap-8">
+              {filteredVehicles.length === 0 ? (
+                <p className="font-bold text-xl text-red-500 w-full">
+                  No vehicles found
+                </p>
+              ) : (
+                filteredVehicles.map((vehicle, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-lg shadow-md overflow-hidden"
+                  >
                     <Image
-                      src={assets.muktinathTemple.src}
-                      width={assets.muktinathTemple.width}
-                      height={assets.muktinathTemple.height}
-                      className="w-full h-48 object-cover rounded-lg"
-                      alt="Vehicle Image"
+                      src={vehicle.vehicleImage}
+                      alt={vehicle.vehicleName}
+                      width={400}
+                      height={250}
+                      className="w-full h-52 object-cover"
                     />
-                    <div className="flex justify-between text-subheading text-sm">
-                      <span>{vehicle.capacity.luggage} Luggages</span>
-                      <span>{vehicle.capacity.passengers} People</span>
-                      <span>{vehicle.transmission}</span>
+                    <p className="bg-slate-100 w-[100px] h-[40px] flex justify-center items-center font-bold relative -top-[40px] rounded-tr-xl">
+                      {vehicle.vehicleName}
+                    </p>
+                    <div className="p-4 flex items-center justify-between gap-2">
+                      <h2 className="text-md font-bold flex gap-1 text-subheading">
+                        <Loggages />
+                        {vehicle.features.luggage}
+                      </h2>
+                      <p className="text-subheading text-md flex gap-1 line-clamp-2">
+                        <PeopleIcon />
+                        {vehicle.features.seats}
+                      </p>
+                      <p className="text-subheading text-md flex gap-1 font-semibold">
+                        <TransmissionIcon />
+                        {vehicle.features.transmission}
+                      </p>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <div className="text-[#222121]">
-                        <span className="text-2xl sm:text-3xl font-bold">
-                          ${vehicle.pricing.perDay}/
-                        </span>
-                        <span className="text-sm ml-1">per day</span>
-                      </div>
-                      <button className="bg-[#045B8F] px-6 py-2 rounded-2xl text-white font-bold hover:bg-primary-dark transition-colors hover:cursor-pointer">
+                    <div className="p-4 flex items-center justify-between">
+                      <p className="text-2xl font-semibold">
+                        ${vehicle.vehiclePrice} /
+                        <span className="text-sm font-normal">
+                          per day
+                        </span>{" "}
+                      </p>
+                      <button className="bg-primary text-white font-semibold px-6 py-2 cursor-pointer hover:bg-blue-500 transition-all rounded-full">
                         Book Now
                       </button>
                     </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              // Display when no vehicles are found
-              <div className="w-full max-w-sm mx-auto p-4 sm:p-6 rounded-2xl shadow-xl transition-shadow">
-                <div className="flex justify-center items-center h-full">
-                  <p className="font-bold text-2xl sm:text-3xl text-red-500">
-                    No vehicles found.
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
+                ))
+              )}
+            </div>
+          )}
         </div>
       </div>
     </>

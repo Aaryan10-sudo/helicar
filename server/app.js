@@ -18,7 +18,7 @@ const enquiryRouter = require("./src/routes/enquiry.route");
 const settingRouter = require("./src/routes/setting.route");
 const {
   testPostgresConnection,
-} = require("./src/config/db/postgres/connectPostgres");
+} = require("./config/db/postgres/connectPostgres");
 
 const app = express();
 

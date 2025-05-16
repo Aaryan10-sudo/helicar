@@ -1,5 +1,5 @@
 const speakeasy = require("speakeasy");
-const { SECRET_KEY } = require("../config/config");
+const { SECRET_KEY } = require("../../config/env");
 
 function generateOTP() {
   const otp = speakeasy.totp({

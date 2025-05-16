@@ -163,10 +163,10 @@ const AddVehiclePage = () => {
   }, []);
 
   return (
-    <form className="m-[30px]" onSubmit={handleSubmit}>
+    <form className="sm:m-[30px]" onSubmit={handleSubmit}>
       <ToastContainer />
       <section className="flex justify-between">
-        <h1 className="font-bold text-2xl flex items-center gap-2">
+        <h1 className="font-bold sm:text-2xl flex items-center gap-2">
           <Vehicle />
           Add New Vehicle
         </h1>
@@ -184,8 +184,8 @@ const AddVehiclePage = () => {
         </button>
       </section>
 
-      <section className="flex justify-between mt-[20px] gap-5 ">
-        <div className="bg-gray-100 w-[60%] rounded-xl p-[30px]">
+      <section className="flex flex-wrap sm:flex-nowrap justify-between mt-[20px] gap-5 ">
+        <div className="bg-gray-100 sm:w-[60%] w-full rounded-xl sm:p-[30px] p-[10px]">
           <h1 className="font-bold text-xl">General Information</h1>
           <br />
           <label>Vehicle Name</label>
@@ -211,13 +211,13 @@ const AddVehiclePage = () => {
           <br />
           <br />
 
-          <span className="flex items-center justify-between gap-2">
+          <span className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 w-full">
             <div>
               <p>Seats:</p>
               <input
                 name="seats"
                 type="number"
-                className="bg-gray-200 w-[200px] p-[10px] rounded-md"
+                className="bg-gray-200 sm:w-[200px] w-full p-[10px] rounded-md"
                 placeholder="0"
                 value={formData.features.seats}
                 onChange={handleChange}
@@ -227,7 +227,7 @@ const AddVehiclePage = () => {
               <p>Luggage:</p>
               <input
                 name="luggage"
-                className="bg-gray-200 w-[200px] p-[10px] rounded-md"
+                className="bg-gray-200 sm:w-[200px] w-full p-[10px] rounded-md"
                 placeholder="0"
                 value={formData.features.luggage}
                 onChange={handleChange}
@@ -237,7 +237,7 @@ const AddVehiclePage = () => {
               <label className="block mb-1 font-semibold">Transmission:</label>
               <select
                 name="transmission"
-                className="bg-gray-200 w-[200px] p-[10px] rounded-md"
+                className="bg-gray-200 sm:w-[200px] w-full p-[10px] rounded-md"
                 value={formData.features.transmission}
                 onChange={handleChange}
               >
@@ -251,14 +251,14 @@ const AddVehiclePage = () => {
           </span>
           <br />
           <br />
-          <span className="flex items-center justify-between gap-2">
+          <span className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <label>Vehicle Brand</label>
               <br />
               <input
                 name="vehicleBrand"
                 placeholder="Brand"
-                className="bg-gray-200 h-[40px] w-[320px] p-2 rounded-md"
+                className="bg-gray-200 h-[40px] sm:w-[320px]  p-2 rounded-md"
                 value={formData.vehicleBrand}
                 onChange={handleChange}
               ></input>
@@ -269,7 +269,7 @@ const AddVehiclePage = () => {
               <input
                 name="numberPlate"
                 placeholder="MH312323H"
-                className="bg-gray-200 h-[40px] w-[320px] p-2 rounded-md"
+                className="bg-gray-200 h-[40px] sm:w-[320px] w-full p-2 rounded-md"
                 value={formData.numberPlate}
                 onChange={handleChange}
               ></input>
@@ -279,8 +279,8 @@ const AddVehiclePage = () => {
 
           <h1>Pricing</h1>
           <br />
-          <div className="flex items-center justify-between gap-2">
-            <span className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="flex items-center gap-1">
               <label>Base Price :</label>
               <br />
               <input
@@ -292,7 +292,7 @@ const AddVehiclePage = () => {
               />
             </span>
 
-            <span className="flex items-center gap-2">
+            <span className="flex items-center gap-1">
               <label>Discount Price :</label>
               <br />
               <input
@@ -303,7 +303,7 @@ const AddVehiclePage = () => {
           </div>
         </div>
 
-        <div className="w-[40%] bg-gray-100 p-[20px] rounded-xl">
+        <div className="sm:w-[40%] w-full bg-gray-100 sm:p-[20px] p-[10px] rounded-xl">
           <h1 className="font-bold text-xl">Upload Image</h1>
           <br />
           <span className="flex justify-center items-center">
@@ -326,7 +326,7 @@ const AddVehiclePage = () => {
           </span>
 
           <br />
-          <span className="flex justify-between gap-5">
+          <span className="flex flex-wrap sm:flex-nowrap justify-between gap-5">
             <div className="bg-gray-200 p-4 rounded-lg shadow-md w-fit">
               <h2 className="text-lg font-semibold mb-3">Category</h2>
 

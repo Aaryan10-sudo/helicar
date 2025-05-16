@@ -21,14 +21,14 @@ const PopularDestinationCard = () => {
     <div className="relative w-full">
       <div
         ref={prevRef}
-        className="z-10 absolute top-1/2 -left-15 transform -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer  transition"
+        className="z-10 absolute top-1/2 -left-15 transform -translate-y-1/2 w-10 h-10 rounded-full sm:flex items-center justify-center cursor-pointer  transition hidden"
       >
         <LeftArrowIcon />
       </div>
 
       <div
         ref={nextRef}
-        className="z-10 absolute top-1/2 -right-15 transform -translate-y-1/2 w-10 h-10  bg-opacity-80 rounded-full  flex items-center justify-center cursor-pointer transition"
+        className="z-10 absolute top-1/2 -right-15 transform -translate-y-1/2 w-10 h-10  bg-opacity-80 rounded-full  sm:flex items-center justify-center cursor-pointer transition hidden"
       >
         <RightArrowIcon />
       </div>

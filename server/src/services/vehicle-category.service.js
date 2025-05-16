@@ -1,4 +1,4 @@
-const VehicleCategory = require("../models/vehicle-category.model");
+const VehicleCategory = require("../../models/vehicle-category.model");
 
 async function createVehicleCategoryService (name) {
     try {

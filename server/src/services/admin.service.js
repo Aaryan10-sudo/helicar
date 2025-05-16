@@ -1,6 +1,6 @@
 const { hashPassword, comparePassword } = require("../lib/bcrypt/bcrypt");
 const { createJwtToken } = require("../lib/jwt/jwt");
-const Admin = require("../models/admin/admin.model");
+const Admin = require("../../models/admin/admin.model");
 
 async function createAdminService(name, email, password, role, profileImage) {
   try {
@@ -44,7 +44,7 @@ async function loginAdminService(email, password) {
       token,
     };
   } catch (error) {
-    throw new Error("Error logging in admin: " + error.message);
+    throw new Error(error.message);
   }
 }
 

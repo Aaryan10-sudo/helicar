@@ -5,13 +5,13 @@ import React from "react";
 const TrekkingCard = () => {
   return (
     <section className="py-5 w-full">
-      <div className="text-black flex flex-col gap-10 justify-center items-center">
+      <div className="text-black flex flex-col gap-10 justify-center items-center flex-wrap">
         {Trekking.map((value, index) => (
           <span key={index}>
             <h1 className="font-semibold text-[30px] py-[10px] ">
               {value.region} :
             </h1>
-            <section className="flex justify-center items-center w-[full] gap-10">
+            <section className="flex flex-col sm:flex-row justify-center items-center w-[full] gap-10">
               {value.tours.map((tours, index) => (
                 <div
                   className="pb-[10px] w-[400px] shadow-md rounded-lg overflow-hidden object-cover "

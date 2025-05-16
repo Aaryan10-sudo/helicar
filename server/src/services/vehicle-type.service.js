@@ -1,4 +1,4 @@
-const VehicleType = require("../models/vehicle-type.model");
+const VehicleType = require("../../models/vehicle-type.model");
 
 async function createVehicleTypeService (name) {
     try {

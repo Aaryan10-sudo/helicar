@@ -21,7 +21,7 @@ const storage = new CloudinaryStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedExtensions = [".jpg", ".jpeg", ".png", ".webp"];
+  const allowedExtensions = [".jpg", ".jpeg", ".png", ".webp", ".svg"];
   const fileExtension = path.extname(file.originalname).toLowerCase();
 
   if (allowedExtensions.includes(fileExtension)) {

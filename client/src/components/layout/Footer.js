@@ -9,10 +9,10 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#D7E9FB] w-full h-[350px] font-Comfortaa">
-      <section className=" py-[50px] flex justify-between border border-transparent border-b-black max-w-[1700px] mx-auto">
+    <footer className="bg-[#D7E9FB] w-full  font-Comfortaa px-[10px] sm:px-0">
+      <section className="py-[50px] flex justify-between border border-transparent border-b-black max-w-[1700px] mx-auto flex-wrap gap-5 sm:gap-0">
         {" "}
-        <ul className="flex flex-col justify-center gap-2 cursor-pointer">
+        <ul className="flex flex-col justify-center gap-2 cursor-pointer ">
           <h1 className="font-bold text-[30px]">Company</h1>
           <li className="text-[20px]">About us</li>
           <li className="text-[20px]">Contact us</li>
@@ -24,13 +24,13 @@ const Footer = () => {
           <li className="text-[20px]">Helicar</li>
           <li className="text-[20px]">Nnine Solution</li>
         </ul>
-        <ul className="flex flex-col justify-center gap-2 cursor-pointer">
+        <ul className="flex flex-col justify-center gap-2 cursor-pointer ">
           <h1 className="font-bold text-[30px]">Services</h1>
           <li className="text-[20px]">Vehicle Rentals</li>
           <li className="text-[20px]">Heli Charter Service</li>
           <li className="text-[20px]">Booking</li>
         </ul>
-        <div className="w-[400px] flex flex-col gap-3">
+        <div className="w-[400px] flex flex-col gap-3  py-5 sm:py-0">
           <Image
             src={assets.navlogo.src}
             height={assets.navlogo.height}

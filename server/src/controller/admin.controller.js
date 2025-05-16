@@ -32,7 +32,7 @@ exports.loginAdmin = async (req, res, next) => {
   try {
     const result = await loginAdminService(email, password);
     if (!result) {
-      return res.status(400).json({ message: "Error logging in admin" });
+      return res.status(400).json({ message: "User login failed" });
     }
     return res
       .cookie("token", result.token)

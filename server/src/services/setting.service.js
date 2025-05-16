@@ -1,4 +1,4 @@
-const Setting = require("../models/setting.model");
+const Setting = require("../../models/setting.model");
 
 async function createSettingService({ name, settings }) {
   try {

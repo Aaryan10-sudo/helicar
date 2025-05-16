@@ -39,16 +39,31 @@ const page = () => {
   return (
     <div className="bg-[#f8f9fa] text-black w-full h-auto py-[10px] min-h-screen">
       <main>
-        <section>
-          <h2 className="font-Comfortaa text-3xl font-semibold border-b px-[120px] py-[30px] border-gray-400">
+        <section className="max-w-[1900px] mx-auto">
+          <h2 className="font-Comfortaa text-3xl font-semibold border-b-3 px-[120px] py-[30px] border-gray-400">
             Which bus do you want to ride?
           </h2>
+          <div className="flex px-[120px] gap-10 pt-[20px ]">
+            <span className="flex flex-col  py-3">
+              <label className="mb-3 font-bold text-[20px]">Price Range</label>
+              <input
+                placeholder="Select as per choice"
+                className="px-3 h-[40px] border w-[250px] border-slate-400 rounded-md"
+              ></input>
+            </span>
+            <span className="flex flex-col py-3">
+              <label className="mb-3 font-bold text-[20px]">Sort By</label>
+              <input
+                placeholder="Select as per choice"
+                className="px-3 h-[40px] border border-slate-400 w-[250px] rounded-md"
+              ></input>
+            </span>
+          </div>
           <div className="flex items-center justify-between gap-5 flex-wrap flex-row-4">
             {loading ? (
-              // Show 6 skeleton placeholders while loading
               [...Array(8)].map((_, index) => <VehicleSkeleton key={index} />)
             ) : (
-              <div className="grid grid-cols-4 mt-[30px] w-full">
+              <div className="grid grid-cols-4 w-full px-[100px]">
                 {Bus.map((value, index) => (
                   <div
                     key={index}

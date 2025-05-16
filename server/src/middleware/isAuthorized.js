@@ -1,4 +1,4 @@
-const Admin = require("../models/admin/admin.model");
+const Admin = require("../../models/admin/admin.model");
 
 exports.isAuthorized = (roles) => {
   return async (req, res, next) => {

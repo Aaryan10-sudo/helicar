@@ -42,10 +42,26 @@ const page = () => {
   return (
     <div className="bg-[#f8f9fa] text-black w-full h-auto py-[10px] min-h-screen">
       <main>
-        <section>
+        <section className="mx-auto max-w-[1900px]">
           <h2 className="text-3xl font-semibold border-b px-[50px] py-[30px] border-gray-400 font-Comfortaa">
             Which car do you want to ride?
           </h2>
+          <div className="flex px-[50px] gap-10 pt-[20px ]">
+            <span className="flex flex-col  py-3">
+              <label className="mb-3 font-bold text-[20px]">Price Range</label>
+              <input
+                placeholder="Select as per choice"
+                className="px-3 h-[40px] border w-[250px] border-slate-400 rounded-md"
+              ></input>
+            </span>
+            <span className="flex flex-col py-3">
+              <label className="mb-3 font-bold text-[20px]">Sort By</label>
+              <input
+                placeholder="Select as per choice"
+                className="px-3 h-[40px] border border-slate-400 w-[250px] rounded-md"
+              ></input>
+            </span>
+          </div>
           <div className="flex items-center justify-between gap-5 flex-wrap flex-row-4 w-full px-[50px]">
             {loading ? (
               [...Array(8)].map((_, index) => <VehicleSkeleton key={index} />)
@@ -54,11 +70,11 @@ const page = () => {
                 No vehicle found
               </h1>
             ) : (
-              <div className="grid grid-cols-4 mt-[30px] w-full">
+              <div className="grid grid-cols-4 w-full">
                 {cars.map((value, index) => (
                   <div
                     key={index}
-                    className="p- m-4 bg-white rounded-lg shadow-lg flex items-start justify-start flex-col w-[340px] h-[402px]"
+                    className="my-4 bg-white rounded-lg shadow-lg flex items-start justify-start flex-col w-[340px] h-[402px]"
                   >
                     <div className="relative w-full h-[60%]">
                       <img

@@ -14,7 +14,7 @@ const Company = () => {
           content="Learn more about our premium vehicle rental company. We provide top-notch rental services for cars, helicopters, and more in Nepal."
         />
       </Head>
-      <section className="text-[#F9F9F9] flex flex-col gap-16 max-w-[1700px] mx-auto">
+      <section className="text-[#F9F9F9] flex flex-col gap-16 max-w-[1700px] mx-auto min-h-screen my-5">
         {/* Company Section */}
         <article className="flex flex-col gap-12 px-5">
           {/* Heading & Paragraph */}

@@ -16,7 +16,7 @@ const AdminNavbar = () => {
     } catch (error) {}
   };
   return (
-    <nav className="w-full text-white shadow-md h-[70px] flex items-center justify-end px-12 gap-5">
+    <nav className="w-full text-white shadow-md h-[70px] flex items-center justify-end sm:px-12 gap-5 px-2">
       <section className="flex items-center relative">
         <Bellicon />
         <span className="absolute top-[-13px] left-[17px] text-red-600 font-bold text-3xl">

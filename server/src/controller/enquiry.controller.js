@@ -1,4 +1,4 @@
-const Enquiry = require("../models/enquiry.model");
+const Enquiry = require("../../models/enquiry.model");
 const {
   createEnquiryService,
   getAllEnquiryService,

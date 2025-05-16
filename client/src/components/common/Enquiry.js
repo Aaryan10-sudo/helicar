@@ -52,10 +52,10 @@ const Enquiry = () => {
   console.log(formData);
 
   return (
-    <section className="flex justify-between items-center w-full px-4 py-8 max-w-[1300px] mx-auto">
+    <section className="flex justify-between items-center w-full px-4 py-8 max-w-[1300px] mx-auto sm:flex-wrap gap-5">
       <ToastContainer />
       <form
-        className="flex flex-col gap-1 shadow-xl p-[30px] rounded-xl"
+        className="flex flex-col gap-1 shadow-xl sm:p-[30px] rounded-xl w-full sm:w-auto p-[20px]"
         onSubmit={handelSubmit}
       >
         <h1 className="font-bold text-2xl">Make an Enquiry</h1>
@@ -63,7 +63,7 @@ const Enquiry = () => {
         <label className="font-semibold text-lg">Full Name</label>
         <input
           placeholder="Enter your fullname"
-          className="w-[400px] h-[40px] border px-[10px]"
+          className="w-full sm:w-[400px] h-[40px] border px-[10px]"
           value={formData.name}
           onChange={handleChange}
           name="name"
@@ -110,7 +110,12 @@ const Enquiry = () => {
         </button>
       </form>
 
-      <Image src={EnquiryImage} height={500} w={200} />
+      <Image
+        src={EnquiryImage}
+        height={500}
+        w={200}
+        className="hidden sm:block"
+      />
     </section>
   );
 };

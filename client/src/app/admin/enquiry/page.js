@@ -77,14 +77,14 @@ const Page = () => {
   }, []);
 
   return (
-    <section className="m-7 shadow-md p-5 rounded-xl">
+    <section className="sm:m-7 shadow-md p-5 rounded-xl">
       <h1 className="text-[30px] font-semibold">Enquiries History</h1>
       <br />
       <ul className="flex justify-between items-center border-b-2 border-b-gray-200 pb-5 text-[#606061] px-[10px]">
-        <li className="w-[200px]">Full Name</li>
-        <li className="w-[200px]">Enquiry Date</li>
-        <li className="w-[200px]">Sending Date</li>
-        <li className="w-[200px]"></li>
+        <li className="sm:w-[200px]">Full Name</li>
+        <li className="sm:w-[200px]">Enquiry Date</li>
+        <li className="sm:w-[200px]">Sending Date</li>
+        <li className="sm:w-[200px]"></li>
       </ul>
       {enquiry.length === 0 ? (
         <p className="text-center text-gray-500 mt-10 text-lg">

@@ -43,12 +43,12 @@ const page = () => {
           <h2 className="font-Comfortaa text-3xl font-semibold border-b px-[120px] py-[30px] border-gray-400">
             Which hiace do you want to ride?
           </h2>
-          <div className="flex items-center justify-between gap-5 flex-wrap flex-row-4">
+          <div className="flex items-center justify-between gap-5 flex-wrap flex-row-4 ">
             {loading ? (
               // Show 6 skeleton placeholders while loading
               [...Array(8)].map((_, index) => <VehicleSkeleton key={index} />)
             ) : (
-              <div className="grid grid-cols-4 mt-[30px] w-full">
+              <div className="grid grid-cols-4 mt-[30px] w-full px-4">
                 {hiace.map((value, index) => (
                   <div
                     key={index}

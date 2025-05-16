@@ -7,13 +7,13 @@ export default function BlogSection() {
   const [activeTab, setActiveTab] = useState("card1");
 
   return (
-    <div className="p-6  mx-auto w-full h-auto bg-blue-300 rounded-xl shadow-md">
+    <div className="p-6  mx-auto w-full h-autorounded-xl shadow-md">
       <h2 className="text-3xl font-bold mb-4">Landing page Customization</h2>
 
       <div className=" rounded-xl p-6 bg-gray-50">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-semibold">Blog Section</h3>
-          <button className="bg-blue-700 px-3 py-1 flex items-center justify-center rounded-sm">
+          <button className=" px-3 py-1 flex items-center justify-center rounded-sm">
             Update
           </button>
         </div>

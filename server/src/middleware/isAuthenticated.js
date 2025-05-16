@@ -1,4 +1,4 @@
-const { JWT_SECRET } = require("../config/config");
+const { JWT_SECRET } = require("../../config/env");
 const { verifyJwtToken } = require("../lib/jwt/jwt");
 
 async function isAuthenticated(req, res, next) {

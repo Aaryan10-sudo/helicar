@@ -1,7 +1,7 @@
 const pug = require("pug");
 const path = require("path");
 const sendMail = require("../../utils/sendMail");
-const { ADMIN_MAIL } = require("../../config/config");
+const { ADMIN_MAIL } = require("../../../config/env");
 
 async function confirmedBooking({ username, receiver, OTP }) {
   console.log(OTP);

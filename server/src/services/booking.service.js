@@ -1,5 +1,5 @@
-const Booking = require("../models/booking.model");
-const Vehicle = require("../models/vehicle.model");
+const Booking = require("../../models/booking.model");
+const Vehicle = require("../../models/vehicle.model");
 
 async function createBookingService(bookingData) {
   try {

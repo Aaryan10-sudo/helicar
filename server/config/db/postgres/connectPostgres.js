@@ -7,7 +7,7 @@ const {
   DB_DIALECT,
   DB_PORT,
   SSL,
-} = require("../../config");
+} = require("../../env");
 
 const postgres = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
   host: DB_HOST,

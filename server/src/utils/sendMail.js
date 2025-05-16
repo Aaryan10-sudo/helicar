@@ -1,4 +1,4 @@
-const { SMTP_EMAIL, SMTP_PASSWORD } = require("../config/config");
+const { SMTP_EMAIL, SMTP_PASSWORD } = require("../../config/env");
 const nodemailer = require("nodemailer");
 
 const transporterInfo = {

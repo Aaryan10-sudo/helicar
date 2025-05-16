@@ -15,7 +15,7 @@ const page = () => {
           content="Learn more about our premium vehicle rental company. We provide top-notch rental services for cars, helicopters, and more in Nepal."
         />
       </Head>
-      <section className="text-[#F9F9F9] flex flex-col gap-16">
+      <section className="text-[#F9F9F9] flex flex-col gap-16 min-h-screen">
         <article className="flex flex-col gap-12 px-5">
           <header className="text-center">
             <h1 className="font-Comfortaa font-bold text-primary text-[36px] md:text-[48px]">
@@ -30,13 +30,13 @@ const page = () => {
             </p>
           </header>
 
-          <div className="flex justify-center items-center gap-10 w-full">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-10 w-full">
             <img
               src={assets.contact1.src}
               alt="Contact our company for more information."
               className="w-full max-w-[900px] h-auto"
             />
-            <p className=" text-black w-[400px] 2xl:line-clamp-13 line-clamp-12 font-bold text-[18px] ">
+            <p className=" text-black w-[400px] 2xl:line-clamp-13 line-clamp-12 sm:font-bold text-[18px] ">
               Trekking in Nepal is indeed a remarkable experience, offering a
               unique blend of natural beauty, cultural diversity, and warm
               hospitality from the local people. Here are some key points that
@@ -55,7 +55,7 @@ const page = () => {
             </p>
           </div>
         </article>
-        <section className="px-10">
+        <section className="sm:px-10">
           <h1 className="text-blue-600  font-bold text-[40px] flex justify-center items-center font-Comfortaa">
             Trekking Packages
           </h1>

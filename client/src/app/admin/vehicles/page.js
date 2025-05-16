@@ -80,128 +80,123 @@ const page = () => {
     handleDetails();
   }, []);
   return (
-    <div className="py-4 px-5">
+    <div className="py-4 sm:px-3">
       <main className="mb-10">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-semibold">
-            Vehicles <span className="text-blue-700">(Car)</span>{" "}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
+          <h2 className="text-2xl sm:text-3xl font-semibold">
+            Vehicles <span className="text-blue-700">(Car)</span>
           </h2>
           <input
             type="text"
             placeholder="Search client name, car etc..."
-            className="border w-[250px] border-gray-500 bg-gray-300 px-2 py-1 outline-none rounded-sm"
+            className="border border-gray-500 bg-gray-300 px-2 py-1 outline-none rounded-sm w-full sm:w-[250px]"
           />
         </div>
-        <div className="flex items-center justify-between">
-          <div className=" flex items-center gap-3">
-            <button className="border cursor-pointer border-gray-700 rounded-sm px-2.5 py-1">
-              Car
-            </button>
-            <button className="border cursor-pointer border-gray-700 rounded-sm px-2.5 py-1">
-              Bus
-            </button>
-            <button className="border cursor-pointer border-gray-700 rounded-sm px-2.5 py-1">
-              Tourist bus
-            </button>
-            <button className="border cursor-pointer border-gray-700 rounded-sm px-2.5 py-1">
-              Toyota Hiace
-            </button>
+
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0 mb-5">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
+            {["Car", "Bus", "Tourist bus", "Toyota Hiace"].map((type) => (
+              <button
+                key={type}
+                className="border border-gray-700 rounded-sm px-3 py-1 text-sm"
+              >
+                {type}
+              </button>
+            ))}
           </div>
-          <div className="flex items-center gap-6">
-            <button className="bg-gray-200 text-black rounded-sm border-none px-3 py-2">
+          <div className="flex items-center gap-4">
+            <button className="bg-gray-200 text-black rounded-sm border-none px-3 py-2 text-sm">
               Sort by
             </button>
             <Link
-              href={"/admin/vehicles/add"}
-              className="bg-blue-600 text-gray-50 px-3 py-2 rounded-sm"
+              href="/admin/vehicles/add"
+              className="bg-blue-600 text-white px-3 py-2 rounded-sm text-sm"
             >
-              Add Vehicles{" "}
+              Add Vehicles
             </Link>
           </div>
         </div>
       </main>
-      <table className="w-full bg-white shadow-md rounded-md overflow-hidden">
-        <thead className="bg-blue-100 w-full text-left">
-          <tr>
-            <th className="p-2">Vehicle ID</th>
-            <th className="p-2 text-center">Vehicle Name</th>
-            <th className="p-2 text-center">Vehicle Number</th>
-            <th className="p-2 text-center">Status</th>
-            <th className="p-2 text-center">Pricing</th>
-            <th className="p-2 text-center">Vehicle Category</th>
-            <th className="p-2 text-center">Vehicle Type</th>
-            <th className="p-2 text-center">Vehicle Brand</th>
-            <th className="p-2 text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {details.length === 0 ? (
-            <p className="p-3 text-xl text-gray-400">No vehicle found</p>
-          ) : (
-            details.map((ride) => (
-              <tr key={ride.id} className="text-sm">
-                <td className="p-2 border-b border-gray-500">
-                  <div
-                    className="line-clamp-1 max-w-[150px] overflow-hidden"
-                    title={ride.id}
-                  >
-                    {ride.id}
-                  </div>
-                </td>
 
-                <td className="p-2 border-b border-gray-500 text-center">
-                  {ride.vehicleName}
-                </td>
-                <td className="p-2 border-b border-gray-500 text-center">
-                  {ride.numberPlate}
-                </td>
-
-                <td
-                  className={`p-2 border-b border-gray-500 font-medium text-center ${
-                    ride.vehicleStatus === "Occupied"
-                      ? "text-red-600"
-                      : "text-green-600"
-                  }`}
-                >
-                  {ride.vehicleStatus}
-                </td>
-
-                <td className="p-2 border-b border-gray-500 text-center">
-                  {ride.vehiclePrice}
-                </td>
-                <td className="p-2 border-b border-gray-500 text-center">
-                  {ride.category.name}
-                </td>
-                <td className="p-2 border-b border-gray-500 text-center">
-                  {ride.type.name}
-                </td>
-                <td className="p-2 border-b border-gray-500 text-center">
-                  {ride.vehicleBrand}
-                </td>
-
-                <td className="p-2 border-b border-gray-500 text-center">
-                  <button
-                    className="cursor-pointer"
-                    onClick={() => {
-                      router.push(
-                        `/admin/vehicles/update?vehicleId=${ride.id}`
-                      );
-                    }}
-                  >
-                    <UpdateIcon />
-                  </button>
-                  <button
-                    className="cursor-pointer mx-[10px]"
-                    onClick={() => handleDelete(ride.id)}
-                  >
-                    <DeleteIcon />
-                  </button>
+      <div className="overflow-x-auto">
+        <table className="min-w-[900px] w-full bg-white shadow-md rounded-md">
+          <thead className="bg-blue-100 text-left">
+            <tr>
+              <th className="p-2">Vehicle ID</th>
+              <th className="p-2 text-center">Vehicle Name</th>
+              <th className="p-2 text-center">Vehicle Number</th>
+              <th className="p-2 text-center">Status</th>
+              <th className="p-2 text-center">Pricing</th>
+              <th className="p-2 text-center">Vehicle Category</th>
+              <th className="p-2 text-center">Vehicle Type</th>
+              <th className="p-2 text-center">Vehicle Brand</th>
+              <th className="p-2 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {details.length === 0 ? (
+              <tr>
+                <td colSpan="9" className="text-center p-4 text-gray-400">
+                  No vehicle found
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              details.map((ride) => (
+                <tr key={ride.id} className="text-sm">
+                  <td className="p-2 border-b border-gray-300 max-w-[150px] truncate">
+                    {ride.id}
+                  </td>
+                  <td className="p-2 border-b border-gray-300 text-center">
+                    {ride.vehicleName}
+                  </td>
+                  <td className="p-2 border-b border-gray-300 text-center">
+                    {ride.numberPlate}
+                  </td>
+                  <td
+                    className={`p-2 border-b border-gray-300 text-center font-medium ${
+                      ride.vehicleStatus === "Occupied"
+                        ? "text-red-600"
+                        : "text-green-600"
+                    }`}
+                  >
+                    {ride.vehicleStatus}
+                  </td>
+                  <td className="p-2 border-b border-gray-300 text-center">
+                    {ride.vehiclePrice}
+                  </td>
+                  <td className="p-2 border-b border-gray-300 text-center">
+                    {ride.category.name}
+                  </td>
+                  <td className="p-2 border-b border-gray-300 text-center">
+                    {ride.type.name}
+                  </td>
+                  <td className="p-2 border-b border-gray-300 text-center">
+                    {ride.vehicleBrand}
+                  </td>
+                  <td className="p-2 border-b border-gray-300 text-center">
+                    <button
+                      className="cursor-pointer"
+                      onClick={() =>
+                        router.push(
+                          `/admin/vehicles/update?vehicleId=${ride.id}`
+                        )
+                      }
+                    >
+                      <UpdateIcon />
+                    </button>
+                    <button
+                      className="cursor-pointer mx-[10px]"
+                      onClick={() => handleDelete(ride.id)}
+                    >
+                      <DeleteIcon />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
