@@ -1,4 +1,8 @@
 import { Destination } from "@/lib/data";
+import BusIcon from "@/ui/BusIcon";
+import CarIcon from "@/ui/CarIcon";
+import HiaceIcon from "@/ui/HiaceIcon";
+import JeepIcon from "@/ui/JeepIcon";
 import Link from "next/link";
 
 export default async function PopularDestinationPage({ searchParams }) {
@@ -9,34 +13,42 @@ export default async function PopularDestinationPage({ searchParams }) {
   if (!destinationData) {
     return <div>Destination not found</div>;
   }
-
+  console.log(destinationData);
   return (
     <div className="m-10">
-      <section className=" flex justify-between">
-        <div>
+      <section className="w-full flex justify-between gap-15  max-w-[1700px] mx-auto">
+        <div className="w-[60%]">
           <img
             src={destinationData.image.src}
-            alt={destinationData.name}
-            height={200}
-            className="rounded-lg shadow-lg w-[1000px] h-[500px]"
+            className="h-[400px] w-full rounded-lg"
           />
         </div>
-
-        <div className="flex flex-col justify-between">
-          <img
-            src={destinationData.image.src}
-            alt={destinationData.name}
-            className="rounded-lg shadow-lg h-[240px] w-[600px]"
-          />
-          <img
-            src={destinationData.image.src}
-            alt={destinationData.name}
-            className="rounded-lg shadow-lg h-[240px]"
-          />
+        <div className=" flex flex-col justify-center items-center">
+          <h1 className="text-2xl font-bold text-black text-center">
+            Explore vehicles and services
+          </h1>
+          <br />
+          <ul className="flex flex-col gap-4 w-[100%]">
+            <li className="flex items-center gap-2 px-4 py-2 w-[180px] bg-gray-100 rounded-full shadow-sm">
+              <CarIcon /> Car
+            </li>
+            <li className="flex items-center gap-2 px-4 py-2 w-[180px] bg-gray-100 rounded-full shadow-sm">
+              <JeepIcon /> Jeep
+            </li>
+            <li className="flex items-center gap-2 px-4 py-2 w-[180px] bg-gray-100 rounded-full shadow-sm">
+              <HiaceIcon /> Hiace
+            </li>
+            <li className="flex items-center gap-2 px-4 py-2 w-[180px] bg-gray-100 rounded-full shadow-sm">
+              <BusIcon /> Bus
+            </li>
+            <li className="flex items-center gap-2 px-4 py-2 w-[180px] bg-gray-100 rounded-full shadow-sm">
+              <BusIcon /> Tourist Bus
+            </li>
+          </ul>
         </div>
       </section>
-      <section className="flex justify-between gap-10">
-        <div className="w-[70%]">
+      <section className="flex justify-between max-w-[1700px] mx-auto">
+        <div className="w-[60%]">
           <h1 className="my-5 text-[30px] font-bold">{destinationData.name}</h1>
           <h2 className="text-[20px] font-bold">Itinerary</h2>
           <p>
@@ -55,13 +67,7 @@ export default async function PopularDestinationPage({ searchParams }) {
             className="my-[20px] w-full h-[500px] "
           ></iframe>
         </div>
-        <div className="w-[40%] flex flex-col justify-center items-center">
-          <Link
-            href={"/popular-destination/booking"}
-            className="my-5 bg-blue-600 h-[40px] w-[140px] text-white font-bold rounded-full self-center cursor-pointer flex justify-center items-center"
-          >
-            Select service
-          </Link>
+        <div className=" flex flex-col justify-center items-center">
           <h2 className="text-[20px]">More Destination to discover</h2>
           {Destination.filter((value) => value.id !== parseInt(id))
             .slice(0, 2)
@@ -76,7 +82,9 @@ export default async function PopularDestinationPage({ searchParams }) {
                     backgroundImage: `url(${value.image.src || "/default-hero.jpg"})`,
                   }}
                 ></div>
-                <h1 className="px-[5px] font-bold text-[20px]">{value.name}</h1>
+                <h1 className="px-[5px] font-bold text-[20px] ">
+                  {value.name}
+                </h1>
                 <p className="px-[5px]">One day trip from Kathmandu</p>
               </section>
             ))}

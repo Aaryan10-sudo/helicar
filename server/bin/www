@@ -28,7 +28,7 @@ const getLocalIp = () => {
 
 const ip = getLocalIp();
 
-const port = normalizePort(process.env.PORT || "3001");
+const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 
 /**

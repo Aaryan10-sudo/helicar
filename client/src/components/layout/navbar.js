@@ -19,8 +19,9 @@ const Navbar = () => {
   };
   const navLinks = [
     { title: "Home", path: "/" },
-    { title: "About", path: "/about" },
+    { title: "Vehicle Rental", path: "/vehicle-rental" },
     { title: "Company", path: "/company" },
+    { title: "Blog", path: "/blog" },
     { title: "Tarrif Rate", path: "/tarrif-rate" },
     { title: "Trekking", path: "/trekking" },
   ];
