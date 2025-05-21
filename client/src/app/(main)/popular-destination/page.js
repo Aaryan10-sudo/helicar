@@ -82,7 +82,9 @@ export default async function PopularDestinationPage({ searchParams }) {
                     backgroundImage: `url(${value.image.src || "/default-hero.jpg"})`,
                   }}
                 ></div>
-                <h1 className="px-[5px] font-bold text-[20px]">{value.name}</h1>
+                <h1 className="px-[5px] font-bold text-[20px] ">
+                  {value.name}
+                </h1>
                 <p className="px-[5px]">One day trip from Kathmandu</p>
               </section>
             ))}

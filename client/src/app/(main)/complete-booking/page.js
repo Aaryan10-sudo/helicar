@@ -4,78 +4,95 @@ import { baseURL } from "@/config/config";
 import CalenderIcon from "@/ui/CalenderIcon";
 import Loader from "@/ui/Loader";
 import LocationIcon from "@/ui/LocationIcon";
-import Loggages from "@/ui/Loggages";
-import PassengerIcon from "@/ui/PassengerIcon";
-import PassengerIcons from "@/ui/PassengerIcons";
-import PeopleIcon from "@/ui/PeopleIcon";
-import TransmissionIcon from "@/ui/TransmissionIcon";
-import ViberIcon from "@/ui/ViberIcon";
-import WhatsappIcon from "@/ui/WhatsappIcon";
+import { getName, getCode } from "country-list";
+import Select from "react-select";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import Swal from "sweetalert2";
+import enLocale from "i18n-iso-countries/langs/en.json";
 
-const BookingForm = () => {
+import countries from "i18n-iso-countries";
+import Swal from "sweetalert2";
+import countryList from "react-select-country-list";
+import ViberIcon from "@/ui/ViberIcon";
+import WhatsappIcon from "@/ui/WhatsappIcon";
+import BookingForm from "@/components/common/BookingForm";
+
+countries.registerLocale(enLocale);
+
+const CheckIcon = () => (
+  <svg
+    className="w-5 h-5 text-green-500 flex-shrink-0"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M5 13l4 4L19 7"
+    ></path>
+  </svg>
+);
+
+const Booking = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const cardId = searchParams.get("cardId");
 
+  const [showDetails, setShowDetails] = useState(false);
+  const [country, setCountry] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [phoneCountryCode, setPhoneCountryCode] = useState("np");
+
   const [selectedCar, setSelectedCar] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [country, setCountry] = useState("");
-  const [email, setEmail] = useState("");
-  const [customerPhone, setCustomerPhone] = useState("");
-  const [message, setMessage] = useState("");
+  const [email, setEmail] = useState("hellocarbooking@gmail.com");
+  const [details, setDetails] = useState("");
+
+  const [pickupDateValue, setPickupDateValue] = useState("2025-04-24");
+  const [pickupTimeValue, setPickupTimeValue] = useState("12:30");
+  const [returnDateValue, setReturnDateValue] = useState("2025-04-24");
+  const [returnTimeValue, setReturnTimeValue] = useState("12:30");
+
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loader, setLoader] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = {
-      passengerInfo: {
-        firstName,
-        lastName,
-        address: country,
-        email,
-        phone: customerPhone,
-        message,
-      },
-      bookingDate: new Date().toLocaleString(),
-      pickupDate: "2025-04-24",
-      returnDate: "2025-04-25",
-      totalAmount: selectedCar.vehiclePrice,
-      status: "confirmed",
-      paymentStatus: "pending",
-      vehicleId: cardId,
-      vehicleName: selectedCar.vehicleName,
-    };
+  const lineItems = [
+    { description: "4 Rental days x $60.64", amount: "$450.10" },
+    { description: "4 Rental days x $60.64", amount: "$450.10" },
+    { description: "4 Rental days x $60.64", amount: "$450.10" },
+    { description: "4 Rental days x $60.64", amount: "$450.10" },
+    { description: "4 Rental days x $60.64", amount: "$450.10" },
+    { description: "4 Rental days x $60.64", amount: "$450.10" },
+  ];
 
-    try {
-      setLoader(true);
-      await axios.post(`${baseURL}/booking/create`, formData);
-      setFirstName("");
-      setLastName("");
-      setCountry("");
-      setCustomerPhone("");
-      setEmail("");
-      setMessage("");
-      setLoader(false);
+  const options = useMemo(() => countryList().getData(), []);
 
-      Swal.fire({
-        title: "Booking Confirmed! Please check your email.",
-        icon: "success",
-        confirmButtonColor: "#3085d6",
-      }).then(() => {
-        router.push("/");
-      });
-    } catch (error) {
-      console.error("Booking Error:", error);
-      setLoader(false);
+  const changeHandler = (country) => {
+    setCountry(country);
+  };
+
+  const handleSuggestionClick = (selected) => {
+    setCountry(selected);
+    setSuggestions([]);
+    const code = getCode(selected);
+    if (code) {
+      setPhoneCountryCode(code);
     }
   };
+
+  useEffect(() => {
+    if (cardId) {
+      getVehicleDetails();
+    }
+  }, [cardId]);
 
   const getVehicleDetails = async () => {
     try {
@@ -86,200 +103,174 @@ const BookingForm = () => {
     }
   };
 
-  useEffect(() => {
-    if (cardId) {
-      getVehicleDetails();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!agreedToTerms) {
+      Swal.fire({
+        title: "Agreement Required",
+        text: "Please agree to the terms and conditions before booking.",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+      });
+      return;
     }
-  }, [cardId]);
+
+    const formData = {
+      passengerInfo: {
+        firstName,
+        lastName,
+        address: country,
+        email,
+        phone: customerPhone,
+        message: details,
+      },
+      bookingDate: new Date().toISOString(),
+      pickupDateTime: `${pickupDateValue}T${pickupTimeValue}:00`,
+      returnDateTime: `${returnDateValue}T${returnTimeValue}:00`,
+      totalAmount: selectedCar?.vehiclePrice,
+      status: "confirmed",
+      paymentStatus: "pending",
+      vehicleId: cardId,
+      vehicleName: selectedCar?.vehicleName,
+    };
+
+    try {
+      setLoader(true);
+      await axios.post(`${baseURL}/booking/create`, formData);
+      // Reset form fields
+      setFirstName("");
+      setLastName("");
+      setCountry("Nep");
+      setCustomerPhone("9779801102259");
+      setEmail("hellocarbooking@gmail.com");
+      setDetails("");
+      setPickupDateValue("2025-04-24");
+      setPickupTimeValue("12:30");
+      setReturnDateValue("2025-04-24");
+      setReturnTimeValue("12:30");
+      setAgreedToTerms(false);
+      setLoader(false);
+
+      Swal.fire({
+        title: "Booking Confirmed!",
+        text: "Please check your email for details.",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+      }).then(() => {
+        router.push("/");
+      });
+    } catch (error) {
+      console.error("Booking Error:", error);
+      Swal.fire({
+        title: "Booking Failed",
+        text: error.response?.data?.message || "An unexpected error occurred.",
+        icon: "error",
+      });
+      setLoader(false);
+    }
+  };
+
+  const carPrice = selectedCar?.vehiclePrice ?? 0;
 
   return (
-    <div className="bg-[#f2f2f2] text-black min-h-screen w-full">
-      <main className="flex flex-col items-start justify-start">
-        <div className="flex items-center justify-between w-full px-12 py-6 border-b bg-white">
-          <h1 className="text-3xl font-bold">Review your booking</h1>
-          <h2 className="text-xl font-semibold">
-            Total : Rs.
-            <span className="text-2xl font-bold">
-              {selectedCar?.vehiclePrice ?? 0}
-            </span>
-          </h2>
-        </div>
+    <div className="bg-[#F3F4F6] text-gray-800 min-h-screen w-full">
+      <main className="">
+        <div className="py-5 border-b">
+          <div className="  flex items-center justify-between w-full px-4 md:px-8 max-w-[1700px] mx-auto">
+            <h1 className="text-3xl md:text-4xl font-bold">
+              Review your booking
+            </h1>
+            <div className="text-start flex gap-10 ">
+              <div>
+                <p className="text-sm text-gray-500">Total</p>
+                <button
+                  onClick={() => setShowDetails(true)}
+                  className="text-xs cursor-pointer text-gray-400 underline  hover:text-blue-600"
+                >
+                  Price details
+                </button>
 
-        <section className="flex items-start justify-center px-12 py-8 gap-12 w-full">
-          <form className="w-[60%]" onSubmit={handleSubmit}>
-            <h1 className="font-bold text-xl pb-4">Personal Details:</h1>
-            <div className="bg-white shadow-md rounded-lg p-6 grid grid-cols-2 gap-6">
-              <div className="flex flex-col">
-                <label className="mb-1 font-medium">First Name</label>
-                <input
-                  type="text"
-                  placeholder="Enter your name"
-                  className="border p-3 border-gray-300 outline-blue-500 rounded-md"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="mb-1 font-medium">Last Name</label>
-                <input
-                  type="text"
-                  placeholder="Enter your last name"
-                  className="border p-3 border-gray-300 outline-blue-500 rounded-md"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="mb-1 font-medium">Country</label>
-                <input
-                  type="text"
-                  placeholder="Enter your country"
-                  className="border p-3 border-gray-300 outline-blue-500 rounded-md"
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="mb-1 font-medium">Email</label>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="border p-3 border-gray-300 outline-blue-500 rounded-md"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="col-span-2">
-                <label className="mb-1 font-medium block">Phone Number</label>
-                <PhoneInput
-                  country={"np"}
-                  value={customerPhone}
-                  onChange={(value) => setCustomerPhone(value)}
-                  inputClass="!w-full !px-12 !outline-blue-500 !py-6 !bg-white !border !border-gray-300 !rounded-lg !text-black"
-                  containerClass="!w-full"
-                  buttonClass="!bg-white !border-r !border-gray-300"
-                />
-              </div>
-              <div className="col-span-2">
-                <label className="mb-1 font-medium">Details:</label>
-                <textarea
-                  rows={3}
-                  placeholder="Enter a message..."
-                  className="border p-3 border-gray-300 resize-none outline-blue-500 rounded-md w-full"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                />
-              </div>
-            </div>
+                {showDetails && (
+                  <div className="fixed inset-0 bg-black/10  flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full font-sans relative">
+                      <div className="flex justify-end mb-4">
+                        <button
+                          onClick={() => setShowDetails(false)}
+                          className="text-gray-500 hover:text-gray-700 cursor-pointer"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
 
-            <div className="bg-white p-6 rounded-lg mt-4 w-full shadow">
-              <div className="flex justify-between mb-2 text-lg">
-                <span>Base fare</span>
-                <span>Rs. {selectedCar?.vehiclePrice ?? 0}</span>
-              </div>
-              <div className="flex justify-between mb-2 text-lg">
-                <span>Taxes & fees</span>
-                <span>Rs. 0</span>
-              </div>
-              <div className="flex justify-between font-bold text-xl border-t pt-2">
-                <span>Total</span>
-                <span>Rs. {selectedCar?.vehiclePrice ?? 0}</span>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="mt-6 p-3 cursor-pointer bg-blue-600 text-white font-semibold rounded-full w-[200px] flex justify-center items-center"
-            >
-              {loader ? <Loader /> : "Book Now"}
-            </button>
-          </form>
-          <div className="w-[40%]">
-            {selectedCar && (
-              <div className="w-full mt-10 bg-white p-3 rounded-lg shadow-md">
-                <div className="flex  gap-5 w-full pb-3">
-                  <div className="w-[350px] object-cover h-[200px] overflow-hidden">
-                    <img
-                      src={selectedCar.vehicleImage}
-                      alt={selectedCar.vehicleName}
-                      className="object-cover rounded w-full h-full"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <h3 className="text-[25px] font-medium">
-                      {selectedCar.vehicleName}
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-1">
-                      {selectedCar.vehicleDescription}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Number plate: {selectedCar.numberPlate}
-                    </p>
-                    <br />
-
-                    <div className=" flex items-center justify-between gap-2 w-[300px]">
-                      <h2 className="text-md font-bold flex gap-1 text-subheading">
-                        <Loggages />
-                        {selectedCar.features.luggage}
+                      <h2 className="text-3xl font-bold mb-6 text-black">
+                        PRICE DETAILS
                       </h2>
-                      <p className="text-subheading text-md flex gap-1 line-clamp-2">
-                        <PeopleIcon />
-                        {selectedCar.features.seats}
-                      </p>
-                      <p className="text-subheading text-md flex gap-1 font-semibold">
-                        <TransmissionIcon />
-                        {selectedCar.features.transmission}
-                      </p>
+
+                      <div>
+                        <h3 className="text-lg font-semibold mb-2 text-black">
+                          Rental charges
+                        </h3>
+                        <div className="flex justify-between items-center mb-3">
+                          <span className="text-gray-700">
+                            4 Rental days x $60.64
+                          </span>
+                          <span className="font-semibold text-black">
+                            $450.10
+                          </span>
+                        </div>
+                        <hr className="border-gray-300 mb-4" />
+                      </div>
+
+                      <div>
+                        <h3 className="text-lg font-semibold mb-2 text-black">
+                          Taxes and fees
+                        </h3>
+                        {lineItems.map((item, index) => (
+                          <div
+                            key={index}
+                            className="flex justify-between items-center mb-3"
+                          >
+                            <span className="text-gray-700">
+                              {item.description}
+                            </span>
+                            <span className="font-semibold text-black">
+                              {item.amount}
+                            </span>
+                          </div>
+                        ))}
+                        <hr className="border-gray-300 mb-6" />
+                      </div>
+
+                      <div className="flex justify-between items-center">
+                        <span className="text-lg font-semibold text-black">
+                          Total (incl. tax)
+                        </span>
+                        <span className="text-3xl font-bold text-black">
+                          $450.10
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <span className="flex gap-2">
-                  <LocationIcon />
-                  <div>From : Kathmandu || To : Pokhara</div>
-                </span>
-                <span className="mt-[10px] flex gap-2">
-                  <CalenderIcon />
-                  <div>April 24 - April 25</div>
-                </span>
-
-                <span className="mt-[10px] flex gap-2">
-                  <PassengerIcons />
-                  <div>Passenger : {selectedCar.features.seats}</div>
-                </span>
+                )}
               </div>
-            )}
-
-            <div className="py-5">
-              <h1 className="font-bold text-[25px]">Contact us</h1>
-              <span className="flex gap-5 items-center text-white">
-                <a
-                  href="https://wa.me/9801102579"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="bg-[#25D366] w-[150px] h-[40px] flex items-center justify-center gap-1 cursor-pointer rounded-sm">
-                    <WhatsappIcon />
-                    Whatsapp
-                  </button>
-                </a>
-                <a
-                  href="viber://chat?number=9801102579"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="bg-[#665CAC] w-[150px] h-[40px] flex items-center justify-center gap-1 cursor-pointer rounded-sm">
-                    <ViberIcon />
-                    Viber
-                  </button>
-                </a>
-              </span>
+              <p className="text-2xl md:text-3xl font-bold">${carPrice}</p>
             </div>
           </div>
-        </section>
+        </div>
+        <BookingForm />
       </main>
     </div>
   );
@@ -287,8 +278,14 @@ const BookingForm = () => {
 
 const Page = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <BookingForm />
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center min-h-screen text-xl">
+          Loading page...
+        </div>
+      }
+    >
+      <Booking />
     </Suspense>
   );
 };

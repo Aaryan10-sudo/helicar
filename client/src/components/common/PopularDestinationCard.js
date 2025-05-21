@@ -76,12 +76,19 @@ const PopularDestinationCard = () => {
               }}
             >
               <div
-                className="w-full h-[80px] flex justify-center items-center"
-                style={{ backgroundColor: "rgba(226, 232, 240, 0.55)" }}
+                className="w-full h-[130px] text-white px-5"
+                style={{ backgroundColor: "rgba(0, 0, 0, 0.25)" }}
               >
-                <h1 className="text-[30px] font-medium text-black">
+                <h1 className="text-[30px] font-semibold font-Comfortaa">
                   {value.name}
                 </h1>
+                <p>{value.name} in 7 days</p>
+                <span className="flex justify-between items-center">
+                  <p className="py-5 font-bold text-[20px]">From 10$</p>
+                  <div className="bg-primary h-[30px] w-[60px] flex justify-center items-center rounded-md">
+                    -10%
+                  </div>
+                </span>
               </div>
             </section>
           </SwiperSlide>

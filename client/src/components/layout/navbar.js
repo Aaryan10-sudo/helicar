@@ -8,10 +8,23 @@ import TimesArrowIcon from "@/ui/TimesArrowIcon";
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState(null);
   const dropdownRef = useRef(null);
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
+
+  const handleTab = (index) => {
+    setActive(index);
+  };
+  const navLinks = [
+    { title: "Home", path: "/" },
+    { title: "Vehicle Rental", path: "/vehicle-rental" },
+    { title: "Company", path: "/company" },
+    { title: "Blog", path: "/blog" },
+    { title: "Tarrif Rate", path: "/tarrif-rate" },
+    { title: "Trekking", path: "/trekking" },
+  ];
 
   useEffect(() => {
     if (menuOpen) {
@@ -44,55 +57,33 @@ const Navbar = () => {
           ☰
         </button>
 
-        <ul className="lg:flex ml-10 gap-11 items-center space-x-6 text-lg font-medium hidden">
-          <li>
-            <Link
-              href="/"
-              className="font-Comfortaa font-medium leading-4 text-[#222121]"
-            >
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/vehicle-rental"
-              className="font-Comfortaa font-medium leading-4 text-[#222121]"
-            >
-              Vehicle Rental
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              href="/company"
-              className="font-Comfortaa font-medium leading-4 text-[#222121]"
-            >
-              Company
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/tariff-rate"
-              className="font-Comfortaa font-medium leading-4 text-[#222121]"
-            >
-              Tariff Rate
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/trekking"
-              className="font-Comfortaa font-medium leading-4 text-[#222121]"
-            >
-              Trekking
-            </Link>
-          </li>
+        <ul className="sm:flex hidden items-center justify-center gap-12">
+          {navLinks.map((value, index) => (
+            <li key={index}>
+              <Link
+                href={value.path}
+                onClick={() => handleTab(index)}
+                style={{
+                  boxShadow:
+                    active === index
+                      ? "0 4px 6px rgba(8, 125, 194, 0.15)"
+                      : "none",
+                }}
+                className={`px-4 py-2 rounded-sm transition-all duration-200
+              hover:bg-primary hover:text-white
+              ${active === index ? "bg-primary  text-white" : "text-black"}`}
+              >
+                {value.title}
+              </Link>
+            </li>
+          ))}
         </ul>
 
         <Link
           href={"/login"}
-          className=" bg-primary text-white px-10 py-2 rounded-lg font-bold sm:block hidden"
+          className=" underline decoration-1 text-primary px-10 py-2 rounded-lg font-medium sm:block hidden"
         >
-          Log In
+          Log in
         </Link>
       </div>
 
