@@ -22,8 +22,8 @@ export default function Booking() {
   const [selectedVehicle, setSelectedVehicle] = useState("Cars");
 
   const vehicleSlugMap = {
-    Cars: "car",
-    Jeep: "jeep",
+    Cars: "cars",
+    Jeep: "jeeps",
     "Toyota Hiace": "hiace",
     Bus: "bus",
   };
