@@ -22,8 +22,8 @@ export default function Booking() {
   const [selectedVehicle, setSelectedVehicle] = useState("Cars");
 
   const vehicleSlugMap = {
-    Cars: "car",
-    Jeep: "jeep",
+    Cars: "cars",
+    Jeep: "jeeps",
     "Toyota Hiace": "hiace",
     Bus: "bus",
   };
@@ -250,7 +250,7 @@ export default function Booking() {
             Search
           </Link>
         </div>
-        <div className="w-[200px] bg-primary rounded-md p-2 text-white  flex justify-center items-center mt-5 cursor-pointer">
+        <div className="w-[220px] bg-primary rounded-md p-2 text-white  flex justify-center items-center mt-5 cursor-pointer">
           Add another destination
         </div>
       </div>
