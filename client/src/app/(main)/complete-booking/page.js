@@ -1,43 +1,19 @@
 "use client";
 
 import { baseURL } from "@/config/config";
-import CalenderIcon from "@/ui/CalenderIcon";
-import Loader from "@/ui/Loader";
-import LocationIcon from "@/ui/LocationIcon";
-import { getName, getCode } from "country-list";
-import Select from "react-select";
 import axios from "axios";
+import { getCode } from "country-list";
+import enLocale from "i18n-iso-countries/langs/en.json";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import enLocale from "i18n-iso-countries/langs/en.json";
 
-import countries from "i18n-iso-countries";
-import Swal from "sweetalert2";
-import countryList from "react-select-country-list";
-import ViberIcon from "@/ui/ViberIcon";
-import WhatsappIcon from "@/ui/WhatsappIcon";
 import BookingForm from "@/components/common/BookingForm";
+import countries from "i18n-iso-countries";
+import countryList from "react-select-country-list";
+import Swal from "sweetalert2";
 
 countries.registerLocale(enLocale);
-
-const CheckIcon = () => (
-  <svg
-    className="w-5 h-5 text-green-500 flex-shrink-0"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
-      d="M5 13l4 4L19 7"
-    ></path>
-  </svg>
-);
 
 const Booking = () => {
   const router = useRouter();
@@ -46,14 +22,12 @@ const Booking = () => {
 
   const [showDetails, setShowDetails] = useState(false);
   const [country, setCountry] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
   const [customerPhone, setCustomerPhone] = useState("");
-  const [phoneCountryCode, setPhoneCountryCode] = useState("np");
 
   const [selectedCar, setSelectedCar] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("hellocarbooking@gmail.com");
+  const [email, setEmail] = useState("");
   const [details, setDetails] = useState("");
 
   const [pickupDateValue, setPickupDateValue] = useState("2025-04-24");
@@ -62,7 +36,6 @@ const Booking = () => {
   const [returnTimeValue, setReturnTimeValue] = useState("12:30");
 
   const [agreedToTerms, setAgreedToTerms] = useState(false);
-  const [loader, setLoader] = useState(false);
 
   const lineItems = [
     { description: "4 Rental days x $60.64", amount: "$450.10" },
@@ -72,21 +45,6 @@ const Booking = () => {
     { description: "4 Rental days x $60.64", amount: "$450.10" },
     { description: "4 Rental days x $60.64", amount: "$450.10" },
   ];
-
-  const options = useMemo(() => countryList().getData(), []);
-
-  const changeHandler = (country) => {
-    setCountry(country);
-  };
-
-  const handleSuggestionClick = (selected) => {
-    setCountry(selected);
-    setSuggestions([]);
-    const code = getCode(selected);
-    if (code) {
-      setPhoneCountryCode(code);
-    }
-  };
 
   useEffect(() => {
     if (cardId) {
@@ -137,7 +95,6 @@ const Booking = () => {
     try {
       setLoader(true);
       await axios.post(`${baseURL}/booking/create`, formData);
-      // Reset form fields
       setFirstName("");
       setLastName("");
       setCountry("Nep");

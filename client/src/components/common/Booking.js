@@ -2,16 +2,30 @@
 
 import Link from "next/link";
 import React, { useState } from "react";
+import { Calendar } from "react-date-range";
+import { addDays } from "date-fns";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import { FaCalendarAlt } from "react-icons/fa";
+import CarIcon from "@/ui/CarIcon";
+import JeepIcon from "@/ui/JeepIcon";
+import HiaceIcon from "@/ui/HiaceIcon";
+import BusIcon from "@/ui/BusIcon";
 
 export default function Booking() {
-  const vehicleTypes = ["Cars", "Jeep", "Toyota Hiace", "Bus"];
+  const vehicleTypes = [
+    { name: "Cars", icon: <CarIcon /> },
+    { name: "Jeep", icon: <JeepIcon /> },
+    { name: "Toyota Hiace", icon: <HiaceIcon /> },
+    { name: "Bus", icon: <BusIcon /> },
+  ];
   const [selectedVehicle, setSelectedVehicle] = useState("Cars");
 
   const vehicleSlugMap = {
-    Cars: "cars",
-    Jeep: "jeeps",
-    "Toyota Hiace": "hiaces",
-    Bus: "buses",
+    Cars: "car",
+    Jeep: "jeep",
+    "Toyota Hiace": "hiace",
+    Bus: "bus",
   };
 
   const inputFields = [
@@ -49,9 +63,14 @@ export default function Booking() {
     pickup: "",
     destination: "",
   });
+
   const [focusedField, setFocusedField] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [destinationError, setDestinationError] = useState("");
+
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState("12:30");
 
   const handleInputChange = (id, value) => {
     setAreaValues({ ...areaValues, [id]: value });
@@ -68,7 +87,6 @@ export default function Booking() {
   };
 
   const handleSelectArea = (id, area) => {
-    // Prevent selecting the same destination as the pickup location
     if (id === "destination" && area === areaValues.pickup) {
       setDestinationError("Destination cannot be the same as pickup location.");
       return;
@@ -78,30 +96,21 @@ export default function Booking() {
     setShowSuggestions(false);
   };
 
-  const dateTimeFields = [
-    {
-      label: "Pick-up date",
-      dateId: "pickup-date",
-      timeId: "pickup-time",
-    },
-  ];
-
   return (
-    <div className="p-8 font-sans">
-      <div className="p-10 bg-gray-100 rounded-xl">
-        {/* Vehicle buttons */}
+    <div className="p-8">
+      <div className="p-7 bg-white rounded-xl  relative">
         <div className="flex flex-wrap gap-2 mb-4">
           {vehicleTypes.map((type) => (
             <button
               key={type}
-              onClick={() => setSelectedVehicle(type)}
-              className={`px-4 py-2 rounded-full font-medium transition ${
-                selectedVehicle === type
-                  ? "bg-blue-600 text-white"
+              onClick={() => setSelectedVehicle(type.name)}
+              className={`px-4 py-2 rounded-full font-medium transition flex gap-2 items-center ${
+                selectedVehicle === type.name
+                  ? "bg-primary text-white"
                   : "bg-gray-200 hover:bg-gray-300"
               }`}
             >
-              {type}
+              {type.icon} {type.name}
             </button>
           ))}
         </div>
@@ -153,34 +162,96 @@ export default function Booking() {
             </div>
           ))}
 
-          {/* Date and Time Fields */}
-          {dateTimeFields.map(({ label, dateId, timeId }) => (
-            <div key={label} className="flex flex-col">
-              <label className="mb-1 font-medium">{label}</label>
-              <div className="flex gap-1">
-                <input
-                  id={dateId}
-                  type="date"
-                  defaultValue="2025-04-24"
-                  className="p-2 border border-gray-300 rounded-lg"
-                />
-                <input
-                  id={timeId}
-                  type="time"
-                  defaultValue="12:30"
-                  className="p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-            </div>
-          ))}
+          {/* Calendar and Time Picker */}
+          <div className="flex flex-col relative">
+            <label className="mb-1 font-medium">Pick-up date</label>
+            <div className="flex gap-1">
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowCalendar(!showCalendar)}
+                  className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg bg-white"
+                >
+                  <FaCalendarAlt className="text-gray-600" />
+                  <span>{selectedDate.toDateString()}</span>
+                </button>
 
-          {/* Search Link */}
+                {showCalendar && (
+                  <div className="absolute z-30 mt-2 shadow-lg">
+                    <Calendar
+                      date={selectedDate}
+                      onChange={(date) => {
+                        setSelectedDate(date);
+                        setShowCalendar(false);
+                      }}
+                      months={2}
+                      direction="horizontal"
+                      showMonthAndYearPickers={true}
+                      minDate={new Date()}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <input
+                id="pickup-time"
+                type="time"
+                value={selectedTime}
+                onChange={(e) => setSelectedTime(e.target.value)}
+                className="p-2 border border-gray-300 rounded-lg"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col relative">
+            <label className="mb-1 font-medium">Return date</label>
+            <div className="flex gap-1">
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowCalendar(!showCalendar)}
+                  className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg bg-white"
+                >
+                  <FaCalendarAlt className="text-gray-600" />
+                  <span>{selectedDate.toDateString()}</span>
+                </button>
+
+                {showCalendar && (
+                  <div className="absolute z-30 mt-2 shadow-lg">
+                    <Calendar
+                      date={selectedDate}
+                      onChange={(date) => {
+                        setSelectedDate(date);
+                        setShowCalendar(false);
+                      }}
+                      months={2}
+                      direction="horizontal"
+                      showMonthAndYearPickers={true}
+                      minDate={new Date()}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <input
+                id="pickup-time"
+                type="time"
+                value={selectedTime}
+                onChange={(e) => setSelectedTime(e.target.value)}
+                className="p-2 border border-gray-300 rounded-lg"
+              />
+            </div>
+          </div>
+
           <Link
-            href={`/booking/${vehicleSlugMap[selectedVehicle]}`}
+            href={`/booking?vehicle=${vehicleSlugMap[selectedVehicle]}&pickUp=${areaValues.pickup}&destination=${areaValues.destination}&date=${selectedDate.toISOString()}&time=${selectedTime}`}
             className="bg-gradient-to-r from-[#006ba6] to-[#009acb] text-white font-bold px-6 py-2 rounded-full hover:opacity-90"
           >
             Search
           </Link>
+        </div>
+        <div className="w-[200px] bg-primary rounded-md p-2 text-white  flex justify-center items-center mt-5 cursor-pointer">
+          Add another destination
         </div>
       </div>
     </div>
