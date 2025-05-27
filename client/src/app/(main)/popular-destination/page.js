@@ -7,6 +7,12 @@ import Link from "next/link";
 
 export default async function PopularDestinationPage({ searchParams }) {
   const { id } = await searchParams;
+  const vehicleTypes = [
+    { name: "Cars", icon: <CarIcon />, slug: "cars" },
+    { name: "Jeep", icon: <JeepIcon />, slug: "jeeps" },
+    { name: "Toyota Hiace", icon: <HiaceIcon />, slug: "hiace" },
+    { name: "Bus", icon: <BusIcon />, slug: "bus" },
+  ];
 
   const destinationData = Destination.find((item) => item.id === parseInt(id));
 
@@ -15,7 +21,7 @@ export default async function PopularDestinationPage({ searchParams }) {
   }
   console.log(destinationData);
   return (
-    <div className="m-10">
+    <div className="m-10 min-h-screen">
       <section className="w-full flex justify-between gap-15  max-w-[1700px] mx-auto">
         <div className="w-[60%]">
           <img
@@ -29,21 +35,20 @@ export default async function PopularDestinationPage({ searchParams }) {
           </h1>
           <br />
           <ul className="flex flex-col gap-4 w-[100%]">
-            <li className="flex items-center gap-2 px-4 py-2 w-[180px] bg-gray-100 rounded-full shadow-sm">
-              <CarIcon /> Car
-            </li>
-            <li className="flex items-center gap-2 px-4 py-2 w-[180px] bg-gray-100 rounded-full shadow-sm">
-              <JeepIcon /> Jeep
-            </li>
-            <li className="flex items-center gap-2 px-4 py-2 w-[180px] bg-gray-100 rounded-full shadow-sm">
-              <HiaceIcon /> Hiace
-            </li>
-            <li className="flex items-center gap-2 px-4 py-2 w-[180px] bg-gray-100 rounded-full shadow-sm">
-              <BusIcon /> Bus
-            </li>
-            <li className="flex items-center gap-2 px-4 py-2 w-[180px] bg-gray-100 rounded-full shadow-sm">
-              <BusIcon /> Tourist Bus
-            </li>
+            {vehicleTypes.map((vehicle, index) => (
+              <li
+                key={index}
+                className="flex items-center gap-2 px-4 py-2 w-[180px] bg-gray-100 rounded-full shadow-sm"
+              >
+                <span className="text-2xl">{vehicle.icon}</span>
+                <Link
+                  href={`/booking?vehicle=${vehicle.slug}&pickUp=${destinationData.name}&destination=${destinationData.name}`}
+                  className="text-lg font-medium"
+                >
+                  {vehicle.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </section>

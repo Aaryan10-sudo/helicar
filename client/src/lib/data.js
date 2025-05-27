@@ -16,16 +16,19 @@ export const Blog = [
   {
     date: "Jul 12, 2020",
     title: "Chitwan Sauraha Tours",
+    category: "Recent",
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua labore et dolore ut labore et dolore magna.",
   },
   {
     date: "Aug 15, 2021",
     title: "Pokhara Adventure",
+    category: "Adventure",
     text: "Explore the beauty of Pokhara with its serene lakes, breathtaking mountain views, and thrilling adventures. A perfect getaway for nature lovers.",
   },
   {
     date: "Sep 10, 2022",
     title: "Kathmandu Heritage Walk",
+    category: "Heritage",
     text: "Discover the rich cultural heritage of Kathmandu with its ancient temples, bustling markets, and vibrant traditions.",
   },
 ];
