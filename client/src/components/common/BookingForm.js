@@ -757,7 +757,7 @@ const BookingForm = () => {
             </h2>
             <p className="text-sm text-gray-600 text-center mb-6 sm:mb-8 leading-relaxed">
               Please Enter the OTP (One-Time Password) sent to your registered
-              email ({email}) to complete your verification.
+              email to complete your verification.
             </p>
 
             <div className="flex justify-center space-x-2 sm:space-x-3 mb-6 sm:mb-8">

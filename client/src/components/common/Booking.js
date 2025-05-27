@@ -1,16 +1,15 @@
 "use client";
 
+import BusIcon from "@/ui/BusIcon";
+import CarIcon from "@/ui/CarIcon";
+import HiaceIcon from "@/ui/HiaceIcon";
+import JeepIcon from "@/ui/JeepIcon";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Calendar } from "react-date-range";
-import { addDays } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { FaCalendarAlt } from "react-icons/fa";
-import CarIcon from "@/ui/CarIcon";
-import JeepIcon from "@/ui/JeepIcon";
-import HiaceIcon from "@/ui/HiaceIcon";
-import BusIcon from "@/ui/BusIcon";
 
 export default function Booking() {
   const vehicleTypes = [
@@ -28,18 +27,10 @@ export default function Booking() {
     Bus: "bus",
   };
 
-  const inputFields = [
-    {
-      id: "pickup",
-      label: "Pick-up",
-      placeholder: "Enter area...",
-    },
-    {
-      id: "destination",
-      label: "Destination",
-      placeholder: "Enter area...",
-    },
-  ];
+  const [destinations, setDestinations] = useState([
+    { id: "pickup", label: "Pick-up", value: "" },
+    { id: "destination", label: "Destination", value: "" },
+  ]);
 
   const kathmanduAreas = [
     "Thamel",
@@ -59,21 +50,26 @@ export default function Booking() {
     "Chabahil",
   ];
 
-  const [areaValues, setAreaValues] = useState({
-    pickup: "",
-    destination: "",
-  });
-
   const [focusedField, setFocusedField] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [destinationError, setDestinationError] = useState("");
+  const [showAnotherDestination, setShowAnotherDestination] = useState(false);
+
+  const handleAnotherDestination = () => {
+    setShowAnotherDestination(true);
+  };
+  const removeAnotherDestination = () => {
+    setShowAnotherDestination(false);
+  };
 
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("12:30");
 
   const handleInputChange = (id, value) => {
-    setAreaValues({ ...areaValues, [id]: value });
+    setDestinations((prev) =>
+      prev.map((dest) => (dest.id === id ? { ...dest, value: value } : dest))
+    );
 
     if (
       id === "destination" &&
@@ -87,18 +83,20 @@ export default function Booking() {
   };
 
   const handleSelectArea = (id, area) => {
-    if (id === "destination" && area === areaValues.pickup) {
+    if (id === "destination" && area === destinations[0].value) {
       setDestinationError("Destination cannot be the same as pickup location.");
       return;
     }
 
-    setAreaValues({ ...areaValues, [id]: area });
+    setDestinations((prev) =>
+      prev.map((dest) => (dest.id === id ? { ...dest, value: area } : dest))
+    );
     setShowSuggestions(false);
   };
 
   return (
     <div className="p-8">
-      <div className="p-7 bg-white rounded-xl  relative">
+      <div className="p-7 bg-white rounded-xl  relative shadow-2xl">
         <div className="flex flex-wrap gap-2 mb-4">
           {vehicleTypes.map((type) => (
             <button
@@ -116,7 +114,7 @@ export default function Booking() {
         </div>
 
         <div className="flex flex-wrap gap-4 items-end relative">
-          {inputFields.map(({ id, label, placeholder }) => (
+          {destinations.map(({ id, label, value }) => (
             <div key={id} className="flex flex-col relative min-w-[200px]">
               <label htmlFor={id} className="mb-1 font-medium">
                 {label}
@@ -125,8 +123,8 @@ export default function Booking() {
                 id={id}
                 required
                 type="text"
-                placeholder={placeholder}
-                value={areaValues[id]}
+                placeholder="Enter area..."
+                value={value}
                 onFocus={() => {
                   setFocusedField(id);
                   setShowSuggestions(true);
@@ -141,7 +139,7 @@ export default function Booking() {
                 <ul className="absolute top-full mt-1 z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
                   {kathmanduAreas
                     .filter((area) =>
-                      area.toLowerCase().includes(areaValues[id].toLowerCase())
+                      area.toLowerCase().includes(value.toLowerCase())
                     )
                     .map((area, index) => (
                       <li
@@ -244,15 +242,74 @@ export default function Booking() {
           </div>
 
           <Link
-            href={`/booking?vehicle=${vehicleSlugMap[selectedVehicle]}&pickUp=${areaValues.pickup}&destination=${areaValues.destination}&date=${selectedDate.toISOString()}&time=${selectedTime}`}
+            href={`/booking?vehicle=${vehicleSlugMap[selectedVehicle]}&pickUp=${destinations[0].value}&destination=${destinations[1].value}&date=${selectedDate.toISOString()}&time=${selectedTime}`}
             className="bg-gradient-to-r from-[#006ba6] to-[#009acb] text-white font-bold px-6 py-2 rounded-full hover:opacity-90"
           >
             Search
           </Link>
         </div>
-        <div className="w-[220px] bg-primary rounded-md p-2 text-white  flex justify-center items-center mt-5 cursor-pointer">
-          Add another destination
-        </div>
+        <span>
+          {showAnotherDestination ? (
+            <div className="flex flex-wrap gap-4 mt-2">
+              {destinations.map(({ id, label, value }) => (
+                <div key={id} className="flex flex-col relative min-w-[200px]">
+                  <input
+                    id={id}
+                    required
+                    type="text"
+                    placeholder={"City"}
+                    value={value}
+                    onFocus={() => {
+                      setFocusedField(id);
+                      setShowSuggestions(true);
+                    }}
+                    onBlur={() => {
+                      setTimeout(() => setShowSuggestions(false), 100);
+                    }}
+                    onChange={(e) => handleInputChange(id, e.target.value)}
+                    className="p-2 border border-gray-300 rounded-lg"
+                  />
+                  {showSuggestions && focusedField === id && (
+                    <ul className="absolute top-full mt-1 z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
+                      {kathmanduAreas
+                        .filter((area) =>
+                          area.toLowerCase().includes(value.toLowerCase())
+                        )
+                        .map((area, index) => (
+                          <li
+                            key={index}
+                            onClick={() => handleSelectArea(id, area)}
+                            className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
+                          >
+                            {area}
+                          </li>
+                        ))}
+                    </ul>
+                  )}
+                  {destinationError && id === "destination" && (
+                    <p className="text-red-500 text-xs top-[70px] absolute">
+                      {destinationError}
+                    </p>
+                  )}
+                </div>
+              ))}
+
+              <button
+                className="bg-red-500 w-[100px] h-[40px] rounded-[20px] text-white cursor-pointer hover:bg-red-600"
+                onClick={removeAnotherDestination}
+              >
+                Remove
+              </button>
+            </div>
+          ) : null}
+
+          <div
+            className="w-[220px] bg-primary rounded-md p-2 text-white  flex justify-center items-center mt-5 cursor-pointer"
+            onClick={handleAnotherDestination}
+          >
+            Add another destination
+          </div>
+        </span>
       </div>
     </div>
   );
