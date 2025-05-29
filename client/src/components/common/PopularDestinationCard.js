@@ -77,7 +77,7 @@ const PopularDestinationCard = () => {
             >
               <div
                 className="w-full h-[130px] text-white px-5"
-                style={{ backgroundColor: "rgba(0, 0, 0, 0.25)" }}
+                style={{ backgroundColor: "rgba(0, 0, 0, 0.60)" }}
               >
                 <h1 className="text-[30px] font-semibold font-Comfortaa">
                   {value.name}
