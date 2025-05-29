@@ -20,11 +20,11 @@ const BlogCard = () => {
           <h2 className="px-5 py-3 text-blue-400 font-semibold">
             {value.date}
           </h2>
-          <h1 className="px-5 text-blue-500 font-bold text-xl">
+          <h1 className="px-5 text-blue-500 font-bold text-xl font-Comfortaa">
             {value.title}
           </h1>
           <p className="px-5 line-clamp-4 max-h-[100px] py-2">{value.text}</p>
-          <button className="p-5 float-right text-xl font-medium flex items-center gap-2 cursor-pointer">
+          <button className="p-5 float-right text-xl font-medium flex items-center gap-2 cursor-pointer font-Comfortaa">
             Read more
             <ArrowIcon />
           </button>

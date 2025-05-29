@@ -15,7 +15,7 @@ const page = () => {
   return (
     <main className="min-h-screen">
       <section className="flex flex-col items-center gap-7 py-5 w-full justify-center">
-        <h1 className="text-primary text-4xl font-semibold">
+        <h1 className="text-primary text-4xl font-semibold font-Comfortaa">
           {bloglanding.title}
         </h1>
         <p className="text-gray-600 px-[50px] text-center max-w-[1000px]">
