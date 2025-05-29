@@ -2,6 +2,7 @@ import React from "react";
 import blogImage from "../../assets/blogImag.jpg";
 import ArrowIcon from "@/ui/ArrowIcon";
 import { Blog } from "@/lib/data";
+import Link from "next/link";
 
 const BlogCard = () => {
   return (
@@ -14,7 +15,7 @@ const BlogCard = () => {
           <div
             className="bg-slate-100 w-full h-[230px] bg-cover bg-center"
             style={{
-              backgroundImage: `url(${blogImage?.src || "/default-hero.jpg"})`,
+              backgroundImage: `url(${value.image || "/default-hero.jpg"})`,
             }}
           ></div>
           <h2 className="px-5 py-3 text-blue-400 font-semibold">
@@ -24,10 +25,13 @@ const BlogCard = () => {
             {value.title}
           </h1>
           <p className="px-5 line-clamp-4 max-h-[100px] py-2">{value.text}</p>
-          <button className="p-5 float-right text-xl font-medium flex items-center gap-2 cursor-pointer font-Comfortaa">
+          <Link
+            href={`/blog/${value.id}`}
+            className="p-5 float-right text-xl font-medium flex items-center gap-2 cursor-pointer font-Comfortaa"
+          >
             Read more
             <ArrowIcon />
-          </button>
+          </Link>
         </div>
       ))}
     </section>

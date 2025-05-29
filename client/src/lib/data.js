@@ -3,6 +3,7 @@ import luklaImage from "../assets/lukla.jpg";
 import pokharaImage from "../assets/pokhara.jpg";
 import chandragiriImage from "../assets/chandragiri.jpg";
 import swayambhuImage from "../assets/swayambhu.jpg";
+import blogImage from "../assets/blogImag.jpg";
 
 export const Destination = [
   { id: 1, name: "Mustang", image: mustangImage },
@@ -14,21 +15,27 @@ export const Destination = [
 
 export const Blog = [
   {
+    id: 1,
     date: "Jul 12, 2020",
     title: "Chitwan Sauraha Tours",
     category: "Recent",
+    image: blogImage?.src,
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua labore et dolore ut labore et dolore magna.",
   },
   {
+    id: 2,
     date: "Aug 15, 2021",
     title: "Pokhara Adventure",
     category: "Adventure",
+    image: blogImage?.src,
     text: "Explore the beauty of Pokhara with its serene lakes, breathtaking mountain views, and thrilling adventures. A perfect getaway for nature lovers.",
   },
   {
+    id: 3,
     date: "Sep 10, 2022",
     title: "Kathmandu Heritage Walk",
     category: "Heritage",
+    image: blogImage?.src,
     text: "Discover the rich cultural heritage of Kathmandu with its ancient temples, bustling markets, and vibrant traditions.",
   },
 ];
