@@ -66,8 +66,8 @@ const PopularDestinationCard = () => {
       >
         {Destination.map((value, index) => (
           <SwiperSlide key={index}>
-            <section
-              className="w-full h-[440px] rounded-lg bg-cover flex flex-col justify-end overflow-hidden cursor-pointer transition-transform"
+            <section              className="w-full h-[440px] rounded-lg bg-cover flex flex-col justify-end overflow-hidden cursor-pointer transition-transform"
+
               style={{
                 backgroundImage: `url(${value.image.src || "/default-hero.jpg"})`,
               }}

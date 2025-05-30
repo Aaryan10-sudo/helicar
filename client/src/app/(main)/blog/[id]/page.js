@@ -4,7 +4,7 @@ import { Blog } from "@/lib/data";
 import { useParams } from "next/navigation";
 import React from "react";
 
-const Page = () => {
+export default function Page() {
   const params = useParams();
   const id = params.id;
 
@@ -109,6 +109,4 @@ const Page = () => {
       </span>
     </section>
   );
-};
-
-export default Page;
+}
