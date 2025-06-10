@@ -9,6 +9,8 @@ const createInitialAdmin = require("../src/utils/createInitialAdmin");
 const debug = require("debug")("express:server");
 const http = require("http");
 const os = require("os");
+require("dotenv").config();
+const { PORT } = require("../config/env");
 
 /**
  * Get port from environment and store in Express.
@@ -28,7 +30,7 @@ const getLocalIp = () => {
 
 const ip = getLocalIp();
 
-const port = normalizePort(process.env.PORT || "3000");
+const port = normalizePort(PORT || "8000");
 app.set("port", port);
 
 /**
