@@ -29,7 +29,7 @@ const getLocalIp = () => {
 
 const ip = getLocalIp();
 
-const port = normalizePort(PORT || "8000");
+const port = normalizePort(PORT || "4000");
 app.set("port", port);
 
 /**
