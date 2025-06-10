@@ -19,9 +19,9 @@ services:
     container_name: nnine-helicar-be
     image: prina1/nnine-helicar-be:latest
     ports:
-      - "3000:3000"  
+      - "4000:4000"  
     env_file:
-      - /home/ubuntu/helicarbooking/server/.env
+      - /home/azureuser/client-project/helicarbooking/server/.env
     environment:
       - DB_NAME=${DB_NAME}
       - DB_USERNAME=${DB_USERNAME}
