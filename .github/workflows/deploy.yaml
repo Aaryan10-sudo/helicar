@@ -21,8 +21,8 @@ jobs:
           docker build -t ${{ vars.DOCKERHUB_USERNAME }}/nnine-helicar-be:latest -f ./server/Dockerfile ./server
           docker push ${{ vars.DOCKERHUB_USERNAME }}/nnine-helicar-be:latest
 
-  deploy-aws:
-    name: Deploy to AWS EC2
+  deploy-azure:
+    name: Deploy to Azure VM
     needs: build-and-push
     runs-on: ubuntu-latest
 
@@ -30,85 +30,50 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Install AWS CLI
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install --update
-          aws --version
-
-      - name: Configure AWS CLI
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set default.region ${{ secrets.AWS_REGION }}
-
-      - name: Debug AWS Region
-        run: |
-          echo "Current AWS Region: ${{ secrets.AWS_REGION }}"
-
-      - name: Get EC2 Instance IP
-        run: |
-          echo "Fetching EC2 instance public IP..."
-          export AWS_REGION=${{ secrets.AWS_REGION }} 
-          IP=$(aws ec2 describe-instances \
-            --filters "Name=tag:Name,Values=helicar" "Name=instance-state-name,Values=running" \
-            --query "Reservations[*].Instances[*].PublicIpAddress" \
-            --region "$AWS_REGION" \
-            --output text)
-          if [[ -z "$IP" ]]; then
-            echo "No running instance found. Exiting."
-            exit 1
-          fi
-          echo "Latest IP: $IP"
-          echo "IP_ADDRESS=$IP" >> $GITHUB_ENV
+      - name: Set Azure VM IP
+        run: echo "AZURE_VM_IP=${{ secrets.AZURE_VM_IP }}" >> $GITHUB_ENV
 
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Create .env file in backend folder on EC2
+      - name: Create .env file in backend folder on Azure VM
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ env.IP_ADDRESS }} << 'EOF'
-            echo "DB_NAME=${{secrets.DB_NAME}}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "DB_USERNAME=${{secrets.DB_USERNAME}}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "DB_HOST=postgres" > /home/ubuntu/helicarbooking/server/.env
-            echo "DB_PORT=${{secrets.DB_PORT}}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "SSL=${{secrets.SSL}}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "DB_DIALECT=${{secrets.DB_DIALECT}}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "SECRET_KEY=${{secrets.SECRET_KEY}}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "ADMIN_MAIL=${{ secrets.ADMIN_MAIL }}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "CORS_ORIGIN=${{ secrets.CORS_ORIGIN }}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "SMTP_EMAIL=${{ secrets.SMTP_EMAIL }}" >> /home/ubuntu/helicarbooking/server/.env
-            echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD}}" >> /home/ubuntu/helicarbooking/server/.env
+          ssh -o StrictHostKeyChecking=no azureuser@${{ env.AZURE_VM_IP }} << 'EOF'
+            echo "DB_NAME=${{secrets.DB_NAME}}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "DB_USERNAME=${{secrets.DB_USERNAME}}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "DB_HOST=postgres" > /home/azureuser/client-project/helicarbooking/server/.env
+            echo "DB_PORT=${{secrets.DB_PORT}}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "SSL=${{secrets.SSL}}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "DB_DIALECT=${{secrets.DB_DIALECT}}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "SECRET_KEY=${{secrets.SECRET_KEY}}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "ADMIN_MAIL=${{ secrets.ADMIN_MAIL }}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "CORS_ORIGIN=${{ secrets.CORS_ORIGIN }}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "SMTP_EMAIL=${{ secrets.SMTP_EMAIL }}" >> /home/azureuser/client-project/helicarbooking/server/.env
+            echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD}}" >> /home/azureuser/client-project/helicarbooking/server/.env
           EOF
 
-      - name: Deploy to Ubuntu Server with Docker Compose
+      - name: Deploy to Azure VM with Docker Compose
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ env.IP_ADDRESS }} << 'EOF'
-            cd /home/ubuntu/helicarbooking           
+          ssh -o StrictHostKeyChecking=no azureuser@${{ env.AZURE_VM_IP }} << 'EOF'
+            cd /home/azureuser/client-project/helicarbooking           
             echo "Pulling latest code from origin staging..."
             git pull origin staging
 
             echo "Cleaning up disk space..."
-            echo "Removing dangling images..."
             docker image prune -f
-
-            echo "Removing unused containers..."
             docker container prune -f
-
-            echo "Removing unused volumes..."
             docker volume prune -f
 
             echo "Pulling latest Docker image..."
             sudo docker pull ${{ vars.DOCKERHUB_USERNAME }}/nnine-helicar-be:latest
-            
+
             echo "Rebuilding and restarting containers..."
             docker compose down
             docker compose up -d --build
