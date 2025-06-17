@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import vehicleImage from "../../assets/herosection.jpg";
 import Booking from "./Booking";
+import axios from "axios";
 
 const Hero = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -10,6 +11,17 @@ const Hero = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
+    const handleHero = async () => {
+      try {
+        const response = await axios({
+          method: "GET",
+          url: ""
+        })
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+    
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);

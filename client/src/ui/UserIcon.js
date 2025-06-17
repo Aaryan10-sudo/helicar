@@ -8,12 +8,9 @@ const UserIcon = () => {
       height="24"
       viewBox="0 0 24 24"
     >
-      <g fill="none" stroke="#000" stroke-width="1.5">
+      <g fill="none" stroke="#000" strokeWidth="1.5">
         <circle cx="12" cy="6" r="4" />
-        <path
-          stroke-linecap="round"
-          d="M19.998 18q.002-.246.002-.5c0-2.485-3.582-4.5-8-4.5s-8 2.015-8 4.5S4 22 12 22c2.231 0 3.84-.157 5-.437"
-        />
+        <path strokeLinecap="round" d="M19.998 18q.002-.246.002-.5c0-2.485-3.582-4.5-8-4.5s-8 2.015-8 4.5S4 22 12 22c2.231 0 3.84-.157 5-.437" />
       </g>
     </svg>
   );
