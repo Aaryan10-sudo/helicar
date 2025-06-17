@@ -196,18 +196,23 @@ export default function Booking() {
                 {showPickupCalendar && (
                   <div
                     ref={pickupCalendarRef}
-                    className="absolute top-full left-0 mt-2 z-30 rounded-md shadow-lg"
+                    className="absolute top-full left-0 mt-5 z-30 rounded-md shadow-lg"
                   >
                     <DayPicker
                       mode="range"
                       numberOfMonths={2}
-                      selected={range.from}
+                      selected={range}
+                      onSelect={(range) => setRange({ ...range })}
                       fromDate={new Date()}
+                      disabled={{ before: new Date() }}
                       className="bg-white rounded-lg shadow-lg p-2"
                       classNames={{
                         months: "flex flex-row gap-4",
-
                         caption_label: "text-lg font-large",
+                        today:
+                          "border-amber-500 rounded-full bg-primary text-white",
+                        selected: "rounded-full",
+                        chevron: "text-black",
                       }}
                     />
                   </div>
