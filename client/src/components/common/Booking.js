@@ -63,7 +63,6 @@ export default function Booking() {
   };
 
   const [showPickupCalendar, setShowPickupCalendar] = useState(false);
-  const [showReturnCalendar, setShowReturnCalendar] = useState(false);
   const [range, setRange] = useState({ from: undefined, to: undefined });
   const [pickupTime, setPickupTime] = useState("12:30 AM");
   const [returnTime, setReturnTime] = useState("12:30 AM");
