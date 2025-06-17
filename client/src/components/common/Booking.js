@@ -5,10 +5,9 @@ import CarIcon from "@/ui/CarIcon";
 import HiaceIcon from "@/ui/HiaceIcon";
 import JeepIcon from "@/ui/JeepIcon";
 import Link from "next/link";
-import { useState } from "react";
-import { Calendar } from "react-date-range";
-import "react-date-range/dist/styles.css";
-import "react-date-range/dist/theme/default.css";
+import { useEffect, useRef, useState } from "react";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/dist/style.css"; // Import default styles
 import { FaCalendarAlt } from "react-icons/fa";
 
 export default function Booking() {
@@ -62,9 +61,11 @@ export default function Booking() {
     setShowAnotherDestination(false);
   };
 
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState("12:30");
+  const [showPickupCalendar, setShowPickupCalendar] = useState(false);
+  const [showReturnCalendar, setShowReturnCalendar] = useState(false);
+  const [range, setRange] = useState({ from: undefined, to: undefined });
+  const [pickupTime, setPickupTime] = useState("12:30");
+  const [returnTime, setReturnTime] = useState("12:30");
 
   const handleInputChange = (id, value) => {
     setDestinations((prev) =>
@@ -94,13 +95,31 @@ export default function Booking() {
     setShowSuggestions(false);
   };
 
+  const pickupCalendarRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        pickupCalendarRef.current &&
+        !pickupCalendarRef.current.contains(event.target)
+      ) {
+        setShowPickupCalendar(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="p-8">
-      <div className="p-7 bg-white rounded-xl  relative shadow-2xl">
+      <div className="p-7 bg-white rounded-xl relative shadow-2xl">
         <div className="flex flex-wrap gap-2 mb-4">
           {vehicleTypes.map((type) => (
             <button
-              key={type}
+              key={type.name}
               onClick={() => setSelectedVehicle(type.name)}
               className={`px-4 py-2 rounded-full font-medium transition flex gap-2 items-center ${
                 selectedVehicle === type.name
@@ -141,9 +160,9 @@ export default function Booking() {
                     .filter((area) =>
                       area.toLowerCase().includes(value.toLowerCase())
                     )
-                    .map((area, index) => (
+                    .map((area) => (
                       <li
-                        key={index}
+                        key={area}
                         onClick={() => handleSelectArea(id, area)}
                         className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
                       >
@@ -153,101 +172,109 @@ export default function Booking() {
                 </ul>
               )}
               {destinationError && id === "destination" && (
-                <p className="text-red-500 text-xs top-[70px] absolute">
-                  {destinationError}
-                </p>
+                <p className="text-red-500 text-xs mt-1">{destinationError}</p>
               )}
             </div>
           ))}
 
-          {/* Calendar and Time Picker */}
+          {/* Pick-up Calendar and Time Picker */}
           <div className="flex flex-col relative">
             <label className="mb-1 font-medium">Pick-up date</label>
             <div className="flex gap-1">
               <div className="relative">
                 <button
                   type="button"
-                  onClick={() => setShowCalendar(!showCalendar)}
+                  onClick={() => setShowPickupCalendar(!showPickupCalendar)}
                   className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg bg-white"
+                  aria-label="Select pick-up date"
                 >
                   <FaCalendarAlt className="text-gray-600" />
-                  <span>{selectedDate.toDateString()}</span>
+                  <span>
+                    {range.from ? range.from.toDateString() : "Select date"}
+                  </span>
                 </button>
-
-                {showCalendar && (
-                  <div className="absolute z-30 mt-2 shadow-lg">
-                    <Calendar
-                      date={selectedDate}
-                      onChange={(date) => {
-                        setSelectedDate(date);
-                        setShowCalendar(false);
+                {showPickupCalendar && (
+                  <div
+                    ref={pickupCalendarRef}
+                    className="absolute top-full left-0 mt-5 z-30 rounded-md shadow-lg"
+                  >
+                    <DayPicker
+                      mode="range"
+                      numberOfMonths={2}
+                      selected={range}
+                      onSelect={(range) => setRange({ ...range })}
+                      fromDate={new Date()}
+                      disabled={{ before: new Date() }}
+                      className="bg-white rounded-lg shadow-lg p-2"
+                      classNames={{
+                        months: "flex flex-row gap-4",
+                        caption_label: "text-lg font-large",
+                        today:
+                          "border-amber-500 rounded-full bg-primary text-white",
+                        selected: "rounded-full",
+                        chevron: "text-black",
                       }}
-                      months={2}
-                      direction="horizontal"
-                      showMonthAndYearPickers={true}
-                      minDate={new Date()}
                     />
                   </div>
                 )}
               </div>
-
               <input
                 id="pickup-time"
                 type="time"
-                value={selectedTime}
-                onChange={(e) => setSelectedTime(e.target.value)}
+                value={pickupTime}
+                onChange={(e) => setPickupTime(e.target.value)}
                 className="p-2 border border-gray-300 rounded-lg"
               />
             </div>
           </div>
 
+          {/* Return Calendar and Time Picker */}
           <div className="flex flex-col relative">
             <label className="mb-1 font-medium">Return date</label>
             <div className="flex gap-1">
               <div className="relative">
                 <button
                   type="button"
-                  onClick={() => setShowCalendar(!showCalendar)}
+                  onClick={() => setShowReturnCalendar(!showReturnCalendar)}
                   className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg bg-white"
+                  aria-label="Select return date"
                 >
                   <FaCalendarAlt className="text-gray-600" />
-                  <span>{selectedDate.toDateString()}</span>
+                  <span>
+                    {range.to ? range.to.toDateString() : "Select date"}
+                  </span>
                 </button>
-
-                {showCalendar && (
-                  <div className="absolute z-30 mt-2 shadow-lg">
-                    <Calendar
-                      date={selectedDate}
-                      onChange={(date) => {
-                        setSelectedDate(date);
-                        setShowCalendar(false);
-                      }}
-                      months={2}
-                      direction="horizontal"
-                      showMonthAndYearPickers={true}
-                      minDate={new Date()}
-                    />
-                  </div>
-                )}
               </div>
-
               <input
-                id="pickup-time"
+                id="return-time"
                 type="time"
-                value={selectedTime}
-                onChange={(e) => setSelectedTime(e.target.value)}
+                value={returnTime}
+                onChange={(e) => setReturnTime(e.target.value)}
                 className="p-2 border border-gray-300 rounded-lg"
               />
             </div>
           </div>
 
           <Link
-            href={`/booking?vehicle=${vehicleSlugMap[selectedVehicle]}&pickUp=${destinations[0].value}&destination=${destinations[1].value}&date=${selectedDate.toISOString()}&time=${selectedTime}`}
-            className="bg-gradient-to-r from-[#006ba6] to-[#009acb] text-white font-bold px-6 py-2 rounded-full hover:opacity-90"
+            href={`/booking?vehicle=${vehicleSlugMap[selectedVehicle]}&pickUp=${
+              destinations[0].value
+            }&destination=${destinations[1].value}&date=${
+              range.from ? range.from.toISOString() : ""
+            }&returnDate=${range.to ? range.to.toISOString() : ""}&pickupTime=${pickupTime}&returnTime=${returnTime}`}
+            className={`bg-gradient-to-r from-[#006ba6] to-[#009acb] text-white font-bold px-6 py-2 rounded-full hover:opacity-90 ${
+              !range.from ||
+              !range.to ||
+              !destinations[0].value ||
+              !destinations[1].value ||
+              destinationError
+                ? "opacity-50 pointer-events-none"
+                : ""
+            }`}
           >
             Search
           </Link>
         </div>
+
         <span>
           {showAnotherDestination ? (
             <div className="flex flex-wrap gap-4 mt-2">
@@ -257,7 +284,7 @@ export default function Booking() {
                     id={id}
                     required
                     type="text"
-                    placeholder={"City"}
+                    placeholder="Enter area..."
                     value={value}
                     onFocus={() => {
                       setFocusedField(id);
@@ -275,9 +302,9 @@ export default function Booking() {
                         .filter((area) =>
                           area.toLowerCase().includes(value.toLowerCase())
                         )
-                        .map((area, index) => (
+                        .map((area) => (
                           <li
-                            key={index}
+                            key={area}
                             onClick={() => handleSelectArea(id, area)}
                             className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
                           >
@@ -287,13 +314,12 @@ export default function Booking() {
                     </ul>
                   )}
                   {destinationError && id === "destination" && (
-                    <p className="text-red-500 text-xs top-[70px] absolute">
+                    <p className="text-red-500 text-xs mt-1">
                       {destinationError}
                     </p>
                   )}
                 </div>
               ))}
-
               <button
                 className="bg-red-500 w-[100px] h-[40px] rounded-[20px] text-white cursor-pointer hover:bg-red-600"
                 onClick={removeAnotherDestination}
@@ -304,7 +330,7 @@ export default function Booking() {
           ) : null}
 
           <div
-            className="w-[220px] bg-primary rounded-md p-2 text-white  flex justify-center items-center mt-5 cursor-pointer"
+            className="w-[220px] bg-primary rounded-md p-2 text-white flex justify-center items-center mt-5 cursor-pointer"
             onClick={handleAnotherDestination}
           >
             Add another destination
