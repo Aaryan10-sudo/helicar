@@ -20,8 +20,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-Lexend`}
-      >
+        className={`${geistSans.variable} ${geistMono.variable} font-Lexend`} suppressContentEditableWarning suppressHydrationWarning >
         {children}
       </body>
     </html>
