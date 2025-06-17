@@ -19,6 +19,7 @@ const settingRouter = require("./src/routes/setting.route");
 const {
   testPostgresConnection,
 } = require("./config/db/postgres/connectPostgres");
+const cmsrouter = require("./src/routes/cms.route");
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use("/file", fileRouter);
 app.use("/booking", bookingRouter);
 app.use("/enquiry", enquiryRouter);
 app.use("/settings", settingRouter);
+app.use("/cms",cmsrouter)
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
