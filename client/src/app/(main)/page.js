@@ -7,11 +7,14 @@ import OurMission from "@/components/common/OurMission";
 import PopularDestination from "@/components/common/PopularDestination";
 import Rating from "@/components/common/Rating";
 import WhyUs from "@/components/common/WhyUs";
+import { baseURL } from "@/config/config";
 import useGetVehicle from "@/hooks/useVehicle";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const { loading, vehicles } = useGetVehicle();
-
+  
   return (
     <div>
       <section>

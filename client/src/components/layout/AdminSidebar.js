@@ -21,9 +21,7 @@ const AdminSidebar = () => {
 
   const adminDashboardItems = [
     { title: "Dashboard", icon: <DashboardIcon />, path: "/admin" },
-    { title: "Details", icon: <DetailsIcon />, path: "/admin/details" },
     { title: "Pages", icon: <PagesIcon />, path: "/admin/pages" },
-    { title: "Servies", icon: <ServicesIcon />, path: "/admin/services" },
     { title: "Vehicles", icon: <VehicleIcon />, path: "/admin/vehicles" },
     { title: "Blog", icon: <Blogicon />, path: "/admin/blog" },
     { title: "Booking", icon: <BookingIcon />, path: "/admin/booking" },

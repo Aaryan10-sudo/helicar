@@ -39,6 +39,7 @@ const BookingForm = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [customerPhone, setCustomerPhone] = useState("");
   const [phoneCountryCode, setPhoneCountryCode] = useState("np");
+  const [bookingId, setBookingId] = useState("");
 
   const [selectedCar, setSelectedCar] = useState(null);
   const [firstName, setFirstName] = useState("");
@@ -50,6 +51,13 @@ const BookingForm = () => {
   const [pickupTimeValue, setPickupTimeValue] = useState("12:30");
   const [returnDateValue, setReturnDateValue] = useState("2025-04-24");
   const [returnTimeValue, setReturnTimeValue] = useState("12:30");
+
+  const pickUp = searchParams.get("pickUp");
+  const destination = searchParams.get("destination");
+  const pickUpDate = searchParams.get("pickUpDate");
+  const returnDate = searchParams.get("returnDate");
+  const pickUpTime = searchParams.get("pickUpTime");
+  const returnTime = searchParams.get("returnTime");
 
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -85,6 +93,28 @@ const BookingForm = () => {
       console.error("Error fetching vehicle details:", error);
     }
   };
+
+  function formatDate(dateString) {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  }
+
+  function toDateInputValue(dateString) {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  const formattedPickupDate = formatDate(pickUpDate);
+  const formattedReturnDate = formatDate(returnDate);
 
   const startOtpTimer = () => {
     if (timerIntervalRef.current) {
@@ -216,7 +246,6 @@ const BookingForm = () => {
           email: localStorage.getItem("email"),
         },
       });
-      console.log("OTP Verification Result:", result.data);
       setShowOtpPopup(false);
 
       Swal.fire({
@@ -227,7 +256,9 @@ const BookingForm = () => {
         allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
-          router.push("/complete-booking/booking-preview");
+          router.push(
+            `/complete-booking/booking-preview?bookingId=${bookingId}`
+          );
         }
       });
     } catch (error) {
@@ -266,8 +297,10 @@ const BookingForm = () => {
       },
       status: "pending",
       bookingDate: new Date().toISOString(),
-      pickupDate: `${pickupDateValue}T${pickupTimeValue}:00`,
-      returnDate: `${returnDateValue}T${returnTimeValue}:00`,
+      pickupDate: `${formattedPickupDate} | ${pickUpTime}`,
+      returnDate: `${formattedReturnDate} | ${returnTime}`,
+      pickUp,
+      destination,
       totalAmount: selectedCar?.vehiclePrice,
       paymentStatus: "pending",
       vehicleId: cardId,
@@ -276,8 +309,8 @@ const BookingForm = () => {
 
     try {
       setLoader(true);
-      await axios.post(`${baseURL}/booking/create`, formData);
-
+      const response = await axios.post(`${baseURL}/booking/create`, formData);
+      setBookingId(response.data.data.id);
       setFirstName("");
       setLastName("");
       setCustomerPhone("9779801102259");
@@ -287,6 +320,7 @@ const BookingForm = () => {
       setPickupTimeValue("12:30");
       setReturnDateValue("2025-04-24");
       setReturnTimeValue("12:30");
+
       setAgreedToTerms(false);
       setLoader(false);
       localStorage.setItem("email", email);
@@ -419,16 +453,8 @@ const BookingForm = () => {
                     type="date"
                     id="pickupDate"
                     className="flex-grow p-3 bg-transparent focus:outline-none"
-                    value={pickupDateValue}
+                    value={toDateInputValue(pickUpDate)}
                     onChange={(e) => setPickupDateValue(e.target.value)}
-                    required
-                  />
-                  <input
-                    type="time"
-                    className="p-3 border-l border-gray-300 bg-transparent focus:outline-none w-[120px]"
-                    value={pickupTimeValue}
-                    onChange={(e) => setPickupTimeValue(e.target.value)}
-                    required
                   />
                 </div>
               </div>
@@ -447,16 +473,7 @@ const BookingForm = () => {
                     type="date"
                     id="returnDate"
                     className="flex-grow p-3 bg-transparent focus:outline-none"
-                    value={returnDateValue}
-                    onChange={(e) => setReturnDateValue(e.target.value)}
-                    required
-                  />
-                  <input
-                    type="time"
-                    className="p-3 border-l border-gray-300 bg-transparent focus:outline-none w-[120px]"
-                    value={returnTimeValue}
-                    onChange={(e) => setReturnTimeValue(e.target.value)}
-                    required
+                    value={toDateInputValue(returnDate)}
                   />
                 </div>
               </div>
@@ -652,13 +669,12 @@ const BookingForm = () => {
                   <div>
                     <p className="font-semibold text-gray-700">Pickup</p>
                     <p className="text-sm text-gray-600">
-                      {selectedCar.pickupLocation || "Kathmandu, KMC hospital"}{" "}
-                      {/* Example */}
+                      {pickUp || "Kathmandu, KMC hospital"} {/* Example */}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {new Date(
-                        pickupDateValue + "T" + pickupTimeValue
-                      ).toLocaleString() || "April 14, 2025 | 08:00 AM"}
+                      {pickUpDate && pickUpTime
+                        ? `${formattedPickupDate} | ${pickUpTime}`
+                        : "April 14, 2025 | 12:00 PM"}
                     </p>
                   </div>
                 </div>
@@ -669,13 +685,12 @@ const BookingForm = () => {
                       Destination / Return
                     </p>
                     <p className="text-sm text-gray-600">
-                      {selectedCar.returnLocation || "Kathmandu, KMC hospital"}{" "}
-                      {/* Example */}
+                      {destination || "Kathmandu, KMC hospital"}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {new Date(
-                        returnDateValue + "T" + returnTimeValue
-                      ).toLocaleString() || "April 14, 2025 | 12:00 PM"}
+                      {returnDate && returnTime
+                        ? `${formattedReturnDate} | ${returnTime}`
+                        : "April 14, 2025 | 12:00 PM"}
                     </p>
                   </div>
                 </div>

@@ -50,4 +50,47 @@ async function adminBookingNotification({
   }
 }
 
-module.exports = { confirmedBooking, adminBookingNotification };
+async function verifiedBookingNotification({
+  vehicleName,
+  vehicleImage,
+  vehicleType,
+  seats,
+  numberPlate,
+  pickupLocation,
+  pickupDate,
+  destinationLocation,
+  destinationDate,
+  mail,
+}) {
+  const htmlContent = pug.renderFile(
+    path.join(__dirname, "./template/booking-confirmation.jade"),
+    {
+      vehicleName,
+      vehicleImage,
+      vehicleType,
+      seats,
+      numberPlate,
+      pickupLocation,
+      pickupDate,
+      destinationLocation,
+      destinationDate,
+      mail,
+    }
+  );
+  try {
+    await sendMail({
+      from: '"Helicar Booking" <helicarbooking@gmail.com>',
+      to: mail,
+      subject: "Your bookng is confirmed",
+      html: htmlContent,
+    });
+  } catch (error) {
+    throw new Error("Error sending email: " + error.message);
+  }
+}
+
+module.exports = {
+  confirmedBooking,
+  adminBookingNotification,
+  verifiedBookingNotification,
+};
