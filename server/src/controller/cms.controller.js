@@ -93,7 +93,6 @@ exports.updateWhyChooseUs = async (req, res) => {
   try {
     const { content } = req.body;
 
-    // Validate structure
     if (
       !content ||
       typeof content !== "object" ||
@@ -163,10 +162,8 @@ exports.getBlogSection = async (req, res) => {
 
 exports.updateBlogSection = async (req, res) => {
   try {
-    // console.log(req)
     const { content } = req.body;
     console.log(content);
-    
 
     // Validate
     if (
@@ -240,7 +237,6 @@ exports.updateOurMission = async (req, res) => {
   try {
     const { content } = req.body;
 
-    // Validation
     if (
       !content ||
       typeof content !== "object" ||

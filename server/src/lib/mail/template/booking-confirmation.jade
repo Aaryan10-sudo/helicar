@@ -33,7 +33,7 @@ html
       }
       .car-img img {
         width: 100%;
-        height: auto;
+        height: 300px;
         display: block;
       }
       .car-title {
@@ -84,30 +84,30 @@ html
     .container
       p.header Your booking request Successful !!!
       .car-img
-        img(src="https://images.unsplash.com/photo-1608652763120-59c6b909e3a2", alt="Car Image")
+        img(src=`${vehicleImage}`, alt="Car Image")
 
-      p.car-title Car
-      p.subtext asdfnnsdfij
+      p.car-title #{vehicleName}
+      p.subtext #{vehicleType}
 
       .info
         span 🧍‍♂️
-        span 12 seats
+        span #{seats} seats
 
       .info
         span 🚗
-        span License: MH5327232
+        span License: #{numberPlate}
 
       hr
 
       .section
         p.section-title 📍 Pickup
-        p Thamel
-        p Jun 18, 2025 | 12:30 AM
+        p #{pickupLocation}
+        p #{pickupDate}
 
       .section
         p.section-title 📍 Destination
-        p Baneshwor
-        p Jun 18, 2025 | 12:30 AM
+        p #{destinationLocation}
+        p #{destinationDate}
 
       .section
         p.section-title Your booking overview:
