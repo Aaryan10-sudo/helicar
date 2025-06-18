@@ -31,6 +31,7 @@ Booking.init(
     status: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "pending",
     },
     paymentStatus: {
       type: DataTypes.STRING,

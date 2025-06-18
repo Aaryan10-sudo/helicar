@@ -37,14 +37,13 @@ const BookingForm = () => {
   const cardId = searchParams.get("cardId");
 
   const [showDetails, setShowDetails] = useState(false);
-  // const [suggestions, setSuggestions] = useState([]); // For country text input, seems unused
   const [customerPhone, setCustomerPhone] = useState("");
-  const [phoneCountryCode, setPhoneCountryCode] = useState("np"); // Default for PhoneInput
+  const [phoneCountryCode, setPhoneCountryCode] = useState("np");
 
   const [selectedCar, setSelectedCar] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("hellocarbooking@gmail.com");
+  const [email, setEmail] = useState("");
   const [details, setDetails] = useState("");
 
   const [pickupDateValue, setPickupDateValue] = useState("2025-04-24");
@@ -59,7 +58,7 @@ const BookingForm = () => {
   const [showOtpPopup, setShowOtpPopup] = useState(false);
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const otpInputRefs = useRef([]);
-  const [otpTimer, setOtpTimer] = useState(120); // 120 seconds for 00:120 Sec or 02:00 Min
+  const [otpTimer, setOtpTimer] = useState(60);
   const [canResendOtp, setCanResendOtp] = useState(false);
   const timerIntervalRef = useRef(null);
 
@@ -71,21 +70,6 @@ const BookingForm = () => {
     { description: "4 Rental days x $60.64", amount: "$450.10" },
     { description: "4 Rental days x $60.64", amount: "$450.10" },
   ];
-
-  // const options = useMemo(() => countryList().getData(), []); // Unused
-
-  // const changeHandler = (country) => { // Unused
-  //   setCountry(country);
-  // };
-
-  // const handleSuggestionClick = (selected) => { // Unused
-  //   setCountry(selected);
-  //   setSuggestions([]);
-  //   const code = getCode(selected);
-  //   if (code) {
-  //     setPhoneCountryCode(code);
-  //   }
-  // };
 
   useEffect(() => {
     if (cardId) {
@@ -102,12 +86,11 @@ const BookingForm = () => {
     }
   };
 
-  // --- OTP Logic ---
   const startOtpTimer = () => {
     if (timerIntervalRef.current) {
       clearInterval(timerIntervalRef.current);
     }
-    setOtpTimer(120); // Initial time for "00:120 Sec" or 2 minutes
+    setOtpTimer(120);
     setCanResendOtp(false);
     timerIntervalRef.current = setInterval(() => {
       setOtpTimer((prevTimer) => {
@@ -122,7 +105,6 @@ const BookingForm = () => {
   };
 
   useEffect(() => {
-    // Cleanup timer on component unmount or when OTP popup is closed
     return () => {
       if (timerIntervalRef.current) {
         clearInterval(timerIntervalRef.current);
@@ -133,7 +115,7 @@ const BookingForm = () => {
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")} Sec`;
+    return `${String(minutes).padStart(0.5, "0")}:${String(seconds).padStart(0.5, "0")} Sec`;
   };
 
   const handleOtpChange = (element, index) => {
@@ -222,13 +204,20 @@ const BookingForm = () => {
     });
   };
 
-  const handleOtpSubmit = async () => {
+  const handleOtpSubmit = async (e) => {
+    e.preventDefault();
     const enteredOtp = otp.join("");
-    // --- SIMULATED OTP VERIFICATION ---
-    // Replace "123456" with your actual OTP verification logic/API call
-    if (enteredOtp === "123456") {
+    try {
+      const result = await axios({
+        method: "PUT",
+        url: `${baseURL}/booking/verify`,
+        data: {
+          OTP: enteredOtp,
+          email: localStorage.getItem("email"),
+        },
+      });
+      console.log("OTP Verification Result:", result.data);
       setShowOtpPopup(false);
-      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current); // Stop timer
 
       Swal.fire({
         title: "Booking Confirmed!",
@@ -238,24 +227,22 @@ const BookingForm = () => {
         allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
-          router.push("/");
+          router.push("/complete-booking/booking-preview");
         }
       });
-    } else {
+    } catch (error) {
       Swal.fire({
         title: "Invalid OTP",
         text: "The OTP you entered is incorrect. Please try again.",
         icon: "error",
         confirmButtonColor: "#d33",
       });
-      setOtp(new Array(6).fill("")); // Clear OTP fields on error
+      setOtp(new Array(6).fill(""));
       if (otpInputRefs.current[0]) {
-        otpInputRefs.current[0].focus(); // Focus first input
+        otpInputRefs.current[0].focus();
       }
     }
-    // --- END SIMULATED OTP VERIFICATION ---
   };
-  // --- End OTP Logic ---
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -273,15 +260,15 @@ const BookingForm = () => {
       passengerInfo: {
         firstName,
         lastName,
-        address: "Kathmandu", // Consider making this dynamic or removing if not needed
+        address: "Kathmandu",
         email,
         phone: customerPhone,
       },
+      status: "pending",
       bookingDate: new Date().toISOString(),
       pickupDate: `${pickupDateValue}T${pickupTimeValue}:00`,
       returnDate: `${returnDateValue}T${returnTimeValue}:00`,
       totalAmount: selectedCar?.vehiclePrice,
-      status: "confirmed", // This might change based on OTP flow (e.g., "pending_otp")
       paymentStatus: "pending",
       vehicleId: cardId,
       vehicleName: selectedCar?.vehicleName,
@@ -289,15 +276,12 @@ const BookingForm = () => {
 
     try {
       setLoader(true);
-      // Simulate API call for booking creation
       await axios.post(`${baseURL}/booking/create`, formData);
 
-      // Reset form fields
       setFirstName("");
       setLastName("");
-      // setCountry("Nep"); // If country input is used
       setCustomerPhone("9779801102259");
-      setEmail("hellocarbooking@gmail.com");
+      setEmail("");
       setDetails("");
       setPickupDateValue("2025-04-24");
       setPickupTimeValue("12:30");
@@ -305,7 +289,7 @@ const BookingForm = () => {
       setReturnTimeValue("12:30");
       setAgreedToTerms(false);
       setLoader(false);
-
+      localStorage.setItem("email", email);
       setShowOtpPopup(true);
       startOtpTimer();
       if (otpInputRefs.current[0]) {

@@ -1,109 +1,108 @@
 doctype html
-html(lang="en")
+html
   head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Helicar Booking - Information
-    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css")
+    title Booking Confirmation
     style.
-      * {
-        box-sizing: border-box;
-      }
       body {
-        margin: 0;
-        padding: 2rem;
-        font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(to right, #f8f9fa, #e0e0e0);
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      .container {
+        max-width: 700px;
+        background:  #f3fbff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        overflow: hidden;
+        padding-bottom: 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start;
-        min-height: 100vh;
+      }
+      .success {
         text-align: center;
+        font-weight: bold;
+        margin: 15px 0;
       }
-      img {
+      .car-img img {
+        width: 70%;
         height: auto;
-        width: 200px;
-        margin-bottom: 1.5rem;
+        border-radius: 8px;
+        display: block;
+        margin: 0 auto;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s;    
       }
-      h1 {
-        color: #2c3e50;
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
+      .details {
+        padding: 0 20px;
       }
-      p {
-        color: #555;
-        font-size: 1.2rem;
-        max-width: 800px;
-        margin: 1rem 0;
+      .car-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: 10px;
       }
-      .social-icons {
+      .subtext {
+        color: #888;
+        margin-bottom: 5px;
+      }
+      .info {
         display: flex;
-        gap: 1rem;
-        margin-top: 1.5rem;
-        justify-content: center;
+        align-items: center;
+        margin: 5px 0;
       }
-      .social-icons a {
-        color: #2c3e50;
-        font-size: 1.8rem;
-        transition: color 0.3s ease;
+      .info i {
+        margin-right: 8px;
       }
-      .social-icons a:hover {
-        color: #0077b6;
+      .section-title {
+        font-weight: bold;
+        margin-top: 15px;
       }
-      .contact-section {
-        margin-top: 3rem;
-        background: #ffffff;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        max-width: 500px;
-        width: 100%;
+      .booking-overview {
+        margin-top: 10px;
       }
-      .contact-section h2 {
-        margin-bottom: 1rem;
-        color: #2c3e50;
+      li {
+        list-style: none;
+        
       }
-      .contact-section p {
-        margin: 0.5rem 0;
-        font-size: 1rem;
-        color: #666;
+      li:before {
+        content: "✓ ";
+        color: green;
+        font-weight: bold;
       }
-      @media (max-width: 600px) {
-        body {
-          padding: 1rem;
-        }
-        h1 {
-          font-size: 2rem;
-        }
-        p {
-          font-size: 1rem;
-        }
-        img {
-          width: 150px;
-        }
-        .social-icons a {
-          font-size: 1.5rem;
-        }
-      }
-  body 
-    img(src='https://helicarbooking.com/wp-content/uploads/2020/07/logo.png', alt="Helicar Booking Logo")
-    h1 Helicar Booking
-    p Welcome to Helicar Booking — your one-stop platform for hassle-free car bookings! Explore the best deals, choose your perfect ride, and travel comfortably with us.
-    p Whether it's a business trip, a weekend getaway, or your daily commute, Helicar Booking ensures a smooth and reliable experience every time.
 
-    .social-icons
-      a(href="https://facebook.com", target="_blank")
-        i(class="fab fa-facebook")
-      a(href="https://twitter.com", target="_blank")
-        i(class="fab fa-twitter")
-      a(href="https://instagram.com", target="_blank")
-        i(class="fab fa-instagram")
-      a(href="https://linkedin.com", target="_blank")
-        i(class="fab fa-linkedin")
+  body
+    .container
+      p.success Your booking request Successful !!!
+      .car-img
+        img(src="https://helicar.nnine.training/_next/image?url=%2Fblog.jpg&w=1920&q=75", alt="Car image")
+      .details
+        p.car-title Jeep
+        p.subtext asdfnnsdfij
+        .info
+          i 🧍‍♂️
+          span 9 Seats
+        .info
+          i 🚗
+          span License: BA 1 JA 2023
 
-    .contact-section
-      h2 Contact Us
-      p 📍 Location: Chabahil, Kathmandu, Nepal
-      p 📞 Phone: +977 9764849910
-      p ✉️ Email: support@helicarbooking.com
+        hr
+
+        .section
+          .section-title 📍 Pickup
+          p Kathmandu , KMC hospital
+          p April 14, 2025 | 08:00 AM
+
+        .section
+          .section-title 📍 Destination
+          p Kathmandu , KMC hospital
+          p April 14, 2025 | 12:00 PM
+
+        .section
+          .section-title Your booking overview:
+        ul.booking-overview
+        li 24/7 Roadside Assistance Hotline
+        li GPS
+        li Limited Miles
+        li Booking option: Best price - pay now , cancel and rebook for a fee
