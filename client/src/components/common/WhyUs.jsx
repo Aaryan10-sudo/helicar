@@ -44,7 +44,7 @@ const WhyUs = () => {
           {formData.header || "Why Choose Us?"}
         </h1>
         <p className="text-sm md:text-base text-gray-600 max-w-[90%] md:max-w-[785px] mx-auto mt-2">
-          {formData.description }
+          {formData.description ||  "We are the best choice for you."}
         </p>
       </div>
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { assets } from "@/assets/assets";
 import TimesArrowIcon from "@/ui/TimesArrowIcon";
+import { FaBars } from "react-icons/fa";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -41,7 +42,7 @@ const Navbar = () => {
   return (
     <nav className="sm:h-[80px] w-full bg-white flex items-center shadow-md px-5 sm:px-10 sticky top-0 z-50 h-[70px]">
       <div className="flex justify-between items-center w-full max-w-[1700px] mx-auto">
-        <Link className=" font-bold" href={"/"}>
+        <Link className="font-bold" href={"/"}>
           <Image
             src={assets.navlogo.src}
             height={assets.navlogo.height}
@@ -51,13 +52,14 @@ const Navbar = () => {
         </Link>
 
         <button
-          className="lg:hidden block focus:outline-none"
+          className="lg:hidden block focus:outline-none text-2xl text-primary"
           onClick={toggleMenu}
+          aria-label="Open menu"
         >
-          ☰
+          <FaBars />
         </button>
 
-        <ul className="sm:flex hidden items-center justify-center gap-12">
+        <ul className="sm:flex hidden items-center justify-center gap-10">
           {navLinks.map((value, index) => (
             <li key={index}>
               <Link
@@ -66,12 +68,13 @@ const Navbar = () => {
                 style={{
                   boxShadow:
                     active === index
-                      ? "0 4px 6px rgba(8, 125, 194, 0.15)"
+                      ? "0 4px 12px rgba(8, 125, 194, 0.10)"
                       : "none",
                 }}
-                className={`px-4 py-2 rounded-sm transition-all duration-200
-              hover:bg-primary hover:text-white
-              ${active === index ? "bg-primary  text-white" : "text-black"}`}
+                className={`px-4 py-2 rounded-md transition-all duration-200 font-medium
+                  hover:bg-primary/90 hover:text-white hover:shadow
+                  ${active === index ? "bg-primary text-white shadow" : "text-gray-800"}
+                `}
               >
                 {value.title}
               </Link>
@@ -81,7 +84,7 @@ const Navbar = () => {
 
         <Link
           href={"/login"}
-          className=" underline decoration-1 text-primary px-10 py-2 rounded-lg font-medium sm:block hidden"
+          className="sm:block hidden bg-primary text-white px-6 py-2 rounded-full font-semibold shadow-md transition-all duration-200 hover:bg-primary/90 hover:shadow-lg focus:outline-none"
         >
           Log in
         </Link>
@@ -92,30 +95,46 @@ const Navbar = () => {
           menuOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
         }`}
       >
-        <div className="w-[70%] bg-white h-full flex flex-col items-start p-6">
-          <div className="flex justify-between w-full items-center pb-[10px] border-b border-black">
+        <div className="w-[75%] max-w-xs bg-white h-full flex flex-col items-start p-6 shadow-2xl border-r border-gray-200">
+          <div className="flex justify-between w-full items-center pb-[10px] border-b border-gray-200">
             <div className="flex gap-2 items-center">
-              <img src={assets.navlogo.src} className="h-[30px] " alt="Logo" />
+              <img src={assets.navlogo.src} className="h-[30px]" alt="Logo" />
             </div>
             <div
-              className="text-black text-2xl cursor-pointer border-2"
+              className="text-black text-2xl cursor-pointer border-2 rounded-full p-1 hover:bg-gray-100 transition"
               onClick={toggleMenu}
+              aria-label="Close menu"
             >
               <TimesArrowIcon />
             </div>
           </div>
-          <ul className="flex flex-col gap-8 mt-10 text-black text-[15px]">
+          <ul className="flex flex-col gap-7 mt-10 text-gray-800 text-[16px] w-full">
             {[
-              { label: "Home", path: "/" },
-              { label: "Vehicle Rental", path: "/vehicle-rental" },
-              { label: "Company", path: "/company" },
-              { label: "Tarrif Rate", path: "/tarrif-rates" },
-              { label: "Trekking", path: "/trekking" },
+              {
+                label: "Home",
+                path: "/",
+              },
+              {
+                label: "Vehicle Rental",
+                path: "/vehicle-rental",
+              },
+              {
+                label: "Company",
+                path: "/company",
+              },
+              {
+                label: "Tarrif Rate",
+                path: "/tarrif-rate",
+              },
+              {
+                label: "Trekking",
+                path: "/trekking",
+              },
             ].map((link, index) => (
               <Link
                 key={index}
                 href={link.path}
-                className="hover:text-[#e3a253]"
+                className="w-full py-2 px-3 rounded-md hover:bg-primary/10 hover:text-primary transition font-medium"
                 onClick={toggleMenu}
               >
                 {link.label}
@@ -123,10 +142,10 @@ const Navbar = () => {
             ))}
           </ul>
 
-          <div className="w-full flex justify-center">
+          <div className="w-full flex justify-center mt-8">
             <Link
               href={"/login"}
-              className="mt-6 text-blue-500 font-semibold text-center"
+              className="bg-primary text-white px-8 py-2 rounded-full font-semibold shadow-md transition-all duration-200 hover:bg-primary/90 hover:shadow-lg focus:outline-none"
               onClick={toggleMenu}
             >
               Log In
@@ -135,7 +154,7 @@ const Navbar = () => {
         </div>
         {/* Overlay */}
         <div
-          className="w-[30%] bg-transparent backdrop-blur-md bg-opacity-75 transition-opacity duration-300 ease-in-out"
+          className="w-[25%] bg-black bg-opacity-30 backdrop-blur-sm transition-opacity duration-300 ease-in-out"
           onClick={toggleMenu}
           style={{ opacity: menuOpen ? 1 : 0 }}
         />
