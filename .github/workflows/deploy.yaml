@@ -44,7 +44,7 @@ jobs:
             echo "DB_NAME=${{secrets.DB_NAME}}" >> /home/azureuser/client-project/helicarbooking/server/.env
             echo "DB_USERNAME=${{secrets.DB_USERNAME}}" >> /home/azureuser/client-project/helicarbooking/server/.env
             echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "DB_HOST=postgres" > /home/azureuser/client-project/helicarbooking/server/.env
+            echo "DB_HOST=${{secrets.DB_HOST}}" > /home/azureuser/client-project/helicarbooking/server/.env
             echo "DB_PORT=${{secrets.DB_PORT}}" >> /home/azureuser/client-project/helicarbooking/server/.env
             echo "SSL=${{secrets.SSL}}" >> /home/azureuser/client-project/helicarbooking/server/.env
             echo "DB_DIALECT=${{secrets.DB_DIALECT}}" >> /home/azureuser/client-project/helicarbooking/server/.env
