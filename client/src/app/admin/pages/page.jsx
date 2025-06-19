@@ -11,6 +11,7 @@ import { useDropzone } from "react-dropzone";
 import WhyChooseUs from "./WhyChooseUs";
 import { toast, ToastContainer } from "react-toastify";
 import ClientReview from "./ClientReview";
+import { FaImage } from "react-icons/fa";
 
 const Page = () => {
   const lists = [
@@ -25,6 +26,7 @@ const Page = () => {
   const [activeTab, setActiveTab] = useState("Home");
   const [form, setForm] = useState({});
   const [loading, setLoading] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
 
   // console.log(form)
 
@@ -94,10 +96,11 @@ const Page = () => {
     }
   };
 
-const onDrop = useCallback(async (acceptedFiles) => {
+  const onDrop = useCallback(async (acceptedFiles) => {
     let fileData = acceptedFiles[0];
     let data = new FormData();
     data.append("document", fileData);
+    setImageUploading(true); // Start loader
     try {
       let result = await axios.post(`${baseURL}/file/single`, data);
       setForm((prev) => ({
@@ -106,9 +109,10 @@ const onDrop = useCallback(async (acceptedFiles) => {
       }));
     } catch (error) {
       toast.success(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setImageUploading(false); // Stop loader
     }
   }, []);
-
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -119,76 +123,107 @@ const onDrop = useCallback(async (acceptedFiles) => {
     switch (activeTab) {
       case "Home":
         return (
-          <div className="relative space-y-5 mb-15">
-            <div className="btn-section overflow-hidden">
+          <div className="relative space-y-8 mb-16 bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-lg p-8 border border-blue-100">
+            <div className="flex justify-end">
               <button
                 onClick={handleUpdate}
                 disabled={loading}
-                className={`mr-2 px-4 py-2 rounded text-white ${loading
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700"
-                  }`}
+                className={`transition-all duration-200 mr-2 px-6 py-2 rounded-lg font-semibold shadow-md text-white bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 focus:ring-2 focus:ring-blue-300 focus:outline-none ${loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : ""
+                }`}
               >
-                {loading ? "Updating..." : "Update"}
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                    </svg>
+                    Updating...
+                  </span>
+                ) : "Update"}
               </button>
             </div>
 
-            <div className="mb-6 relative">
-              <label className="block font-semibold mb-2">Hero Image</label>
-
+            <div className="mb-8 relative">
+              <label className="block font-semibold mb-2 text-blue-700 text-lg">Hero Image</label>
               <div
                 {...getRootProps()}
-                className="w-full h-[200px] border-2 border-dashed border-gray-400 flex items-center justify-center cursor-pointer rounded"
+                className="transition-all duration-200 w-full h-[220px] border-2 border-dashed border-blue-300 flex items-center justify-center cursor-pointer rounded-lg bg-blue-50 hover:bg-blue-100 hover:border-blue-500 group relative"
               >
                 <input {...getInputProps()} />
-                <p className="text-gray-500">
-                  Drag & drop image here, or click to select
-                </p>
+                {imageUploading ? (
+                  <div className="flex flex-col items-center justify-center w-full h-full">
+                    <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                    </svg>
+                    <span className="mt-2 text-blue-600 font-medium">Uploading...</span>
+                  </div>
+                ) : (
+                  <>
+                    {!form?.image && (
+                      <div className="flex flex-col items-center text-blue-400 group-hover:text-blue-600 transition-all">
+                        <FaImage size={56} className="animate-bounce mb-2" />
+                        <p className="mt-2 text-blue-500 font-medium">Drag & drop image here, or click to select</p>
+                      </div>
+                    )}
+                    {form?.image && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <img
+                          src={form.image}
+                          alt="Uploaded preview"
+                          className="w-full h-full object-contain rounded-lg shadow border border-blue-100"
+                        />
+                        <button
+                          type="button"
+                          onClick={e => {
+                            e.stopPropagation();
+                            setForm({ ...form, image: "", imageFile: null });
+                          }}
+                          className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full text-xs shadow transition-all"
+                          title="Remove image"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
-
-              {form?.image && (
-                <div className="relative mt-4">
-                  <img
-                    src={form.image}
-                    alt="Uploaded preview"
-                    className="w-full h-[200px] object-cover rounded"
-                  />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setForm({ ...form, image: "", imageFile: null })
-                    }
-                    className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full text-xs"
-                  >
-                    ✕
-                  </button>
-                </div>
-              )}
             </div>
 
             <div className="heading-section my-4">
-              <label className="block font-medium mb-1">Heading</label>
+              <label className="block font-medium mb-2 text-blue-700">Heading</label>
               <input
                 type="text"
                 value={form.heading || ""}
                 onChange={(e) =>
                   setForm({ ...form, heading: e.target.value })
                 }
-                className="w-full border px-3 py-2 rounded"
+                className="w-full border border-blue-200 px-4 py-2 rounded-lg bg-blue-50 focus:bg-white focus:ring-2 focus:ring-blue-300 transition-all"
+                placeholder="Enter hero heading..."
               />
             </div>
 
             <div className="sub-title my-4">
-              <label className="block font-medium mb-1">Subtitle</label>
+              <label className="block font-medium mb-2 text-blue-700">Subtitle</label>
               <input
                 type="text"
                 value={form.subtitle || ""}
                 onChange={(e) =>
                   setForm({ ...form, subtitle: e.target.value })
                 }
-                className="w-full border px-3 py-2 rounded"
+                className="w-full border border-blue-200 px-4 py-2 rounded-lg bg-blue-50 focus:bg-white focus:ring-2 focus:ring-blue-300 transition-all"
+                placeholder="Enter hero subtitle..."
               />
             </div>
+            <div className="whychooseus-section">
+          <WhyChooseUs />
+        </div>
+        <div className="ClientReview">
+          <ClientReview />
+        </div>
           </div>
         );
 
@@ -232,12 +267,7 @@ const onDrop = useCallback(async (acceptedFiles) => {
         <h2 className="text-2xl font-bold mb-4">{activeTab}</h2>
         {renderForm()}
 
-        <div className="whychooseus-section">
-          <WhyChooseUs />
-        </div>
-        <div className="ClientReview">
-          <ClientReview />
-        </div>
+        
       </div>
     </section>
   );

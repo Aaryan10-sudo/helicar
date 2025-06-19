@@ -45,7 +45,7 @@ export default function Home() {
           <div className="text-center mb-6 flex flex-col gap-4 lg:mb-10">
             <div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-Comfortaa text-primary font-bold">
-                {reviews?.header || "Why Choose Us?"}
+                {reviews?.header || "Client Reviews"}
               </h1>
               <p className="text-sm md:text-base text-gray-600 max-w-[90%] md:max-w-[785px] mx-auto mt-2">
                 {reviews?.headerDescription}
