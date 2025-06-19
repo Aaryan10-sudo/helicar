@@ -17,11 +17,11 @@ Booking.init(
       allowNull: false,
     },
     pickupDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     returnDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     totalAmount: {
@@ -31,6 +31,7 @@ Booking.init(
     status: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "pending",
     },
     paymentStatus: {
       type: DataTypes.STRING,
@@ -38,6 +39,14 @@ Booking.init(
     },
     passengerInfo: {
       type: DataTypes.JSON,
+      allowNull: false,
+    },
+    pickUp: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    destination: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     vehicleId: {

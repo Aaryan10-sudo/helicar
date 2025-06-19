@@ -41,23 +41,26 @@ jobs:
       - name: Create .env file in backend folder on Azure VM
         run: |
           ssh -o StrictHostKeyChecking=no azureuser@${{ env.AZURE_VM_IP }} << 'EOF'
-            echo "DB_NAME=${{secrets.DB_NAME}}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "DB_USERNAME=${{secrets.DB_USERNAME}}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "DB_HOST=postgres" > /home/azureuser/client-project/helicarbooking/server/.env
-            echo "DB_PORT=${{secrets.DB_PORT}}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "SSL=${{secrets.SSL}}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "DB_DIALECT=${{secrets.DB_DIALECT}}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "SECRET_KEY=${{secrets.SECRET_KEY}}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "ADMIN_MAIL=${{ secrets.ADMIN_MAIL }}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "CORS_ORIGIN=${{ secrets.CORS_ORIGIN }}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "SMTP_EMAIL=${{ secrets.SMTP_EMAIL }}" >> /home/azureuser/client-project/helicarbooking/server/.env
-            echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD}}" >> /home/azureuser/client-project/helicarbooking/server/.env
-          EOF
+            cat > /home/azureuser/client-project/helicarbooking/server/.env <<'ENVEOF'
+          DB_NAME=${{ secrets.DB_NAME }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_PORT=${{ secrets.DB_PORT }}
+          SSL=${{ secrets.SSL }}
+          DB_DIALECT=${{ secrets.DB_DIALECT }}
+          SECRET_KEY=${{ secrets.SECRET_KEY }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          ADMIN_MAIL=${{ secrets.ADMIN_MAIL }}
+          CORS_ORIGIN=${{ secrets.CORS_ORIGIN }}
+          CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
+          SMTP_EMAIL=${{ secrets.SMTP_EMAIL }}
+          SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
+          ENVEOF
+              EOF
+
 
       - name: Deploy to Azure VM with Docker Compose
         run: |

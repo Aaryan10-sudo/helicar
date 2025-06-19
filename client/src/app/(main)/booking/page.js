@@ -17,7 +17,21 @@ const VehicleBooking = () => {
   const [showDetails, setShowDetails] = useState(false);
   const searchParams = useSearchParams();
   const vehicle = searchParams.get("vehicle");
+  const pickUp = searchParams.get("pickUp");
+  const destination = searchParams.get("destination");
+  const pickUpDate = searchParams.get("date");
+  const returnDate = searchParams.get("returnDate");
+  const pickUpTime = searchParams.get("pickupTime");
+  const returnTime = searchParams.get("returnTime");
 
+  console.log(
+    pickUp,
+    destination,
+    pickUpDate,
+    returnDate,
+    pickUpTime,
+    returnTime
+  );
   const lineItems = [
     { description: "4 Rental days x $60.64", amount: "$450.10" },
     { description: "Insurance + Protection", amount: "$150.00" },
@@ -25,7 +39,15 @@ const VehicleBooking = () => {
   ];
 
   const handleBookNow = (cardId) => {
-    router.push(`/complete-booking?cardId=${cardId}`);
+    router.push(
+      `/complete-booking?cardId=${cardId}` +
+        `&pickUp=${pickUp}` +
+        `&destination=${destination}` +
+        `&pickUpDate=${pickUpDate}` +
+        `&returnDate=${returnDate}` +
+        `&pickUpTime=${pickUpTime}` +
+        `&returnTime=${returnTime}`
+    );
   };
 
   const handleVehicleClick = (vehicle) => {

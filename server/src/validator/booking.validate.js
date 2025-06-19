@@ -2,11 +2,13 @@ const Joi = require("joi");
 
 const bookingSchema = Joi.object({
   bookingDate: Joi.date().required(),
-  pickupDate: Joi.date().required(),
-  returnDate: Joi.date().required(),
+  pickupDate: Joi.string().required(),
+  returnDate: Joi.string().required(),
   totalAmount: Joi.string().required(),
   status: Joi.string().required(),
   paymentStatus: Joi.string().required(),
+  pickUp: Joi.string().required(),
+  destination: Joi.string().required(),
   passengerInfo: Joi.object({
     firstName: Joi.string().min(2).max(30).required(),
     lastName: Joi.string().min(2).max(30).required(),

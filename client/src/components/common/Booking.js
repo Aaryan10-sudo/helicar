@@ -7,8 +7,9 @@ import JeepIcon from "@/ui/JeepIcon";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css"; // Import default styles
+import "react-day-picker/dist/style.css";
 import { FaCalendarAlt } from "react-icons/fa";
+import TimePicker from "./Time";
 
 export default function Booking() {
   const vehicleTypes = [
@@ -62,10 +63,9 @@ export default function Booking() {
   };
 
   const [showPickupCalendar, setShowPickupCalendar] = useState(false);
-  const [showReturnCalendar, setShowReturnCalendar] = useState(false);
   const [range, setRange] = useState({ from: undefined, to: undefined });
-  const [pickupTime, setPickupTime] = useState("12:30");
-  const [returnTime, setReturnTime] = useState("12:30");
+  const [pickupTime, setPickupTime] = useState("12:30 AM");
+  const [returnTime, setReturnTime] = useState("12:30 AM");
 
   const handleInputChange = (id, value) => {
     setDestinations((prev) =>
@@ -218,12 +218,17 @@ export default function Booking() {
                   </div>
                 )}
               </div>
-              <input
+              {/* <input
                 id="pickup-time"
                 type="time"
                 value={pickupTime}
                 onChange={(e) => setPickupTime(e.target.value)}
                 className="p-2 border border-gray-300 rounded-lg"
+              /> */}
+              <TimePicker
+                type="pickup"
+                selectedTime={pickupTime}
+                onSelect={(time) => setPickupTime(time)}
               />
             </div>
           </div>
@@ -235,7 +240,7 @@ export default function Booking() {
               <div className="relative">
                 <button
                   type="button"
-                  onClick={() => setShowReturnCalendar(!showReturnCalendar)}
+                  onClick={() => setShowPickupCalendar(!showPickupCalendar)}
                   className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg bg-white"
                   aria-label="Select return date"
                 >
@@ -245,12 +250,18 @@ export default function Booking() {
                   </span>
                 </button>
               </div>
-              <input
+              {/* <input
                 id="return-time"
                 type="time"
                 value={returnTime}
                 onChange={(e) => setReturnTime(e.target.value)}
                 className="p-2 border border-gray-300 rounded-lg"
+              /> */}
+
+              <TimePicker
+                type="return"
+                selectedTime={returnTime}
+                onSelect={(time) => setReturnTime(time)}
               />
             </div>
           </div>

@@ -14,6 +14,7 @@ const {
   SMTP_EMAIL,
   SMTP_PASSWORD,
   SECRET_KEY,
+  PORT,
 } = process.env;
 
 module.exports = {
@@ -29,4 +30,5 @@ module.exports = {
   SMTP_EMAIL,
   SMTP_PASSWORD,
   SECRET_KEY,
+  PORT,
 };
