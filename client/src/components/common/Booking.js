@@ -7,7 +7,7 @@ import JeepIcon from "@/ui/JeepIcon";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css"; // Import default styles
+import "react-day-picker/dist/style.css";
 import { FaCalendarAlt } from "react-icons/fa";
 import TimePicker from "./Time";
 

@@ -37,20 +37,27 @@ const BookingForm = () => {
   const cardId = searchParams.get("cardId");
 
   const [showDetails, setShowDetails] = useState(false);
-  // const [suggestions, setSuggestions] = useState([]); // For country text input, seems unused
   const [customerPhone, setCustomerPhone] = useState("");
-  const [phoneCountryCode, setPhoneCountryCode] = useState("np"); // Default for PhoneInput
+  const [phoneCountryCode, setPhoneCountryCode] = useState("np");
+  const [bookingId, setBookingId] = useState("");
 
   const [selectedCar, setSelectedCar] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("hellocarbooking@gmail.com");
+  const [email, setEmail] = useState("");
   const [details, setDetails] = useState("");
 
   const [pickupDateValue, setPickupDateValue] = useState("2025-04-24");
   const [pickupTimeValue, setPickupTimeValue] = useState("12:30");
   const [returnDateValue, setReturnDateValue] = useState("2025-04-24");
   const [returnTimeValue, setReturnTimeValue] = useState("12:30");
+
+  const pickUp = searchParams.get("pickUp");
+  const destination = searchParams.get("destination");
+  const pickUpDate = searchParams.get("pickUpDate");
+  const returnDate = searchParams.get("returnDate");
+  const pickUpTime = searchParams.get("pickUpTime");
+  const returnTime = searchParams.get("returnTime");
 
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -59,7 +66,7 @@ const BookingForm = () => {
   const [showOtpPopup, setShowOtpPopup] = useState(false);
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const otpInputRefs = useRef([]);
-  const [otpTimer, setOtpTimer] = useState(120); // 120 seconds for 00:120 Sec or 02:00 Min
+  const [otpTimer, setOtpTimer] = useState(60);
   const [canResendOtp, setCanResendOtp] = useState(false);
   const timerIntervalRef = useRef(null);
 
@@ -71,21 +78,6 @@ const BookingForm = () => {
     { description: "4 Rental days x $60.64", amount: "$450.10" },
     { description: "4 Rental days x $60.64", amount: "$450.10" },
   ];
-
-  // const options = useMemo(() => countryList().getData(), []); // Unused
-
-  // const changeHandler = (country) => { // Unused
-  //   setCountry(country);
-  // };
-
-  // const handleSuggestionClick = (selected) => { // Unused
-  //   setCountry(selected);
-  //   setSuggestions([]);
-  //   const code = getCode(selected);
-  //   if (code) {
-  //     setPhoneCountryCode(code);
-  //   }
-  // };
 
   useEffect(() => {
     if (cardId) {
@@ -102,12 +94,33 @@ const BookingForm = () => {
     }
   };
 
-  // --- OTP Logic ---
+  function formatDate(dateString) {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  }
+
+  function toDateInputValue(dateString) {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  const formattedPickupDate = formatDate(pickUpDate);
+  const formattedReturnDate = formatDate(returnDate);
+
   const startOtpTimer = () => {
     if (timerIntervalRef.current) {
       clearInterval(timerIntervalRef.current);
     }
-    setOtpTimer(120); // Initial time for "00:120 Sec" or 2 minutes
+    setOtpTimer(120);
     setCanResendOtp(false);
     timerIntervalRef.current = setInterval(() => {
       setOtpTimer((prevTimer) => {
@@ -122,7 +135,6 @@ const BookingForm = () => {
   };
 
   useEffect(() => {
-    // Cleanup timer on component unmount or when OTP popup is closed
     return () => {
       if (timerIntervalRef.current) {
         clearInterval(timerIntervalRef.current);
@@ -133,7 +145,7 @@ const BookingForm = () => {
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")} Sec`;
+    return `${String(minutes).padStart(0.5, "0")}:${String(seconds).padStart(0.5, "0")} Sec`;
   };
 
   const handleOtpChange = (element, index) => {
@@ -222,13 +234,19 @@ const BookingForm = () => {
     });
   };
 
-  const handleOtpSubmit = async () => {
+  const handleOtpSubmit = async (e) => {
+    e.preventDefault();
     const enteredOtp = otp.join("");
-    // --- SIMULATED OTP VERIFICATION ---
-    // Replace "123456" with your actual OTP verification logic/API call
-    if (enteredOtp === "123456") {
+    try {
+      const result = await axios({
+        method: "PUT",
+        url: `${baseURL}/booking/verify`,
+        data: {
+          OTP: enteredOtp,
+          email: localStorage.getItem("email"),
+        },
+      });
       setShowOtpPopup(false);
-      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current); // Stop timer
 
       Swal.fire({
         title: "Booking Confirmed!",
@@ -238,24 +256,24 @@ const BookingForm = () => {
         allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
-          router.push("/");
+          router.push(
+            `/complete-booking/booking-preview?bookingId=${bookingId}`
+          );
         }
       });
-    } else {
+    } catch (error) {
       Swal.fire({
         title: "Invalid OTP",
         text: "The OTP you entered is incorrect. Please try again.",
         icon: "error",
         confirmButtonColor: "#d33",
       });
-      setOtp(new Array(6).fill("")); // Clear OTP fields on error
+      setOtp(new Array(6).fill(""));
       if (otpInputRefs.current[0]) {
-        otpInputRefs.current[0].focus(); // Focus first input
+        otpInputRefs.current[0].focus();
       }
     }
-    // --- END SIMULATED OTP VERIFICATION ---
   };
-  // --- End OTP Logic ---
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -273,15 +291,17 @@ const BookingForm = () => {
       passengerInfo: {
         firstName,
         lastName,
-        address: "Kathmandu", // Consider making this dynamic or removing if not needed
+        address: "Kathmandu",
         email,
         phone: customerPhone,
       },
+      status: "pending",
       bookingDate: new Date().toISOString(),
-      pickupDate: `${pickupDateValue}T${pickupTimeValue}:00`,
-      returnDate: `${returnDateValue}T${returnTimeValue}:00`,
+      pickupDate: `${formattedPickupDate} | ${pickUpTime}`,
+      returnDate: `${formattedReturnDate} | ${returnTime}`,
+      pickUp,
+      destination,
       totalAmount: selectedCar?.vehiclePrice,
-      status: "confirmed", // This might change based on OTP flow (e.g., "pending_otp")
       paymentStatus: "pending",
       vehicleId: cardId,
       vehicleName: selectedCar?.vehicleName,
@@ -289,23 +309,21 @@ const BookingForm = () => {
 
     try {
       setLoader(true);
-      // Simulate API call for booking creation
-      await axios.post(`${baseURL}/booking/create`, formData);
-
-      // Reset form fields
+      const response = await axios.post(`${baseURL}/booking/create`, formData);
+      setBookingId(response.data.data.id);
       setFirstName("");
       setLastName("");
-      // setCountry("Nep"); // If country input is used
       setCustomerPhone("9779801102259");
-      setEmail("hellocarbooking@gmail.com");
+      setEmail("");
       setDetails("");
       setPickupDateValue("2025-04-24");
       setPickupTimeValue("12:30");
       setReturnDateValue("2025-04-24");
       setReturnTimeValue("12:30");
+
       setAgreedToTerms(false);
       setLoader(false);
-
+      localStorage.setItem("email", email);
       setShowOtpPopup(true);
       startOtpTimer();
       if (otpInputRefs.current[0]) {
@@ -435,16 +453,8 @@ const BookingForm = () => {
                     type="date"
                     id="pickupDate"
                     className="flex-grow p-3 bg-transparent focus:outline-none"
-                    value={pickupDateValue}
+                    value={toDateInputValue(pickUpDate)}
                     onChange={(e) => setPickupDateValue(e.target.value)}
-                    required
-                  />
-                  <input
-                    type="time"
-                    className="p-3 border-l border-gray-300 bg-transparent focus:outline-none w-[120px]"
-                    value={pickupTimeValue}
-                    onChange={(e) => setPickupTimeValue(e.target.value)}
-                    required
                   />
                 </div>
               </div>
@@ -463,16 +473,7 @@ const BookingForm = () => {
                     type="date"
                     id="returnDate"
                     className="flex-grow p-3 bg-transparent focus:outline-none"
-                    value={returnDateValue}
-                    onChange={(e) => setReturnDateValue(e.target.value)}
-                    required
-                  />
-                  <input
-                    type="time"
-                    className="p-3 border-l border-gray-300 bg-transparent focus:outline-none w-[120px]"
-                    value={returnTimeValue}
-                    onChange={(e) => setReturnTimeValue(e.target.value)}
-                    required
+                    value={toDateInputValue(returnDate)}
                   />
                 </div>
               </div>
@@ -668,13 +669,12 @@ const BookingForm = () => {
                   <div>
                     <p className="font-semibold text-gray-700">Pickup</p>
                     <p className="text-sm text-gray-600">
-                      {selectedCar.pickupLocation || "Kathmandu, KMC hospital"}{" "}
-                      {/* Example */}
+                      {pickUp || "Kathmandu, KMC hospital"} {/* Example */}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {new Date(
-                        pickupDateValue + "T" + pickupTimeValue
-                      ).toLocaleString() || "April 14, 2025 | 08:00 AM"}
+                      {pickUpDate && pickUpTime
+                        ? `${formattedPickupDate} | ${pickUpTime}`
+                        : "April 14, 2025 | 12:00 PM"}
                     </p>
                   </div>
                 </div>
@@ -685,13 +685,12 @@ const BookingForm = () => {
                       Destination / Return
                     </p>
                     <p className="text-sm text-gray-600">
-                      {selectedCar.returnLocation || "Kathmandu, KMC hospital"}{" "}
-                      {/* Example */}
+                      {destination || "Kathmandu, KMC hospital"}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {new Date(
-                        returnDateValue + "T" + returnTimeValue
-                      ).toLocaleString() || "April 14, 2025 | 12:00 PM"}
+                      {returnDate && returnTime
+                        ? `${formattedReturnDate} | ${returnTime}`
+                        : "April 14, 2025 | 12:00 PM"}
                     </p>
                   </div>
                 </div>

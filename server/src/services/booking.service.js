@@ -20,6 +20,16 @@ async function createBookingService(bookingData) {
   }
 }
 
+async function getBookingByIdService(vehicleId) {
+  try {
+    return await Booking.findOne({
+      where: { id: vehicleId },
+    });
+  } catch (error) {
+    throw new Error("Error fetching vehicle: " + error.message);
+  }
+}
+
 async function getAllBookingService() {
   try {
     return await Booking.findAll({});
@@ -28,4 +38,8 @@ async function getAllBookingService() {
   }
 }
 
-module.exports = { createBookingService, getAllBookingService };
+module.exports = {
+  createBookingService,
+  getAllBookingService,
+  getBookingByIdService,
+};
