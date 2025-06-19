@@ -10,6 +10,6 @@ COPY . .
 
 RUN chmod -R 755 /app
 
-EXPOSE 3000
+EXPOSE 4000
 
 CMD ["npm", "start"]
