@@ -3,10 +3,7 @@ import { useEffect, useState } from "react";
 import vehicleImage from "../../assets/herosection.jpg";
 import Booking from "./Booking";
 import axios from "axios";
-<<<<<<< HEAD
-=======
 import { baseURL } from "@/config/config";
->>>>>>> f26b61727bf2f952cfac3a1f9a8a442bd8e9d1ac
 
 const Hero = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -37,7 +34,7 @@ const Hero = () => {
       try {
         const response = await axios({
           method: "GET",
-          url: ""
+          url: "http://localhost:4000/cms/hero"
         })
       } catch (error) {
         console.log(error.message);

@@ -1,20 +1,18 @@
-import { assets } from "@/assets/assets";
 import Image from "next/image";
-import React from "react";
-import womenImage from "../../assets/women.svg";
+import starImage from "@/assets/star.svg";
 
 const RatingCard = ({ rating }) => {
   const ratingStars = Array.from(
-    { length: 5 },
-    (_, index) => index < rating.ratingValue
+    { length: rating.rating },
+    (_, index) => index < rating.rating
   );
-
+  // console.log("ratindksjbasfjdb",rating);
   return (
     <div className="relative bg-[#F5F5F5] shadow-lg rounded-3xl flex items-center p-6 w-full max-w-[400px] sm:max-w-[325px] h-[160px]">
       <div
-        className="absolute bg-cover bg-center  left-[-33px] z-10 top-[-10px] border-subheading border-[2px] rounded-full overflow-hidden h-[186px] w-[110px]"
+        className="absolute bg-cover bg-center left-[-33px] z-10 top-[-10px] border-subheading border-[2px] rounded-full overflow-hidden h-[186px] w-[110px]"
         style={{
-          backgroundImage: `url(${womenImage?.src || "/default-hero.jpg"})`,
+          backgroundImage: `url(${rating.photo})`,
         }}
       ></div>
 
@@ -23,16 +21,15 @@ const RatingCard = ({ rating }) => {
           {rating.name}
         </h1>
         <p className="text-subheading text-start w-full text-sm font-light font-LeagueSpartan">
-          {rating.review}
+          {rating.comment}
         </p>
-
         <div className="flex mt-2">
           {ratingStars.map((isFilled, index) => (
             <Image
               key={index}
-              src={rating.ratingImage.src}
-              height={rating.ratingImage.height}
-              width={rating.ratingImage.width}
+              src={starImage}
+              height={20}
+              width={20}
               alt="rating star"
               className={isFilled ? "opacity-100" : "opacity-40"}
             />
