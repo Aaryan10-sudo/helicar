@@ -97,6 +97,10 @@ exports.updateWhyChooseUs = async (req, res) => {
       !content ||
       typeof content !== "object" ||
       !content.mainImage ||
+      !content.header ||
+      !content.description ||
+      typeof content.header !== "string" ||
+      typeof content.description !== "string" ||
       !Array.isArray(content.features) ||
       content.features.length !== 5 ||
       !content.features.every((item) => item.image && item.title)
@@ -104,7 +108,7 @@ exports.updateWhyChooseUs = async (req, res) => {
       return res.status(400).json({
         success: false,
         message:
-          "Invalid content format. Must include mainImage and exactly 5 features with image and title.",
+          "Invalid content format. Must include header, description, mainImage, and exactly 5 features with image and title.",
       });
     }
 
