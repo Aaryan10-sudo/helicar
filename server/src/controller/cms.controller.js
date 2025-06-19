@@ -276,6 +276,8 @@ exports.getClientReviews = async (req, res) => {
       where: { section: "clientReviews" },
     });
 
+    console.log(section);
+
     if (!section) {
       return res.status(404).json({
         success: false,
