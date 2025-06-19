@@ -17,7 +17,7 @@ CmsContent.init(
     },
     content: {
       type: DataTypes.JSON,
-      allowNull: false,
+      allowNull: true,
     },
     status: {
       type: DataTypes.BOOLEAN,
