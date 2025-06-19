@@ -34,8 +34,8 @@ const lexend = Lexend({
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${comfortaa.variable} ${lexend.variable} font-Lexend`}>
+    <html lang="en" suppressHydrationWarning suppressContentEditableWarning>
+      <body className={`${comfortaa.variable} ${lexend.variable} font-Lexend`} suppressHydrationWarning suppressContentEditableWarning>
         <ProtectedAdmin>
           <section className="flex w-full h-screen overflow-hidden">
             <AdminSidebar />

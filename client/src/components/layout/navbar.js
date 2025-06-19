@@ -115,9 +115,7 @@ const Navbar = () => {
               <Link
                 key={index}
                 href={link.path}
-                className={({ isActive }) =>
-                  isActive ? "text-[#e3a253]" : "hover:text-[#e3a253]"
-                }
+                className="hover:text-[#e3a253]"
                 onClick={toggleMenu}
               >
                 {link.label}
