@@ -26,17 +26,7 @@ exports.updateHero = async (req, res) => {
     const { content } = req.body;
 
     // Check that content is an object with required keys
-    if (
-      !content ||
-      typeof content !== "object" ||
-      !content.heading ||
-      !content.image
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid content format. Must include heading and image.",
-      });
-    }
+  
 
     let hero = await CmsContent.findOne({ where: { section: "hero" } });
 
@@ -93,24 +83,21 @@ exports.updateWhyChooseUs = async (req, res) => {
   try {
     const { content } = req.body;
 
-    if (
-      !content ||
-      typeof content !== "object" ||
-      !content.mainImage ||
-      !content.header ||
-      !content.description ||
-      typeof content.header !== "string" ||
-      typeof content.description !== "string" ||
-      !Array.isArray(content.features) ||
-      content.features.length !== 5 ||
-      !content.features.every((item) => item.image && item.title)
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Invalid content format. Must include header, description, mainImage, and exactly 5 features with image and title.",
-      });
-    }
+    // Validate structure
+    // if (
+    //   !content ||
+    //   typeof content !== "object" ||
+    //   !content.mainImage ||
+    //   !Array.isArray(content.features) ||
+    //   content.features.length !== 5 ||
+    //   !content.features.every((item) => item.image && item.title)
+    // ) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message:
+    //       "Invalid content format. Must include mainImage and exactly 5 features with image and title.",
+    //   });
+    // }
 
     let section = await CmsContent.findOne({
       where: { section: "whyChooseUs" },
@@ -307,29 +294,29 @@ exports.updateClientReviews = async (req, res) => {
     const { content } = req.body;
 
     // Validate content structure
-    if (
-      !content ||
-      typeof content !== "object" ||
-      !content.header ||
-      !content.headerDescription ||
-      !Array.isArray(content.reviews) ||
-      content.reviews.length > 4 || // Allow up to 4 reviews
-      !content.reviews.every(
-        (review) =>
-          review.name &&
-          review.photo &&
-          review.comment &&
-          typeof review.rating === "number" &&
-          review.rating >= 1 &&
-          review.rating <= 5
-      )
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Invalid format. Must include header, headerDescription, and up to 4 reviews with name, photo, comment, and rating (1–5).",
-      });
-    }
+    // if (
+    //   !content ||
+    //   typeof content !== "object" ||
+    //   !content.header ||
+    //   !content.headerDescription ||
+    //   !Array.isArray(content.reviews) ||
+    //   content.reviews.length > 4 || // Allow up to 4 reviews
+    //   !content.reviews.every(
+    //     (review) =>
+    //       review.name &&
+    //       review.photo &&
+    //       review.comment &&
+    //       typeof review.rating === "number" &&
+    //       review.rating >= 1 &&
+    //       review.rating <= 5
+    //   )
+    // ) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message:
+    //       "Invalid format. Must include header, headerDescription, and up to 4 reviews with name, photo, comment, and rating (1–5).",
+    //   });
+    // }
 
     let section = await CmsContent.findOne({
       where: { section: "clientReviews" },

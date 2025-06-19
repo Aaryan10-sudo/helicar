@@ -115,6 +115,7 @@ const Enquiry = () => {
         height={500}
         w={200}
         className="hidden sm:block"
+        alt="Enquiry Image"
       />
     </section>
   );
