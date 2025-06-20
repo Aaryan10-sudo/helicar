@@ -1,29 +1,23 @@
-#version: '3.8'
+# version: '3.8'
 
 services:
-  # ──────────────────────────────
-  # PostgreSQL
-  # ──────────────────────────────
   postgres:
     container_name: nnine-helicar-db
     image: postgres:15
     restart: always
     env_file:
-      - /home/azureuser/client-project/helicarbooking/server/.env   # ← reads DB_* vars
-    environment:
-      POSTGRES_DB:       ${DB_NAME}        # pulled from the same env_file
+      - .env                       # ← loads DB_NAME / DB_USERNAME / DB_PASSWORD
+    environment:                   # map them to Postgres variables
+      POSTGRES_DB:       ${DB_NAME}
       POSTGRES_USER:     ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "${DB_PORT:-32807}:5432"           # default if DB_PORT not set
+      - "${DB_PORT}:5432"          # external host port → internal 5432
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - helicar-network
 
-  # ──────────────────────────────
-  # Backend (Node.js + Sequelize)
-  # ──────────────────────────────
   nnine-helicar-be:
     container_name: nnine-helicar-be
     image: prina1/nnine-helicar-be:latest
@@ -31,18 +25,15 @@ services:
     depends_on:
       - postgres
     env_file:
-      - /home/azureuser/client-project/helicarbooking/server/.env
-    environment:               # overrides / additions for inside‑container use
-      DB_HOST: postgres        # service name of the Postgres container
-      DB_PORT: 5432            # internal port; keep fixed
+      - .env                       # pull in all app settings
+    environment:                   # overrides that must differ inside Docker
+      DB_HOST: postgres            # service name of postgres container
+      DB_PORT: 5432                # fixed internal port
     ports:
       - "4000:4000"
     networks:
       - helicar-network
 
-# ──────────────────────────────
-# Docker objects
-# ──────────────────────────────
 volumes:
   postgres-data:
 
