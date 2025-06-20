@@ -49,6 +49,7 @@ Booking.init(
     destination: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: '',  // Add this line to avoid null conflicts during sync/migration
     },
     vehicleId: {
       type: DataTypes.UUID,
