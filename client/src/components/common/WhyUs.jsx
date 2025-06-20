@@ -44,7 +44,11 @@ const WhyUs = () => {
           {formData.header || "Why Choose Us?"}
         </h1>
         <p className="text-sm md:text-base text-gray-600 max-w-[90%] md:max-w-[785px] mx-auto mt-2">
+<<<<<<< HEAD
+          {formData.description}
+=======
           {formData.description ||  "We are the best choice for you."}
+>>>>>>> f528913ec955d4cb6641504f45c099e7743d79a2
         </p>
       </div>
 
@@ -53,13 +57,9 @@ const WhyUs = () => {
         {/* Main Image */}
         <div className="w-full lg:w-[45%] flex justify-center">
           <Image
-            src={
-              formData.mainImage
-                ? formData.mainImage
-                : assets.whyUs1.src
-            }
-            width={assets.whyUs1.width}
-            height={assets.whyUs1.height}
+            src={formData.mainImage ? formData.mainImage : assets.whyUs1.src}
+            width={assets?.whyUs1.width}
+            height={assets?.whyUs1.height}
             alt="Luxury rental vehicle in Nepal"
             className="w-full max-w-[553px] h-auto rounded-lg shadow-lg"
           />
@@ -71,10 +71,7 @@ const WhyUs = () => {
             <p className="text-center col-span-2">Loading features...</p>
           ) : formData.features && formData.features.length > 0 ? (
             formData.features.map((feature, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col items-center text-center"
-              >
+              <div key={idx} className="flex flex-col items-center text-center">
                 <Image
                   src={feature.image || assets.whyUs2.src}
                   width={assets.whyUs2.width}
@@ -86,9 +83,7 @@ const WhyUs = () => {
                   {feature.title}
                 </h2>
                 {feature.description && (
-                  <p className="text-gray-600 mt-1">
-                    {feature.description}
-                  </p>
+                  <p className="text-gray-600 mt-1">{feature.description}</p>
                 )}
               </div>
             ))

@@ -1,4 +1,3 @@
-const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -50,7 +49,7 @@ app.use("/file", fileRouter);
 app.use("/booking", bookingRouter);
 app.use("/enquiry", enquiryRouter);
 app.use("/settings", settingRouter);
-app.use("/cms",cmsrouter)
+app.use("/cms", cmsrouter);
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
