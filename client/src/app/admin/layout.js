@@ -4,6 +4,7 @@ import AdminSidebar from "@/components/layout/AdminSidebar";
 import AdminNavbar from "@/components/layout/AdminNavbar";
 import Navbar from "@/components/layout/navbar";
 import ProtectedAdmin from "./ProtectedAdmin";
+import { ToastContainer } from "react-toastify";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,7 +42,10 @@ export default function RootLayout({ children }) {
             <AdminSidebar />
             <div className="flex flex-col flex-1 h-screen overflow-hidden">
               <AdminNavbar />
-              <div className="flex-1 overflow-y-auto px-4 py-2">{children}</div>
+              <div className="flex-1 overflow-y-auto px-4 py-2">
+                    <ToastContainer />
+                    {children}</div>
+
             </div>
           </section>
         </ProtectedAdmin>

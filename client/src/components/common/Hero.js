@@ -18,7 +18,7 @@ const Hero = () => {
           method: "GET",
         });
         setHeroData(result.data.data);
-        console.log(result.data.data);
+        // console.log(result.data.data);
       } catch (error) {
         console.log(`${error.message} `);
       }
@@ -30,16 +30,16 @@ const Hero = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    const handleHero = async () => {
-      try {
-        const response = await axios({
-          method: "GET",
-          url: "http://localhost:4000/cms/hero"
-        })
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
+    // const handleHero = async () => {
+    //   try {
+    //     const response = await axios({
+    //       method: "GET",
+    //       url: "http://localhost:4000/cms/hero"
+    //     })
+    //   } catch (error) {
+    //     console.log(error.message);
+    //   }
+    // }
     
 
     window.addEventListener("scroll", handleScroll);

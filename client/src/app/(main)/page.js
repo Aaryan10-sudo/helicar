@@ -16,12 +16,21 @@ export default function Home() {
   const { loading, vehicles } = useGetVehicle();
   const [reviews, setReviews] = useState();
   // const [loading, setLoading] = useState(true);
-  console.log("bsss",reviews);
+  // console.log("bsss",reviews);
 
   const fetchData = async () => {
     try {
       const response = await axios.get(`${baseURL}/cms/client-reviews`);
-     setReviews(response.data.data.content);
+      if (
+        !response.data ||
+        !response.data.data ||
+        !response.data.data.content
+      ) {
+        // console.log("Invalid response structure:", response.data);
+        return;
+      } else {
+        setReviews(response.data.data.content || []);
+      }
     } catch (error) {
       console.error("Error fetching reviews:", error);
     } finally {
@@ -48,7 +57,8 @@ export default function Home() {
                 {reviews?.header || "Client Reviews"}
               </h1>
               <p className="text-sm md:text-base text-gray-600 max-w-[90%] md:max-w-[785px] mx-auto mt-2">
-                {reviews?.headerDescription}
+                {reviews?.headerDescription ||
+                  "Our clients have shared their experiences with us."}
               </p>
             </div>
             <Rating />

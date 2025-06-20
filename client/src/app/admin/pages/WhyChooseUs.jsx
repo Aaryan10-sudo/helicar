@@ -144,7 +144,7 @@ const WhyChooseUs = () => {
 
   return (
     <div className="relative space-y-8 mb-16 bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-lg p-8 border border-blue-100">
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <h2 className="text-2xl font-bold mb-6 text-blue-700">Why Choose Us Section</h2>
       <form onSubmit={handleUpdate}>
         <div className="flex justify-end mb-6">

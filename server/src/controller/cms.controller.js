@@ -4,10 +4,6 @@ exports.getHero = async (req, res) => {
   try {
     const hero = await CmsContent.findOne({ where: { section: "hero" } });
 
-    if (!hero) {
-      return res.status(404).json({ message: "Hero section not found" });
-    }
-
     res.status(200).json({
       success: true,
       data: hero,
@@ -26,7 +22,6 @@ exports.updateHero = async (req, res) => {
     const { content } = req.body;
 
     // Check that content is an object with required keys
-  
 
     let hero = await CmsContent.findOne({ where: { section: "hero" } });
 
@@ -59,12 +54,6 @@ exports.getWhyChooseUs = async (req, res) => {
     const section = await CmsContent.findOne({
       where: { section: "whyChooseUs" },
     });
-
-    if (!section) {
-      return res
-        .status(404)
-        .json({ message: "Why Choose Us section not found" });
-    }
 
     res.status(200).json({
       success: true,
@@ -130,13 +119,6 @@ exports.updateWhyChooseUs = async (req, res) => {
 exports.getBlogSection = async (req, res) => {
   try {
     const section = await CmsContent.findOne({ where: { section: "blog" } });
-
-    if (!section) {
-      return res.status(404).json({
-        success: false,
-        message: "Blog section not found",
-      });
-    }
 
     res.status(200).json({
       success: true,
@@ -204,13 +186,6 @@ exports.getOurMission = async (req, res) => {
       where: { section: "ourMission" },
     });
 
-    if (!section) {
-      return res.status(404).json({
-        success: false,
-        message: "Our Mission section not found",
-      });
-    }
-
     res.status(200).json({
       success: true,
       data: section,
@@ -275,13 +250,6 @@ exports.getClientReviews = async (req, res) => {
     const section = await CmsContent.findOne({
       where: { section: "clientReviews" },
     });
-
-    if (!section) {
-      return res.status(404).json({
-        success: false,
-        message: "Client Reviews section not found",
-      });
-    }
 
     res.status(200).json({
       success: true,
@@ -359,12 +327,6 @@ exports.getVehicleRentalService = async (req, res) => {
       where: { section: "vehicleRentalService" },
     });
 
-    if (!section) {
-      return res
-        .status(404)
-        .json({ message: "Vehicle Rental Service section not found" });
-    }
-
     res.status(200).json({
       success: true,
       data: section,
@@ -429,10 +391,6 @@ exports.getOurCompany = async (req, res) => {
     const section = await CmsContent.findOne({
       where: { section: "ourCompany" },
     });
-
-    if (!section) {
-      return res.status(404).json({ message: "Our Company section not found" });
-    }
 
     res.status(200).json({
       success: true,
@@ -579,13 +537,6 @@ exports.getTariffRates = async (req, res) => {
       where: { section: "tariffRates" },
     });
 
-    if (!section) {
-      return res.status(404).json({
-        success: false,
-        message: "Tariff Rates content not found",
-      });
-    }
-
     return res.status(200).json({
       success: true,
       data: section.content,
@@ -603,13 +554,6 @@ exports.getTrekkingSection = async (req, res) => {
     const section = await CmsContent.findOne({
       where: { section: "trekking" },
     });
-
-    if (!section) {
-      return res.status(404).json({
-        success: false,
-        message: "Trekking section not found",
-      });
-    }
 
     return res.status(200).json({
       success: true,
