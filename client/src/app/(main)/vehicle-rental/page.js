@@ -131,10 +131,10 @@ const VehicleRental = () => {
                         <PeopleIcon />
                         {vehicle.features.seats}
                       </p>
-                      <p className="text-subheading text-md flex gap-1 font-semibold">
+                      <div className="text-subheading text-md flex gap-1 font-semibold">
                         <TransmissionIcon />
                         {vehicle.features.transmission}
-                      </p>
+                      </div>
                     </div>
                     <div className="p-4 flex items-center justify-between">
                       <p className="text-2xl font-semibold">
