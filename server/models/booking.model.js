@@ -44,6 +44,7 @@ Booking.init(
     pickUp: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: '',  // Add this line to avoid null conflicts during sync/migration
     },
     destination: {
       type: DataTypes.STRING,
@@ -71,3 +72,4 @@ Booking.init(
 );
 
 module.exports = Booking;
+
