@@ -3,16 +3,33 @@ import { Destination } from "@/lib/data";
 import { useRouter } from "next/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import RightArrowIcon from "@/ui/RightArrowIcon";
 import LeftArrowIcon from "@/ui/LeftArrowIcon";
+import axios from "axios";
+import { baseURL } from "@/config/config";
 
 const PopularDestinationCard = () => {
   const router = useRouter();
+  const [destination, setDestination] = useState([]);
+
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        const result = await axios(`${baseURL}/popular-destination/get`);
+        console.log(result.data.data);
+        setDestination(result.data.data);
+      } catch (error) {
+        console.error("Error fetching popular destinations:", error);
+      }
+    };
+
+    fetchDestinations();
+  }, []);
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -64,35 +81,37 @@ const PopularDestinationCard = () => {
         pagination={{ clickable: true }}
         className="w-full"
       >
-        {Destination.map((value, index) => (
-          <SwiperSlide key={index}>
-            <section              className="w-full h-[440px] rounded-lg bg-cover flex flex-col justify-end overflow-hidden cursor-pointer transition-transform"
-
-              style={{
-                backgroundImage: `url(${value.image.src || "/default-hero.jpg"})`,
-              }}
-              onClick={() => {
-                router.push(`/popular-destination?id=${value.id}`);
-              }}
-            >
-              <div
-                className="w-full h-[130px] text-white px-5"
-                style={{ backgroundColor: "rgba(0, 0, 0, 0.60)" }}
+        {(destination.length > 0 ? destination : Destination).map(
+          (value, index) => (
+            <SwiperSlide key={index}>
+              <section
+                className="w-full h-[440px] rounded-lg bg-cover bg-center flex flex-col justify-end overflow-hidden cursor-pointer transition-transform"
+                style={{
+                  backgroundImage: `${destination.length > 0 ? `url(${value.image || "/default-hero.jpg"})` : `url(${value.image.src || "/default-hero.jpg"})`}`,
+                }}
+                onClick={() => {
+                  router.push(`/popular-destination?destination=${value.name}`);
+                }}
               >
-                <h1 className="text-[30px] font-semibold font-Comfortaa">
-                  {value.name}
-                </h1>
-                <p>{value.name} in 7 days</p>
-                <span className="flex justify-between items-center">
-                  <p className="py-5 font-bold text-[20px]">From 10$</p>
-                  <div className="bg-primary h-[30px] w-[60px] flex justify-center items-center rounded-md">
-                    -10%
-                  </div>
-                </span>
-              </div>
-            </section>
-          </SwiperSlide>
-        ))}
+                <div
+                  className="w-full h-[130px] text-white px-5"
+                  style={{ backgroundColor: "rgba(0, 0, 0, 0.60)" }}
+                >
+                  <h1 className="text-[30px] font-semibold font-Comfortaa">
+                    {value.name}
+                  </h1>
+                  <p>{value.name} in 7 days</p>
+                  <span className="flex justify-between items-center">
+                    <p className="py-5 font-bold text-[20px]">From 10$</p>
+                    <div className="bg-primary h-[30px] w-[60px] flex justify-center items-center rounded-md">
+                      -10%
+                    </div>
+                  </span>
+                </div>
+              </section>
+            </SwiperSlide>
+          )
+        )}
       </Swiper>
     </div>
   );

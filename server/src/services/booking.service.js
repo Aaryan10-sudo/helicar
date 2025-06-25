@@ -5,15 +5,6 @@ async function createBookingService(bookingData) {
   try {
     const booking = await Booking.create(bookingData);
 
-    await Vehicle.update(
-      { vehicleStatus: "Occupied" },
-      {
-        where: {
-          id: bookingData.vehicleId,
-        },
-      }
-    );
-
     return booking;
   } catch (error) {
     throw new Error("Error creating vehicle: " + error.message);

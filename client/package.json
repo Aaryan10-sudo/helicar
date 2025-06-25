@@ -17,6 +17,7 @@
     "i18n-iso-countries": "^7.14.0",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
+    "lucide-react": "^0.522.0",
     "prettier": "^3.5.3",
     "react": "^19.0.0",
     "react-date-range": "^2.0.1",
