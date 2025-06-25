@@ -1,12 +1,22 @@
+"use client";
 import { Destination } from "@/lib/data";
 import BusIcon from "@/ui/BusIcon";
 import CarIcon from "@/ui/CarIcon";
 import HiaceIcon from "@/ui/HiaceIcon";
 import JeepIcon from "@/ui/JeepIcon";
 import Link from "next/link";
+import Image from "next/image";
+import { MapPin, Calendar } from "lucide-react";
+import { Suspense, useEffect, useState } from "react";
+import axios from "axios";
+import { baseURL } from "@/config/config";
+import { useSearchParams } from "next/navigation";
 
-export default async function PopularDestinationPage({ searchParams }) {
-  const { id } = await searchParams;
+const PopularDestinationPage = () => {
+  const searchParams = useSearchParams();
+  const destination = searchParams.get("destination");
+  const [dataDestination, setDestinationData] = useState({});
+  const [openItinerary, setOpenItinerary] = useState({});
   const vehicleTypes = [
     { name: "Cars", icon: <CarIcon />, slug: "cars" },
     { name: "Jeep", icon: <JeepIcon />, slug: "jeeps" },
@@ -14,87 +24,300 @@ export default async function PopularDestinationPage({ searchParams }) {
     { name: "Bus", icon: <BusIcon />, slug: "bus" },
   ];
 
-  const destinationData = Destination.find((item) => item.id === parseInt(id));
+  const getEmbedUrl = (url) => {
+    if (!url) return "https://www.google.com/maps";
+    try {
+      const shortPattern = /^https:\/\/maps\.app\.goo\.gl\/(.+)/;
+      const placePattern = /\/maps\/place\/([^/]+)/;
 
+      if (placePattern.test(url)) {
+        const place = url.match(placePattern)[1];
+        return `https://www.google.com/maps?q=${decodeURIComponent(place)}&output=embed`;
+      }
+
+      if (shortPattern.test(url)) {
+        return "";
+      }
+
+      return url.includes("output=embed") ? url : `${url}&output=embed`;
+    } catch {
+      return "https://www.google.com/maps";
+    }
+  };
+
+  const handleToggle = (index) => {
+    setOpenItinerary((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
+  useEffect(() => {
+    async function getDestinationDetails() {
+      try {
+        const result = await axios({
+          url: `${baseURL}/popular-destination/get-by-name?name=${destination}`,
+          method: "GET",
+        });
+        console.log(result);
+        setDestinationData(result.data.data);
+      } catch (error) {
+        setDestinationData({});
+      }
+    }
+
+    if (destination) getDestinationDetails();
+  }, [destination]);
+
+  const destinationData =
+    dataDestination && Object.keys(dataDestination).length > 0
+      ? dataDestination
+      : Destination.find((item) => item.name === destination);
+
+  console.log(destinationData.location);
   if (!destinationData) {
-    return <div>Destination not found</div>;
-  }
-  console.log(destinationData);
-  return (
-    <div className="m-10 min-h-screen">
-      <section className="w-full flex justify-between gap-15  max-w-[1700px] mx-auto">
-        <div className="w-[60%]">
-          <img
-            src={destinationData.image.src}
-            className="h-[400px] w-full rounded-lg"
-          />
-        </div>
-        <div className=" flex flex-col justify-center items-center">
-          <h1 className="text-2xl font-bold text-black text-center">
-            Explore vehicles and services
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            Destination not found
           </h1>
-          <br />
-          <ul className="flex flex-col gap-4 w-[100%]">
-            {vehicleTypes.map((vehicle, index) => (
-              <li
-                key={index}
-                className="flex items-center gap-2 px-4 py-2 w-[180px] bg-gray-100 rounded-full shadow-sm"
-              >
-                <span className="text-2xl">{vehicle.icon}</span>
-                <Link
-                  href={`/booking?vehicle=${vehicle.slug}&pickUp=${destinationData.name}&destination=${destinationData.name}`}
-                  className="text-lg font-medium"
-                >
-                  {vehicle.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-      <section className="flex justify-between max-w-[1700px] mx-auto">
-        <div className="w-[60%]">
-          <h1 className="my-5 text-[30px] font-bold">{destinationData.name}</h1>
-          <h2 className="text-[20px] font-bold">Itinerary</h2>
-          <p>
-            Delight in the fascinating sights of Turkey, from the bazaars
-            of Istanbul to the fairy chimneys of Cappadocia. Cruise on
-            the Bosphorus, discover the caves of the Goreme Valley and visit
-            the Cotton Castle of Pamukkale. Discover the ancient ruins
-            of Ephesus before discovering the heritage of Izmir and Canakkale at
-            the archaeological sites of Pergamon and Troy!
+          <p className="text-gray-600">
+            The destination you're looking for doesn't exist.
           </p>
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d446891.8324680704!2d83.53400836948978!3d28.947565914842453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39be6c7eb19f2ab7%3A0x2c40a8c5a03d3c04!2sMustang!5e0!3m2!1sen!2snp!4v1745476878468!5m2!1sen!2snp"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            className="my-[20px] w-full h-[500px] "
-          ></iframe>
         </div>
-        <div className=" flex flex-col justify-center items-center">
-          <h2 className="text-[20px]">More Destination to discover</h2>
-          {Destination.filter((value) => value.id !== parseInt(id))
-            .slice(0, 2)
-            .map((value, index) => (
-              <section
-                key={index}
-                className="h-[320px] w-[400px] shadow-xl py-[20px]"
-              >
-                <div
-                  className="h-[240px] bg-cover"
-                  style={{
-                    backgroundImage: `url(${value.image.src || "/default-hero.jpg"})`,
-                  }}
-                ></div>
-                <h1 className="px-[5px] font-bold text-[20px] ">
-                  {value.name}
-                </h1>
-                <p className="px-[5px]">One day trip from Kathmandu</p>
-              </section>
-            ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className=" ">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <nav className="flex items-center space-x-2 text-sm text-gray-600">
+            <Link href="/" className="hover:text-blue-600">
+              Kathmandu
+            </Link>
+            <span>›</span>
+
+            <span className="text-gray-900">{destinationData.name}</span>
+          </nav>
         </div>
-      </section>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Main Content Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          {/* Left Column - Hero Image */}
+          <div className="lg:col-span-2">
+            <div className="relative h-[400px] rounded-xl overflow-hidden object-cover object-center ">
+              <Image
+                src={
+                  typeof destinationData.image === "string"
+                    ? destinationData.image
+                    : destinationData.image?.src || "/placeholder.svg"
+                }
+                alt={destinationData.name || "Destination"}
+                fill
+                className="object-cover object-center"
+                priority
+              />
+            </div>
+          </div>
+
+          {/* Right Column - Vehicle Services */}
+          <div className=" rounded-xl p-6  h-fit">
+            <h2 className="text-xl font-bold text-gray-900 text-center mb-6">
+              Explore vehicles and services
+            </h2>
+            <div className="space-y-3">
+              {vehicleTypes.map((vehicle, index) => (
+                <Link
+                  key={index}
+                  href={`/booking?vehicle=${vehicle.slug}&pickUp=${destinationData.name}&destination=${destinationData.name}`}
+                  className="flex items-center gap-3 p-3 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors duration-200 group"
+                >
+                  <div className="text-2xl group-hover:scale-110 transition-transform duration-200">
+                    {vehicle.icon}
+                  </div>
+                  <span className="text-lg font-medium text-gray-700 group-hover:text-gray-900">
+                    {vehicle.name}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column - Destination Details */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className=" rounded-xl p-6 ">
+              <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                {destinationData.name}
+              </h1>
+
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  <Calendar className="w-5 h-5 text-blue-600" />
+                  Itinerary
+                </h2>
+                <p className="text-gray-700 leading-relaxed">
+                  {destinationData.description}
+                </p>
+              </div>
+
+              {destinationData ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  {Array.isArray(destinationData.itinerary) &&
+                  destinationData.itinerary.length > 0 ? (
+                    destinationData.itinerary.map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex flex-col gap-1 text-sm text-gray-600 border rounded-lg p-3 bg-white shadow"
+                      >
+                        <button
+                          type="button"
+                          className="flex items-center gap-2 font-semibold focus:outline-none hover:text-blue-600 transition"
+                          onClick={() => handleToggle(index)}
+                        >
+                          <Calendar className="w-4 h-4 mt-1" />
+                          {item.day ? `Day ${item.day}` : `Day ${index + 1}`}
+                          {item.title && (
+                            <>
+                              {" "}
+                              - <span>{item.title}</span>
+                            </>
+                          )}
+                          <span className="ml-auto text-xs text-blue-500">
+                            {openItinerary[index] ? "Hide" : "Show"}
+                          </span>
+                        </button>
+                        {openItinerary[index] && (
+                          <div className="text-gray-500 mt-2">
+                            {item.description}
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-400 col-span-3">
+                      No itinerary available.
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Calendar className="w-4 h-4" />
+                    <span>1st day - Kathmandu on board</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Calendar className="w-4 h-4" />
+                    <span>2nd day - Pokhara</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Calendar className="w-4 h-4" />
+                    <span>3rd day - Pokhara</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Trip Details */}
+            </div>
+
+            <div className=" rounded-xl p-6 ">
+              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-blue-600" />
+                Location
+              </h3>
+              <div className="rounded-lg overflow-hidden">
+                {getEmbedUrl(destinationData.location) ? (
+                  <iframe
+                    src={getEmbedUrl(destinationData.location)}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="w-full h-[400px] border-0"
+                  />
+                ) : (
+                  <p className="text-gray-500">
+                    Map preview not available.{" "}
+                    <a
+                      href={destinationData.location}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      View on Google Maps
+                    </a>
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - More Destinations */}
+          <div className="space-y-6">
+            <div className=" rounded-xl p-6 ">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 text-center">
+                More Destination to Discover
+              </h2>
+              <div className="space-y-4">
+                {Destination.filter((value) => value.name !== destination)
+                  .slice(0, 2)
+                  .map((value, index) => (
+                    <div
+                      key={index}
+                      className=" rounded-lg  overflow-hidden shadow-xl transition-shadow duration-200"
+                    >
+                      <div className="relative h-48">
+                        <Image
+                          src={
+                            value.image?.src ||
+                            "/placeholder.svg?height=200&width=400"
+                          }
+                          alt={value.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-bold text-lg text-gray-900 mb-1">
+                          {value.name}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-3">
+                          One day trip from Kathmandu
+                        </p>
+                        <Link
+                          href={`/popular-destination?destination=${value.name}`}
+                          className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                        >
+                          Explore destination →
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+const Page = () => {
+  <Suspense
+    fallback={
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    }
+  >
+    <PopularDestinationPage />
+  </Suspense>;
+};
+
+export default Page;

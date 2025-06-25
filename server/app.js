@@ -15,6 +15,7 @@ const fileRouter = require("./src/routes/file.route");
 const bookingRouter = require("./src/routes/booking.route");
 const enquiryRouter = require("./src/routes/enquiry.route");
 const settingRouter = require("./src/routes/setting.route");
+const popularDestinationRoutes = require("./src/routes/popularDestination.route");
 const {
   testPostgresConnection,
 } = require("./config/db/postgres/connectPostgres");
@@ -50,6 +51,7 @@ app.use("/booking", bookingRouter);
 app.use("/enquiry", enquiryRouter);
 app.use("/settings", settingRouter);
 app.use("/cms", cmsrouter);
+app.use("/popular-destination", popularDestinationRoutes);
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {

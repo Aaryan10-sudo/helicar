@@ -175,7 +175,7 @@ const page = () => {
                   </td>
                   <td className="p-2 border-b border-gray-300 text-center">
                     <button
-                      className="cursor-pointer"
+                      className="cursor-pointer text-blue-600"
                       onClick={() =>
                         router.push(
                           `/admin/vehicles/update?vehicleId=${ride.id}`
@@ -185,7 +185,7 @@ const page = () => {
                       <UpdateIcon />
                     </button>
                     <button
-                      className="cursor-pointer mx-[10px]"
+                      className="cursor-pointer mx-[10px] text-red-600"
                       onClick={() => handleDelete(ride.id)}
                     >
                       <DeleteIcon />

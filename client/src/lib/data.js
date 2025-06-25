@@ -6,7 +6,13 @@ import swayambhuImage from "../assets/swayambhu.jpg";
 import blogImage from "../assets/blogImag.jpg";
 
 export const Destination = [
-  { id: 1, name: "Mustang", image: mustangImage },
+  {
+    id: 1,
+    name: "Mustang",
+    image: mustangImage,
+    description:
+      "Discover the mystical land of Mustang — Nepal’s hidden kingdom beyond the Himalayas. This extraordinary journey offers a blend of Tibetan culture, dramatic landscapes, and sacred heritage that few destinations can match. Whether you're on a road trip or trekking expedition, Mustang promises an unforgettable adventure.",
+  },
   { id: 2, name: "Lukla", image: luklaImage },
   { id: 3, name: "Pokhara", image: pokharaImage },
   { id: 4, name: "Chandragiri", image: chandragiriImage },

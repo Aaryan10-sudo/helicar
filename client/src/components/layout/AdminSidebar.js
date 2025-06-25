@@ -26,10 +26,16 @@ const AdminSidebar = () => {
     { title: "Blog", icon: <Blogicon />, path: "/admin/blog" },
     { title: "Booking", icon: <BookingIcon />, path: "/admin/booking" },
     {
+      title: "Popular Destination",
+      icon: <DetailsIcon />,
+      path: "/admin/popular-destination",
+    },
+    {
       title: "General Settings",
       icon: <SettingsIcon />,
       path: "/admin/general-settings",
     },
+
     { title: "Enquiry", icon: <EnquiryIcon />, path: "/admin/enquiry" },
     { title: "Review", icon: <ReviewIcon />, path: "/admin/review" },
     { title: "Users", icon: <UserIcon />, path: "/admin/users" },

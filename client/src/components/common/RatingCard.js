@@ -1,20 +1,27 @@
 import Image from "next/image";
 import starImage from "@/assets/star.svg";
+import womenImage from "@/assets/women.svg";
 
 const RatingCard = ({ rating }) => {
   const ratingStars = Array.from(
     { length: rating.rating },
-    (_, index) => index < rating.rating 
+    (_, index) => index < rating.rating
   );
-  // console.log("ratindksjbasfjdb",rating);
   return (
     <div className="relative bg-[#F5F5F5] shadow-lg rounded-3xl flex items-center p-6 w-full max-w-[400px] sm:max-w-[325px] h-[160px]">
-      <div
-        className="absolute bg-cover bg-center left-[-33px] z-10 top-[-10px] border-subheading border-[2px] rounded-full overflow-hidden h-[186px] w-[110px]"
-        style={{
-          backgroundImage: `url(${rating.photo || "@/assets/women.svg"})`,
-        }}
-      ></div>
+      <div className="absolute left-[-65px] z-10 border-subheading border-[2px] rounded-full overflow-hidden h-[150px] w-[150px] bg-[#F5F5F5]">
+        <Image
+          src={
+            rating && typeof rating.photo === "string" && rating.photo
+              ? rating.photo
+              : womenImage
+          }
+          alt="User"
+          fill
+          style={{ objectFit: "cover" }}
+          className="object-cover object-center"
+        />
+      </div>
 
       <div className="flex flex-col w-full justify-center items-start pl-20 pr-4">
         <h1 className="text-[#222121] font-Comfortaa font-bold text-lg leading-7">
