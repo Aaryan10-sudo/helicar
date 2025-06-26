@@ -11,9 +11,9 @@ const Blog = ({ loading, vehicles, limit = 6 }) => {
     : vehicles?.data?.vehicles;
 
   return (
-    <section className="px-4 py-8">
-      <div className="text-center mb-6 lg:mb-10">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-Comfortaa text-primary font-bold">
+    <section className="sm:px-4 py-8">
+      <div className="sm:text-center mb-6 lg:mb-10">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl px-4 font-Comfortaa text-primary font-bold">
           Blogs
         </h1>
         <p className="text-sm md:text-base text-gray-600 max-w-[90%] md:max-w-[785px] mx-auto mt-2">

@@ -5,7 +5,7 @@ import React from "react";
 
 const OurMission = () => {
   return (
-    <section className="flex flex-col md:flex-row justify-center items-center w-full px-5 md:px-10 h-auto md:h-[537px] max-w-[1700px] mx-auto">
+    <section className="flex flex-col md:flex-row justify-center items-center w-full sm:px-5 md:px-10 h-auto md:h-[537px] max-w-[1700px] mx-auto">
       <article className="  flex flex-col gap-6 justify-center px-4">
         <h2 className="font-Comfortaa font-bold text-primary text-[36px] md:text-[48px] text-left">
           Our Mission
@@ -18,9 +18,6 @@ const OurMission = () => {
         </p>
         <Link href="/about" className="w-fit">
           <button className="bg-primary p-2.5 flex justify-center items-center w-[135px] h-[38px] rounded-[20px] hover:cursor-pointer">
-            <p className="font-bold w-[91px] text-white leading-[17.84px]">
-              Read More
-            </p>
             <Image
               src={assets.rightArrow.src}
               alt="Arrow pointing to more information"

@@ -11,6 +11,10 @@ Blog.init(
       primaryKey: true,
       allowNull: false,
     },
+    coverImage: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     mainTitle: {
       type: DataTypes.STRING,
       allowNull: false,

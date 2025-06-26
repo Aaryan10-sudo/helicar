@@ -8,13 +8,15 @@ const contentItemSchema = Joi.object({
 
 const blogSchema = Joi.object({
   mainTitle: Joi.string().required(),
+  coverImage: Joi.string().required(),
   date: Joi.date().iso().required(),
-  content: Joi.array().items(contentItemSchema).min(1).required()
+  content: Joi.array().items(contentItemSchema).min(1).required(),
 });
 
 const validateBlog = (req, res, next) => {
   const { error } = blogSchema.validate(req.body);
   if (error) {
+    console.log(error);
     return res.status(400).json({ message: error.details[0].message });
   }
   next();

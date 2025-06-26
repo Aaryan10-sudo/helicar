@@ -1,15 +1,17 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/dist/style.css";
+import { FaCalendarAlt } from "react-icons/fa";
+
 import BusIcon from "@/ui/BusIcon";
 import CarIcon from "@/ui/CarIcon";
 import HiaceIcon from "@/ui/HiaceIcon";
 import JeepIcon from "@/ui/JeepIcon";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
-import { FaCalendarAlt } from "react-icons/fa";
 import TimePicker from "./Time";
+import LocationAutocomplete from "./LocationAutocomplete"; // Assuming this component is correct
 
 export default function Booking() {
   const vehicleTypes = [
@@ -27,75 +29,43 @@ export default function Booking() {
     Bus: "bus",
   };
 
-  const [destinations, setDestinations] = useState([
-    { id: "pickup", label: "Pick-up", value: "" },
-    { id: "destination", label: "Destination", value: "" },
-  ]);
+  // Simplified destinations state
+  const [pickupLocation, setPickupLocation] = useState("");
+  const [destinationLocation, setDestinationLocation] = useState("");
 
-  const kathmanduAreas = [
-    "Thamel",
-    "Baneshwor",
-    "Koteshwor",
-    "Kalanki",
-    "Maharajgunj",
-    "Baluwatar",
-    "Lazimpat",
-    "New Road",
-    "Sundhara",
-    "Gongabu",
-    "Bouddha",
-    "Kirtipur",
-    "Patan",
-    "Jawalakhel",
-    "Chabahil",
-  ];
-
-  const [focusedField, setFocusedField] = useState(null);
-  const [showSuggestions, setShowSuggestions] = useState(false);
   const [destinationError, setDestinationError] = useState("");
   const [showAnotherDestination, setShowAnotherDestination] = useState(false);
-
-  const handleAnotherDestination = () => {
-    setShowAnotherDestination(true);
-  };
-  const removeAnotherDestination = () => {
-    setShowAnotherDestination(false);
-  };
 
   const [showPickupCalendar, setShowPickupCalendar] = useState(false);
   const [range, setRange] = useState({ from: undefined, to: undefined });
   const [pickupTime, setPickupTime] = useState("12:30 AM");
   const [returnTime, setReturnTime] = useState("12:30 AM");
 
-  const handleInputChange = (id, value) => {
-    setDestinations((prev) =>
-      prev.map((dest) => (dest.id === id ? { ...dest, value: value } : dest))
-    );
+  const [isClient, setIsClient] = useState(false);
 
-    if (
-      id === "destination" &&
-      value &&
-      !kathmanduAreas.some((area) => area.toLowerCase() === value.toLowerCase())
-    ) {
-      setDestinationError("Please select a valid area from Kathmandu.");
+  const pickupCalendarRef = useRef(null);
+
+  // This useEffect ensures window-dependent code runs only on the client
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const handleSelectArea = (id, area) => {
+    if (id === "pickup") {
+      setPickupLocation(area);
+    } else {
+      setDestinationLocation(area);
+    }
+    // Simple validation example
+    if (id === "destination" && area && area === pickupLocation) {
+      setDestinationError("Destination cannot be the same as pickup.");
     } else {
       setDestinationError("");
     }
   };
 
-  const handleSelectArea = (id, area) => {
-    if (id === "destination" && area === destinations[0].value) {
-      setDestinationError("Destination cannot be the same as pickup location.");
-      return;
-    }
-
-    setDestinations((prev) =>
-      prev.map((dest) => (dest.id === id ? { ...dest, value: area } : dest))
-    );
-    setShowSuggestions(false);
-  };
-
-  const pickupCalendarRef = useRef(null);
+  const handleAnotherDestination = () => setShowAnotherDestination(true);
+  const removeAnotherDestination = () => setShowAnotherDestination(false);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -108,15 +78,21 @@ export default function Booking() {
     }
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const isSearchDisabled =
+    !range.from ||
+    !range.to ||
+    !pickupLocation ||
+    !destinationLocation ||
+    destinationError;
+
   return (
-    <div className="p-8">
-      <div className="p-7 bg-white rounded-xl relative shadow-2xl">
-        <div className="flex flex-wrap gap-2 mb-4">
+    <div className="sm:p-4 md:p-8">
+      <div className="p-6 bg-white rounded-xl relative shadow-2xl max-w-7xl mx-auto">
+        {/* Vehicle selection */}
+        <div className="flex flex-wrap gap-2 mb-6">
           {vehicleTypes.map((type) => (
             <button
               key={type.name}
@@ -132,221 +108,121 @@ export default function Booking() {
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-4 items-end relative">
-          {destinations.map(({ id, label, value }) => (
-            <div key={id} className="flex flex-col relative min-w-[200px]">
-              <label htmlFor={id} className="mb-1 font-medium">
-                {label}
-              </label>
-              <input
-                id={id}
-                required
-                type="text"
-                placeholder="Enter area..."
-                value={value}
-                onFocus={() => {
-                  setFocusedField(id);
-                  setShowSuggestions(true);
-                }}
-                onBlur={() => {
-                  setTimeout(() => setShowSuggestions(false), 100);
-                }}
-                onChange={(e) => handleInputChange(id, e.target.value)}
-                className="p-2 border border-gray-300 rounded-lg"
-              />
-              {showSuggestions && focusedField === id && (
-                <ul className="absolute top-full mt-1 z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
-                  {kathmanduAreas
-                    .filter((area) =>
-                      area.toLowerCase().includes(value.toLowerCase())
-                    )
-                    .map((area) => (
-                      <li
-                        key={area}
-                        onClick={() => handleSelectArea(id, area)}
-                        className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
-                      >
-                        {area}
-                      </li>
-                    ))}
-                </ul>
-              )}
-              {destinationError && id === "destination" && (
-                <p className="text-red-500 text-xs mt-1">{destinationError}</p>
-              )}
-            </div>
-          ))}
+        {/* Main form grid - This is the core fix */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+          {/* Pick-up Location */}
+          <div className="lg:col-span-1">
+            <LocationAutocomplete
+              id="pickup"
+              label="Pick-up"
+              value={pickupLocation}
+              onSelect={handleSelectArea}
+            />
+          </div>
 
-          {/* Pick-up Calendar and Time Picker */}
+          {/* Destination Location */}
+          <div className="lg:col-span-1">
+            <LocationAutocomplete
+              id="destination"
+              label="Destination"
+              value={destinationLocation}
+              onSelect={handleSelectArea}
+              error={destinationError}
+            />
+          </div>
+
+          {/* Pick-up Date & Time */}
           <div className="flex flex-col relative">
             <label className="mb-1 font-medium">Pick-up date</label>
             <div className="flex gap-1">
-              <div className="relative">
+              <div className="relative flex-grow">
                 <button
                   type="button"
                   onClick={() => setShowPickupCalendar(!showPickupCalendar)}
-                  className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg bg-white"
+                  className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg bg-white w-full h-full"
                   aria-label="Select pick-up date"
                 >
-                  <FaCalendarAlt className="text-gray-600" />
-                  <span>
+                  <FaCalendarAlt className="text-gray-600 flex-shrink-0" />
+                  <span className="truncate">
                     {range.from ? range.from.toDateString() : "Select date"}
                   </span>
                 </button>
                 {showPickupCalendar && (
                   <div
                     ref={pickupCalendarRef}
-                    className="absolute top-full left-0 mt-5 z-30 rounded-md shadow-lg"
+                    className="absolute top-full left-0 mt-2 z-30 rounded-md shadow-lg"
                   >
                     <DayPicker
                       mode="range"
-                      numberOfMonths={2}
+                      numberOfMonths={
+                        isClient && window.innerWidth < 768 ? 1 : 2
+                      }
                       selected={range}
-                      onSelect={(range) => setRange({ ...range })}
+                      onSelect={setRange}
                       fromDate={new Date()}
                       disabled={{ before: new Date() }}
                       className="bg-white rounded-lg shadow-lg p-2"
-                      classNames={{
-                        months: "flex flex-row gap-4",
-                        caption_label: "text-lg font-large",
-                        today:
-                          "border-amber-500 rounded-full bg-primary text-white",
-                        selected: "rounded-full",
-                        chevron: "text-black",
-                      }}
                     />
                   </div>
                 )}
               </div>
-              {/* <input
-                id="pickup-time"
-                type="time"
-                value={pickupTime}
-                onChange={(e) => setPickupTime(e.target.value)}
-                className="p-2 border border-gray-300 rounded-lg"
-              /> */}
               <TimePicker
                 type="pickup"
                 selectedTime={pickupTime}
-                onSelect={(time) => setPickupTime(time)}
+                onSelect={setPickupTime}
               />
             </div>
           </div>
 
-          {/* Return Calendar and Time Picker */}
+          {/* Return Date & Time */}
           <div className="flex flex-col relative">
             <label className="mb-1 font-medium">Return date</label>
             <div className="flex gap-1">
-              <div className="relative">
+              <div className="relative flex-grow">
                 <button
                   type="button"
                   onClick={() => setShowPickupCalendar(!showPickupCalendar)}
-                  className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg bg-white"
+                  className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg bg-white w-full h-full"
                   aria-label="Select return date"
                 >
-                  <FaCalendarAlt className="text-gray-600" />
-                  <span>
+                  <FaCalendarAlt className="text-gray-600 flex-shrink-0" />
+                  <span className="truncate">
                     {range.to ? range.to.toDateString() : "Select date"}
                   </span>
                 </button>
               </div>
-              {/* <input
-                id="return-time"
-                type="time"
-                value={returnTime}
-                onChange={(e) => setReturnTime(e.target.value)}
-                className="p-2 border border-gray-300 rounded-lg"
-              /> */}
-
               <TimePicker
                 type="return"
                 selectedTime={returnTime}
-                onSelect={(time) => setReturnTime(time)}
+                onSelect={setReturnTime}
               />
             </div>
           </div>
 
+          {/* Search Button */}
           <Link
-            href={`/booking?vehicle=${vehicleSlugMap[selectedVehicle]}&pickUp=${
-              destinations[0].value
-            }&destination=${destinations[1].value}&date=${
+            href={`/booking?vehicle=${vehicleSlugMap[selectedVehicle]}&pickUp=${pickupLocation}&destination=${destinationLocation}&date=${
               range.from ? range.from.toISOString() : ""
-            }&returnDate=${range.to ? range.to.toISOString() : ""}&pickupTime=${pickupTime}&returnTime=${returnTime}`}
-            className={`bg-gradient-to-r from-[#006ba6] to-[#009acb] text-white font-bold px-6 py-2 rounded-full hover:opacity-90 ${
-              !range.from ||
-              !range.to ||
-              !destinations[0].value ||
-              !destinations[1].value ||
-              destinationError
-                ? "opacity-50 pointer-events-none"
-                : ""
+            }&returnDate=${
+              range.to ? range.to.toISOString() : ""
+            }&pickupTime=${pickupTime}&returnTime=${returnTime}`}
+            className={`bg-gradient-to-r from-[#006ba6] to-[#009acb] text-white font-bold h-10 px-6 rounded-lg hover:opacity-90 flex items-center justify-center w-full lg:w-auto ${
+              isSearchDisabled ? "opacity-50 pointer-events-none" : ""
             }`}
           >
             Search
           </Link>
         </div>
 
-        <span>
-          {showAnotherDestination ? (
-            <div className="flex flex-wrap gap-4 mt-2">
-              {destinations.map(({ id, label, value }) => (
-                <div key={id} className="flex flex-col relative min-w-[200px]">
-                  <input
-                    id={id}
-                    required
-                    type="text"
-                    placeholder="Enter area..."
-                    value={value}
-                    onFocus={() => {
-                      setFocusedField(id);
-                      setShowSuggestions(true);
-                    }}
-                    onBlur={() => {
-                      setTimeout(() => setShowSuggestions(false), 100);
-                    }}
-                    onChange={(e) => handleInputChange(id, e.target.value)}
-                    className="p-2 border border-gray-300 rounded-lg"
-                  />
-                  {showSuggestions && focusedField === id && (
-                    <ul className="absolute top-full mt-1 z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
-                      {kathmanduAreas
-                        .filter((area) =>
-                          area.toLowerCase().includes(value.toLowerCase())
-                        )
-                        .map((area) => (
-                          <li
-                            key={area}
-                            onClick={() => handleSelectArea(id, area)}
-                            className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
-                          >
-                            {area}
-                          </li>
-                        ))}
-                    </ul>
-                  )}
-                  {destinationError && id === "destination" && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {destinationError}
-                    </p>
-                  )}
-                </div>
-              ))}
-              <button
-                className="bg-red-500 w-[100px] h-[40px] rounded-[20px] text-white cursor-pointer hover:bg-red-600"
-                onClick={removeAnotherDestination}
-              >
-                Remove
-              </button>
-            </div>
-          ) : null}
-
-          <div
-            className="w-[220px] bg-primary rounded-md p-2 text-white flex justify-center items-center mt-5 cursor-pointer"
+        {/* "Add another destination" button moved here, outside the main grid */}
+        <div className="mt-4">
+          <button
+            className="bg-primary w-full sm:w-auto text-white font-semibold py-2 px-4 rounded-lg hover:opacity-90"
             onClick={handleAnotherDestination}
           >
             Add another destination
-          </div>
-        </span>
+          </button>
+        </div>
       </div>
     </div>
   );

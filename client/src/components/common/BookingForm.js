@@ -629,10 +629,10 @@ const BookingForm = () => {
         </form>
 
         {/* Right Summary Panel */}
-        <div className="w-full lg:w-[40%] mt-8 lg:mt-0 sticky top-[120px]">
+        <div className="w-full lg:w-[40%] mt-8 lg:mt-0 sm:sticky top-[120px]">
           {" "}
           {selectedCar ? (
-            <div className="bg-[#f0f9ff] p-5 md:p-6 rounded-xl sticky top-5">
+            <div className="bg-[#f0f9ff] p-5 md:p-6 rounded-xl sm:sticky top-5">
               <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start">
                 <img
                   src={

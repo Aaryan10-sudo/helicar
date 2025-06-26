@@ -15,6 +15,7 @@ import { useSearchParams } from "next/navigation";
 const PopularDestinationPage = () => {
   const searchParams = useSearchParams();
   const destination = searchParams.get("destination");
+  console.log(destination);
   const [dataDestination, setDestinationData] = useState({});
   const [openItinerary, setOpenItinerary] = useState({});
   const vehicleTypes = [
@@ -309,15 +310,17 @@ const PopularDestinationPage = () => {
 };
 
 const Page = () => {
-  <Suspense
-    fallback={
-      <div className="flex items-center justify-center h-screen">
-        Loading...
-      </div>
-    }
-  >
-    <PopularDestinationPage />
-  </Suspense>;
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-screen">
+          Loading...
+        </div>
+      }
+    >
+      <PopularDestinationPage />
+    </Suspense>
+  );
 };
 
 export default Page;
