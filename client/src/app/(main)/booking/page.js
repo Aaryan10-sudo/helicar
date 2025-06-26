@@ -239,7 +239,7 @@ const VehicleBooking = () => {
                         <div className="md:w-[50%] p-6 md:p-10 flex flex-col justify-between">
                           <div>
                             <h1 className="text-2xl font-bold mb-4">
-                              Booking option
+                              Booking optionSuspense
                             </h1>
                             <div className="space-y-3 mb-4">
                               <label className="flex items-center gap-2 text-lg cursor-pointer">
