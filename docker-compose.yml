@@ -1,53 +1,42 @@
 # version: '3.8'
+
 services:
   postgres:
     container_name: nnine-helicar-db
     image: postgres:15
-    environment:
-        - POSTGRES_DB=${DB_NAME}
-        - POSTGRES_USER=${DB_USERNAME}
-        - POSTGRES_PASSWORD=${DB_PASSWORD}
+    restart: always
+    env_file:
+      - .env                       # ← loads DB_NAME / DB_USERNAME / DB_PASSWORD
+    environment:                   # map them to Postgres variables
+      POSTGRES_DB:       ${DB_NAME}
+      POSTGRES_USER:     ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-        - "${DB_PORT}:{DB_PORT}"
+      - "${DB_PORT}:5432"          # external host port → internal 5432
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - helicar-network
-    restart: always
 
   nnine-helicar-be:
     container_name: nnine-helicar-be
     image: prina1/nnine-helicar-be:latest
-    ports:
-      - "4000:4000"  
-    env_file:
-      - /home/azureuser/client-project/helicarbooking/server/.env
-    environment:
-      - DB_NAME=${DB_NAME}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_HOST=postgres
-      - DB_PORT=${DB_PORT}
-      - SSL=${SSL}
-      - DB_DIALECT=${DB_DIALECT}
-      - SECRET_KEY=${SECRET_KEY}
-      - JWT_SECRET=${JWT_SECRET}
-      - ADMIN_MAIL=${ADMIN_MAIL}
-      - CORS_ORIGIN=${CORS_ORIGIN}
-      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
-      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
-      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
-      - SMTP_EMAIL=${SMTP_EMAIL}
-      - SMTP_PASSWORD=${SMTP_PASSWORD}    
-    depends_on:
-        - postgres
-    networks:
-        - helicar-network
     restart: always
+    depends_on:
+      - postgres
+    env_file:
+      - .env                       # pull in all app settings
+    environment:                   # overrides that must differ inside Docker
+      DB_HOST: postgres            # service name of postgres container
+      DB_PORT: 5432                # fixed internal port
+    ports:
+      - "4000:4000"
+    networks:
+      - helicar-network
 
 volumes:
-    postgres-data:
-    
+  postgres-data:
+
 networks:
-    helicar-network:
-      driver: bridge
+  helicar-network:
+    driver: bridge

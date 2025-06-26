@@ -20,6 +20,7 @@ const {
   testPostgresConnection,
 } = require("./config/db/postgres/connectPostgres");
 const cmsrouter = require("./src/routes/cms.route");
+const blogRouter = require("./src/routes/blog.routes");
 
 const app = express();
 
@@ -52,6 +53,7 @@ app.use("/enquiry", enquiryRouter);
 app.use("/settings", settingRouter);
 app.use("/cms", cmsrouter);
 app.use("/popular-destination", popularDestinationRoutes);
+app.use("/blog",blogRouter)
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
