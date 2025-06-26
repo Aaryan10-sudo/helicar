@@ -51,7 +51,7 @@ export default function Home() {
         <section className="w-full flex flex-col items-center py-10 px-4 lg:px-16">
           <Blog limit={3} loading={loading} vehicles={vehicles} />
           <OurMission />
-          <div className="text-center mb-6 flex flex-col gap-4 lg:mb-10">
+          <div className="text-center mb-6 flex flex-col gap-4 lg:mb-10 my-5">
             <div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-Comfortaa text-primary font-bold">
                 {reviews?.header || "Client Reviews"}

@@ -9,7 +9,7 @@ const RatingCard = ({ rating }) => {
   );
   return (
     <div className="relative bg-[#F5F5F5] shadow-lg rounded-3xl flex items-center p-6 w-full max-w-[400px] sm:max-w-[325px] h-[160px]">
-      <div className="absolute left-[-65px] z-10 border-subheading border-[2px] rounded-full overflow-hidden h-[150px] w-[150px] bg-[#F5F5F5]">
+      <div className="absolute left-[-15px] sm:left-[-65px] z-10 border-subheading border-[2px] rounded-full overflow-hidden sm:h-[150px] sm:w-[150px] h-[100px] w-[100px] bg-[#F5F5F5]">
         <Image
           src={
             rating && typeof rating.photo === "string" && rating.photo

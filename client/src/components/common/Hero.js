@@ -40,7 +40,6 @@ const Hero = () => {
     //     console.log(error.message);
     //   }
     // }
-    
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -56,13 +55,13 @@ const Hero = () => {
       }}
     >
       <span
-        className={`hidden sm:block fixed z-50 ${
-          isScrolled ? "top-13" : "top-15 "
-        } transition-all duration-300`}
+        className={`sm:fixed sm:z-50  ${
+          isScrolled ? "sm:top-13" : "sm:top-15 "
+        } transition-all duration-300 `}
       >
         <Booking />
       </span>
-      <div className="max-w-[978px] w-full flex flex-col gap-10 md:gap-16 items-center text-center">
+      <div className="max-w-[978px] w-full sm:flex flex-col gap-10 md:gap-16 items-center text-center hidden">
         <header>
           <h1 className="font-Comfortaa font-bold leading-tight text-4xl md:text-5xl lg:text-7xl text-white">
             {heroData?.content?.heading || "Are You Ready To Travel"}

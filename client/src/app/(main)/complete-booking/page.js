@@ -133,8 +133,8 @@ const Booking = () => {
     <div className="bg-[#F3F4F6] text-gray-800 min-h-screen w-full">
       <main className="">
         <div className="py-5 border-b">
-          <div className="  flex items-center justify-between w-full px-4 md:px-8 max-w-[1700px] mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold">
+          <div className="  flex sm:flex-row flex-col sm:items-center justify-between gap-5 sm:gap-0 w-full px-4 md:px-8 max-w-[1700px] mx-auto">
+            <h1 className="text-2xl md:text-4xl font-bold">
               Review your booking
             </h1>
             <div className="text-start flex gap-10 ">

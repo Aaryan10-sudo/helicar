@@ -66,7 +66,7 @@ const VehicleRental = () => {
             <h1 className="text-3xl sm:text-4xl font-Comfortaa md:text-5xl text-primary font-bold text-center">
               Vehicle Rental Service
             </h1>
-            <p className="text-subheading text-sm sm:text-base font-light leading-3 text-justify max-w-[785px]">
+            <p className="text-gray-200  text-sm stext-center font-light leading-3 text-justify max-w-[785px]">
               Lorem ipsum dolor sit amet consectetur. Malesuada a purus eu
               dignissim morbi egestas interdum viverra. Ac sed in egestas mattis
               eros.
@@ -119,17 +119,17 @@ const VehicleRental = () => {
                       height={250}
                       className="w-full h-52 object-cover"
                     />
-                    <p className="bg-slate-100 w-[100px] h-[40px] flex justify-center items-center font-bold relative -top-[40px] rounded-tr-xl">
+                    <p className=" h-[40px] font-bold rounded-tr-xl text-[20px] px-4 pt-2 ">
                       {vehicle.vehicleName}
                     </p>
                     <div className="p-4 flex items-center justify-between gap-2">
-                      <h2 className="text-md font-bold flex gap-1 text-subheading">
+                      <h2 className="text-md font-bold flex items-center gap-1 text-subheading">
                         <Loggages />
-                        {vehicle.features.luggage}
+                        {vehicle.features.luggage} luggage
                       </h2>
                       <p className="text-subheading text-md flex gap-1 line-clamp-2">
                         <PeopleIcon />
-                        {vehicle.features.seats}
+                        {vehicle.features.seats} Seats
                       </p>
                       <div className="text-subheading text-md flex gap-1 font-semibold">
                         <TransmissionIcon />
