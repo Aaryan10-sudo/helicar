@@ -9,6 +9,7 @@ const bookingSchema = Joi.object({
   paymentStatus: Joi.string().required(),
   pickUp: Joi.string().required(),
   destination: Joi.string().required(),
+  anotherDestination: Joi.string().optional(),
   passengerInfo: Joi.object({
     firstName: Joi.string().min(2).max(30).required(),
     lastName: Joi.string().min(2).max(30).required(),

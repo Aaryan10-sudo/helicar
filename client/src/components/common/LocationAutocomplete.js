@@ -14,64 +14,67 @@ export default function LocationAutocomplete({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      if (input.trim().length > 1) {
-        fetchSuggestions(input);
-      }
-    }, 300); // debounce input
+    const controller = new AbortController();
+    const { signal } = controller;
 
-    return () => clearTimeout(delayDebounce);
+    if (input.trim().length > 1) {
+      const delayDebounce = setTimeout(() => {
+        fetchSuggestions(input, signal);
+      }, 400);
+
+      return () => clearTimeout(delayDebounce);
+    } else {
+      setSuggestions([]);
+      setIsLoading(false);
+    }
+
+    return () => {
+      controller.abort();
+    };
   }, [input]);
 
-  const fetchSuggestions = async (query) => {
+  const fetchSuggestions = async (query, signal) => {
     setIsLoading(true);
+    setShowSuggestions(true);
     try {
-      const res = await fetch(`${baseURL}/api/search?q=${query}`);
+      const res = await fetch(`${baseURL}/api/search?q=${query}`, { signal });
+
+      if (!res.ok) {
+        throw new Error(`API error: ${res.status}`);
+      }
+
       const data = await res.json();
 
       if (Array.isArray(data)) {
-        const kathmanduResults = data.filter((place) =>
-          [
-            "Kathmandu",
-            "Lalitpur",
-            "Bhaktapur",
-            "Godawari",
-            "Chitlang",
-            "Hetauda",
-            "Gokarna",
-            "Kapan",
-            "Chabahil",
-            "Ganesh marg",
-            "Chandra Binayak",
-            "Municipality",
-            "Thimi",
-            "Kamalpokhari",
-            "Gorkha",
-            "White house",
-            "Manakamana",
-            "Budhanilkantha",
-            "Dhading",
-            "Ringroad",
-            "Bagmati",
-          ].some((city) => place.display_name.includes(city))
-        );
-        setSuggestions(kathmanduResults);
+        setSuggestions(data);
       } else {
         setSuggestions([]);
         console.error("API did not return an array:", data);
       }
-      setShowSuggestions(true);
     } catch (err) {
+      if (err.name === "AbortError") {
+        console.log("Fetch aborted");
+        return;
+      }
       console.error("Error fetching suggestions", err);
+      setSuggestions([]);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleSelect = (place) => {
-    setInput(place.display_name);
+    const displayName = place.display_name;
+    setInput(displayName);
     setShowSuggestions(false);
-    onSelect(id, place.display_name);
+    onSelect(id, displayName);
+  };
+
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+    if (!showSuggestions) {
+      setShowSuggestions(true);
+    }
   };
 
   return (
@@ -84,23 +87,30 @@ export default function LocationAutocomplete({
         type="text"
         placeholder="Enter area..."
         value={input}
-        onFocus={() => setShowSuggestions(true)}
-        onBlur={() => setTimeout(() => setShowSuggestions(false), 100)}
-        onChange={(e) => setInput(e.target.value)}
-        className="p-2 border border-gray-300 rounded-lg h-[50px]"
+        autoComplete="off"
+        onFocus={() => input.trim().length > 1 && setShowSuggestions(true)}
+        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} // Allow time for click
+        onChange={handleInputChange}
+        className="p-2 border border-gray-300 rounded-lg h-[45px]"
       />
 
-      {showSuggestions && suggestions.length > 0 && (
-        <ul className="absolute top-full mt-1 z-10  bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto sm:w-[500px] py-2">
-          {suggestions.map((place) => (
-            <li
-              key={place.place_id}
-              onClick={() => handleSelect(place)}
-              className="px-4 hover:bg-blue-100 cursor-pointer border-b sm:h-[50px] flex items-center"
-            >
-              {place.display_name}
-            </li>
-          ))}
+      {showSuggestions && input.trim().length > 1 && (
+        <ul className="absolute top-full mt-1 z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto py-1">
+          {isLoading ? (
+            <li className="px-4 py-2 text-gray-500">Loading...</li>
+          ) : suggestions.length > 0 ? (
+            suggestions.map((place) => (
+              <li
+                key={place.place_id}
+                onMouseDown={() => handleSelect(place)}
+                className="px-4 py-2 hover:bg-blue-100 cursor-pointer border-b"
+              >
+                {place.display_name}
+              </li>
+            ))
+          ) : (
+            <li className="px-4 py-2 text-gray-500">No results found.</li>
+          )}
         </ul>
       )}
 

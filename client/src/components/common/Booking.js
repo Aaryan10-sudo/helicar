@@ -11,7 +11,7 @@ import CarIcon from "@/ui/CarIcon";
 import HiaceIcon from "@/ui/HiaceIcon";
 import JeepIcon from "@/ui/JeepIcon";
 import TimePicker from "./Time";
-import LocationAutocomplete from "./LocationAutocomplete"; // Assuming this component is correct
+import LocationAutocomplete from "./LocationAutocomplete";
 
 export default function Booking() {
   const vehicleTypes = [
@@ -29,12 +29,13 @@ export default function Booking() {
     Bus: "bus",
   };
 
-  // Simplified destinations state
   const [pickupLocation, setPickupLocation] = useState("");
   const [destinationLocation, setDestinationLocation] = useState("");
+  const [anotherDestination1, setAnotherDestination1] = useState("");
+  const [anotherDestination2, setAnotherDestination2] = useState("");
+  const [showAnotherDestination, setShowAnotherDestination] = useState(false);
 
   const [destinationError, setDestinationError] = useState("");
-  const [showAnotherDestination, setShowAnotherDestination] = useState(false);
 
   const [showPickupCalendar, setShowPickupCalendar] = useState(false);
   const [range, setRange] = useState({ from: undefined, to: undefined });
@@ -45,7 +46,6 @@ export default function Booking() {
 
   const pickupCalendarRef = useRef(null);
 
-  // This useEffect ensures window-dependent code runs only on the client
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -53,19 +53,22 @@ export default function Booking() {
   const handleSelectArea = (id, area) => {
     if (id === "pickup") {
       setPickupLocation(area);
-    } else {
+    } else if (id === "destination") {
       setDestinationLocation(area);
+    } else if (id === "another-destination-1") {
+      setAnotherDestination1(area);
+    } else if (id === "another-destination-2") {
+      setAnotherDestination2(area);
     }
-    // Simple validation example
-    if (id === "destination" && area && area === pickupLocation) {
-      setDestinationError("Destination cannot be the same as pickup.");
-    } else {
-      setDestinationError("");
-    }
+    setDestinationError("");
   };
 
   const handleAnotherDestination = () => setShowAnotherDestination(true);
-  const removeAnotherDestination = () => setShowAnotherDestination(false);
+  const removeAnotherDestination = () => {
+    setShowAnotherDestination(false);
+    setAnotherDestination1("");
+    setAnotherDestination2("");
+  };
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -90,7 +93,7 @@ export default function Booking() {
 
   return (
     <div className="sm:p-4 md:p-8">
-      <div className="p-6 bg-white rounded-xl relative shadow-2xl max-w-7xl mx-auto">
+      <div className="p-6 bg-white rounded-xl relative shadow-2xl max-w-8xl mx-auto">
         {/* Vehicle selection */}
         <div className="flex flex-wrap gap-2 mb-6">
           {vehicleTypes.map((type) => (
@@ -108,7 +111,7 @@ export default function Booking() {
           ))}
         </div>
 
-        {/* Main form grid - This is the core fix */}
+        {/* Main form grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
           {/* Pick-up Location */}
           <div className="lg:col-span-1">
@@ -201,11 +204,16 @@ export default function Booking() {
 
           {/* Search Button */}
           <Link
-            href={`/booking?vehicle=${vehicleSlugMap[selectedVehicle]}&pickUp=${pickupLocation}&destination=${destinationLocation}&date=${
+            href={`/booking?vehicle=${vehicleSlugMap[selectedVehicle]}&pickUp=${pickupLocation}&destination=${destinationLocation}&anotherDestination=${anotherDestination2}&date=${
               range.from ? range.from.toISOString() : ""
             }&returnDate=${
               range.to ? range.to.toISOString() : ""
-            }&pickupTime=${pickupTime}&returnTime=${returnTime}`}
+            }&pickupTime=${pickupTime}&returnTime=${returnTime}${
+              showAnotherDestination &&
+              (anotherDestination1 || anotherDestination2)
+                ? `&anotherDestination1=${anotherDestination1}&anotherDestination2=${anotherDestination2}`
+                : ""
+            }`}
             className={`bg-gradient-to-r from-[#006ba6] to-[#009acb] text-white font-bold h-10 px-6 rounded-lg hover:opacity-90 flex items-center justify-center w-full lg:w-auto ${
               isSearchDisabled ? "opacity-50 pointer-events-none" : ""
             }`}
@@ -214,15 +222,47 @@ export default function Booking() {
           </Link>
         </div>
 
-        {/* "Add another destination" button moved here, outside the main grid */}
-        <div className="mt-4">
-          <button
-            className="bg-primary w-full sm:w-auto text-white font-semibold py-2 px-4 rounded-lg hover:opacity-90"
-            onClick={handleAnotherDestination}
-          >
-            Add another destination
-          </button>
-        </div>
+        {showAnotherDestination && (
+          <div className="mt-4 flex flex-wrap  gap-4 ">
+            <div className="w-full sm:w-[230px]">
+              <LocationAutocomplete
+                id="another-destination-1"
+                label="Another Destination 1"
+                value={destinationLocation}
+              />
+            </div>
+            <div className="w-full sm:w-[230px]">
+              <LocationAutocomplete
+                id="another-destination-2"
+                label="Another Destination 2"
+                value={anotherDestination2}
+                onSelect={handleSelectArea}
+              />
+            </div>
+            <div className="w-full sm:w-auto flex items-end">
+              <button
+                className="bg-red-500 text-white font-semibold h-[45px] px-4 rounded-lg hover:opacity-90 w-full sm:w-auto"
+                onClick={removeAnotherDestination}
+                type="button"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* "Add another destination" button */}
+        {!showAnotherDestination && (
+          <div className="mt-4">
+            <button
+              className="bg-primary w-full sm:w-auto text-white font-semibold py-2 px-4 rounded-lg hover:opacity-90"
+              onClick={handleAnotherDestination}
+              type="button"
+            >
+              Add another destination
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
