@@ -23,6 +23,7 @@ const VehicleBooking = () => {
   const returnDate = searchParams.get("returnDate");
   const pickUpTime = searchParams.get("pickupTime");
   const returnTime = searchParams.get("returnTime");
+  const anotherDestination = searchParams.get("anotherDestination");
 
   const lineItems = [
     { description: "4 Rental days x $60.64", amount: "$450.10" },
@@ -38,7 +39,8 @@ const VehicleBooking = () => {
         `&pickUpDate=${pickUpDate}` +
         `&returnDate=${returnDate}` +
         `&pickUpTime=${pickUpTime}` +
-        `&returnTime=${returnTime}`
+        `&returnTime=${returnTime}` +
+        `&anotherDestination=${anotherDestination}`
     );
   };
 

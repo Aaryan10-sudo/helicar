@@ -56,7 +56,9 @@ export default function LocationAutocomplete({
               name.includes("makwanpur") ||
               name.includes("hetauda") ||
               name.includes("lalitpur") ||
-              name.includes("bhaktapur")
+              name.includes("bhaktapur") ||
+              name.includes("godawari") ||
+              name.incluses("chandragiri")
             );
           })
         );
