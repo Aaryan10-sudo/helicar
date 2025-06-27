@@ -44,12 +44,17 @@ Booking.init(
     pickUp: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: '',  // Add this line to avoid null conflicts during sync/migration
+      defaultValue: "",
     },
     destination: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: '',  // Add this line to avoid null conflicts during sync/migration
+      defaultValue: "",
+    },
+    anotherDestination: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: "",
     },
     vehicleId: {
       type: DataTypes.UUID,
@@ -73,4 +78,3 @@ Booking.init(
 );
 
 module.exports = Booking;
-

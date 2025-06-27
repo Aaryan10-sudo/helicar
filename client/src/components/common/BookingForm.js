@@ -4,7 +4,6 @@ import { baseURL } from "@/config/config";
 import CalenderIcon from "@/ui/CalenderIcon";
 import Loader from "@/ui/Loader";
 import LocationIcon from "@/ui/LocationIcon";
-import Select from "react-select";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState, useRef } from "react";
@@ -47,17 +46,15 @@ const BookingForm = () => {
   const [email, setEmail] = useState("");
   const [details, setDetails] = useState("");
 
-  const [pickupDateValue, setPickupDateValue] = useState("2025-04-24");
-  const [pickupTimeValue, setPickupTimeValue] = useState("12:30");
-  const [returnDateValue, setReturnDateValue] = useState("2025-04-24");
-  const [returnTimeValue, setReturnTimeValue] = useState("12:30");
-
   const pickUp = searchParams.get("pickUp");
   const destination = searchParams.get("destination");
   const pickUpDate = searchParams.get("pickUpDate");
   const returnDate = searchParams.get("returnDate");
   const pickUpTime = searchParams.get("pickUpTime");
   const returnTime = searchParams.get("returnTime");
+  const anotherDestination = searchParams.get("anotherDestination");
+
+  console.log(`${anotherDestination} destination`);
 
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -299,6 +296,7 @@ const BookingForm = () => {
       bookingDate: new Date().toISOString(),
       pickupDate: `${formattedPickupDate} | ${pickUpTime}`,
       returnDate: `${formattedReturnDate} | ${returnTime}`,
+      anotherDestination,
       pickUp,
       destination,
       totalAmount: selectedCar?.vehiclePrice,
@@ -686,6 +684,9 @@ const BookingForm = () => {
                     </p>
                     <p className="text-sm text-gray-600">
                       {destination || "Kathmandu, KMC hospital"}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {anotherDestination || "Kathmandu, KMC hospital"}
                     </p>
                     <p className="text-xs text-gray-500">
                       {returnDate && returnTime
