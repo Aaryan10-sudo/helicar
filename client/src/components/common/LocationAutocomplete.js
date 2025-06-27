@@ -46,7 +46,20 @@ export default function LocationAutocomplete({
       const data = await res.json();
 
       if (Array.isArray(data)) {
-        setSuggestions(data);
+        setSuggestions(
+          data.filter((place) => {
+            const name = place.display_name.toLowerCase();
+            return (
+              name.includes("kathmandu") ||
+              name.includes("kapan") ||
+              name.includes("chitlang") ||
+              name.includes("makwanpur") ||
+              name.includes("hetauda") ||
+              name.includes("lalitpur") ||
+              name.includes("bhaktapur")
+            );
+          })
+        );
       } else {
         setSuggestions([]);
         console.error("API did not return an array:", data);
