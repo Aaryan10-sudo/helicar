@@ -314,10 +314,6 @@ const BookingForm = () => {
       setCustomerPhone("9779801102259");
       setEmail("");
       setDetails("");
-      setPickupDateValue("2025-04-24");
-      setPickupTimeValue("12:30");
-      setReturnDateValue("2025-04-24");
-      setReturnTimeValue("12:30");
 
       setAgreedToTerms(false);
       setLoader(false);
@@ -452,7 +448,6 @@ const BookingForm = () => {
                     id="pickupDate"
                     className="flex-grow p-3 bg-transparent focus:outline-none"
                     value={toDateInputValue(pickUpDate)}
-                    onChange={(e) => setPickupDateValue(e.target.value)}
                   />
                 </div>
               </div>
@@ -685,6 +680,13 @@ const BookingForm = () => {
                     <p className="text-sm text-gray-600">
                       {destination || "Kathmandu, KMC hospital"}
                     </p>
+
+                    <p className="text-xs text-gray-500">
+                      {returnDate && returnTime
+                        ? `${formattedReturnDate} | ${returnTime}`
+                        : "April 14, 2025 | 12:00 PM"}
+                    </p>
+                    <br />
                     <p className="text-sm text-gray-600">
                       {anotherDestination || "Kathmandu, KMC hospital"}
                     </p>
