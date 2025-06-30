@@ -397,18 +397,6 @@ exports.updateOurCompany = async (req, res) => {
     const { content } = req.body;
 
     // Validate structure
-    if (
-      !content ||
-      typeof content !== "object" ||
-      !content.image ||
-      !content.header ||
-      !content.paragraph
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid format. Must include image, header, and paragraph.",
-      });
-    }
 
     let section = await CmsContent.findOne({
       where: { section: "ourCompany" },
@@ -444,21 +432,6 @@ exports.updateTariffRates = async (req, res) => {
   try {
     const { header, paragraph, rates } = req.body;
 
-    if (
-      !header ||
-      typeof header !== "string" ||
-      !paragraph ||
-      typeof paragraph !== "string" ||
-      !Array.isArray(rates) ||
-      rates.length === 0
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Invalid payload. Expected header, paragraph, and rates array.",
-      });
-    }
-
     // Required fields for each rate (excluding `sn` as it will be auto-generated)
     const requiredFields = [
       "description",
@@ -471,23 +444,23 @@ exports.updateTariffRates = async (req, res) => {
       "sutlejBus",
     ];
 
-    const validatedRates = rates.map((rate, index) => {
-      const hasAllFields = requiredFields.every((key) => key in rate);
-      if (!hasAllFields) {
-        throw new Error(`Rate at index ${index} is missing required fields.`);
-      }
+    // const validatedRates = rates.map((rate, index) => {
+    //   const hasAllFields = requiredFields.every((key) => key in rate);
+    //   if (!hasAllFields) {
+    //     throw new Error(`Rate at index ${index} is missing required fields.`);
+    //   }
 
-      // roll no ho hai guys
-      return {
-        sn: index + 1,
-        ...rate,
-      };
-    });
+    //   // roll no ho hai guys
+    //   return {
+    //     sn: index + 1,
+    //     ...rate,
+    //   };
+    // });
 
     const content = {
       header,
       paragraph,
-      rates: validatedRates,
+      // rates: validatedRates,
     };
 
     let section = await CmsContent.findOne({
