@@ -14,9 +14,14 @@ export default function Page() {
   useEffect(() => {
     async function fetchBlog() {
       try {
-        const res = await axios.get(`${baseURL}/blog/by-name?name=${slug}`);
+        console.log("Base URL:", baseURL);
+        console.log("Fetching blog with slug:", slug);
+        console.log("Encoded slug:", encodeURIComponent(slug));
+        const res = await axios.get(`${baseURL}/blog/by-name?name=${encodeURIComponent(slug)}`);
+        console.log("API Response:", res.data);
         setBlogData(res.data.data);
-      } catch (err) {
+      } catch (error) {
+        console.error("Error fetching blog:", error);
         setBlogData(null);
       } finally {
         setLoading(false);
