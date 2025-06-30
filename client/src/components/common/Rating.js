@@ -5,7 +5,6 @@ import RatingCardSkeleton from "../loader/ratingCardSkeleton";
 import axios from "axios";
 import { baseURL } from "@/config/config";
 
-
 const defaultRatings = [
   {
     id: 1,
@@ -26,16 +25,14 @@ const defaultRatings = [
   {
     id: 3,
     name: "Jane Smith",
-    comment:
-      "The booking process was smooth and the staff was very helpful.",
+    comment: "The booking process was smooth and the staff was very helpful.",
     photo: "@/assets/women.svg",
     rating: 5,
   },
   {
     id: 4,
     name: "Alex Johnson",
-    comment:
-      "I enjoyed my flight! Will definitely book again.",
+    comment: "I enjoyed my flight! Will definitely book again.",
     photo: "@/assets/women.svg",
     rating: 3,
   },
@@ -52,10 +49,10 @@ const Rating = () => {
   const fetchRatings = async () => {
     try {
       const response = await axios.get(`${baseURL}/cms/client-reviews`);
-      setRatings(response.data.data.content?.reviews || []);
+      setRatings(response?.data?.data?.content?.reviews || []);
     } catch (error) {
       console.error("Error fetching ratings:", error);
-      setRatings([]); // fallback to empty array on error
+      setRatings([]);
     }
   };
 
@@ -76,14 +73,18 @@ const Rating = () => {
           ? [1, 2].map((_, index) => <RatingCardSkeleton key={index} />)
           : displayRatings
               .slice(0, 2)
-              .map((rating,index) => <RatingCard key={index} rating={rating} />)}
+              .map((rating, index) => (
+                <RatingCard key={index} rating={rating} />
+              ))}
       </div>
       <div className="w-full max-w-[1240px] flex flex-wrap justify-center gap-[77px] sm:gap-[288px] mt-8">
         {loading
           ? [1, 2].map((_, index) => <RatingCardSkeleton key={index} />)
           : displayRatings
               .slice(2, 4)
-              .map((rating,index) => <RatingCard key={index} rating={rating} />)}
+              .map((rating, index) => (
+                <RatingCard key={index} rating={rating} />
+              ))}
       </div>
     </div>
   );
