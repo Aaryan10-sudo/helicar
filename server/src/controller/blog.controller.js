@@ -4,8 +4,8 @@ const {
   getBlogByName,
   updateBlogByName,
   deleteBlogByName,
-} = require('../services/blog.service');
-const { blogSchema } = require('../validator/blog.validator');
+} = require("../services/blog.service");
+const { blogSchema } = require("../validator/blog.validator");
 
 exports.createBlog = async (req, res, next) => {
   const data = req.body;
@@ -22,7 +22,7 @@ exports.createBlog = async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      message: 'Blog created successfully',
+      message: "Blog created successfully",
       data: blog,
     });
   } catch (error) {
@@ -45,32 +45,18 @@ exports.getBlogs = async (req, res, next) => {
 exports.getBlogByName = async (req, res, next) => {
   const { name: mainTitle } = req.query;
   try {
-    console.log('Received blog name query:', mainTitle);
-
-    // Try both encoded and decoded versions
-    let blog = await getBlogByName(mainTitle);
-
-    // If not found, try with decoded version
+    const blog = await getBlogByName(mainTitle);
     if (!blog) {
-      const decodedTitle = decodeURIComponent(mainTitle);
-      console.log('Trying with decoded title:', decodedTitle);
-      blog = await getBlogByName(decodedTitle);
-    }
-
-    if (!blog) {
-      console.log('Blog not found for title:', mainTitle);
       return res.status(404).json({
         success: false,
-        message: 'Blog not found',
+        message: "Blog not found",
       });
     }
-
     res.status(200).json({
       success: true,
       data: blog,
     });
   } catch (error) {
-    console.error('Error in getBlogByName:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -91,13 +77,13 @@ exports.updateBlogByName = async (req, res, next) => {
     if (!updatedBlog) {
       return res.status(404).json({
         success: false,
-        message: 'Blog not found',
+        message: "Blog not found",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: 'Blog updated successfully',
+      message: "Blog updated successfully",
       data: updatedBlog,
     });
   } catch (error) {
@@ -113,12 +99,12 @@ exports.deleteBlogByName = async (req, res, next) => {
     if (!deletedBlog) {
       return res.status(404).json({
         success: false,
-        message: 'Blog not found',
+        message: "Blog not found",
       });
     }
     res.status(200).json({
       success: true,
-      message: 'Blog deleted successfully',
+      message: "Blog deleted successfully",
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
