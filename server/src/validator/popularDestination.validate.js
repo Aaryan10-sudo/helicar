@@ -4,6 +4,7 @@ const popularDestinationSchema = Joi.object({
   name: Joi.string().required(),
   image: Joi.string().uri().required(),
   description: Joi.string().required(),
+  pricing: Joi.string().optional(),
   itinerary: Joi.array()
     .items(
       Joi.object({

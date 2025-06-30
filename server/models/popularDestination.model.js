@@ -26,6 +26,10 @@ PopularDestination.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    pricing: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     timestamps: true,

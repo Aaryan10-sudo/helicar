@@ -18,7 +18,7 @@ countries.registerLocale(enLocale);
 const Booking = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const cardId = searchParams.get("cardId");
+  const carId = searchParams.get("carId");
 
   const [showDetails, setShowDetails] = useState(false);
   const [country, setCountry] = useState("");
@@ -47,14 +47,14 @@ const Booking = () => {
   ];
 
   useEffect(() => {
-    if (cardId) {
+    if (carId) {
       getVehicleDetails();
     }
-  }, [cardId]);
+  }, [carId]);
 
   const getVehicleDetails = async () => {
     try {
-      const response = await axios.get(`${baseURL}/vehicle/get/${cardId}`);
+      const response = await axios.get(`${baseURL}/vehicle/get/${carId}`);
       setSelectedCar(response.data.data);
     } catch (error) {
       console.error("Error fetching vehicle details:", error);
@@ -88,7 +88,7 @@ const Booking = () => {
       totalAmount: selectedCar?.vehiclePrice,
       status: "confirmed",
       paymentStatus: "pending",
-      vehicleId: cardId,
+      vehicleId: carId,
       vehicleName: selectedCar?.vehicleName,
     };
 

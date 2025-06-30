@@ -38,7 +38,11 @@ const page = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${baseURL}/popular-destination/delete/${id}`);
+        await axios.delete(`${baseURL}/popular-destination/delete/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
         setDestination((prev) => prev.filter((item) => item.id !== id));
         Swal.fire("Deleted!", "Destination has been deleted.", "success");
       } catch (error) {
@@ -102,7 +106,7 @@ const page = () => {
                   <h1 className="text-[30px] font-semibold font-Comfortaa">
                     {value.name}
                   </h1>
-                  <p>{value.name} in 7 days</p>
+                  <p>Rs.{value.pricing}</p>
                   <span className="flex justify-between items-center mt-2">
                     <button
                       className="bg-red-700 w-[150px] h-[40px] cursor-pointer flex items-center justify-center gap-3 rounded-md"

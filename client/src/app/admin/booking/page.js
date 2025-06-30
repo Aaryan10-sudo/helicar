@@ -1,21 +1,24 @@
 "use client";
 import { baseURL } from "@/config/config";
-import CancelledIcon from "@/ui/CancelledIcon";
-import PaidIcon from "@/ui/PaidIcon";
 import axios from "axios";
+import { EyeIcon } from "lucide-react";
 import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const page = () => {
   const [bookingDetails, setBookingDetails] = React.useState([]);
+  const router = useRouter();
 
   const getBookings = async () => {
     try {
       const result = await axios({
         method: "GET",
         url: `${baseURL}/booking/get`,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
       setBookingDetails(result.data.data);
-      console.log(result);
     } catch (error) {
       console.error("Error fetching bookings:", error);
     }
@@ -29,53 +32,50 @@ const page = () => {
     Cancelled: "bg-red-100 text-red-600",
     Ongoing: "bg-blue-100 text-blue-600",
     Returned: "bg-green-100 text-green-600",
+    Completed: "bg-green-100 text-green-600",
+    completed: "bg-green-100 text-green-600",
+    cancelled: "bg-red-100 text-red-600",
   };
 
   const paymentColor = {
     Pending: "bg-red-100 text-red-600",
     Paid: "bg-blue-100 text-blue-600",
+    Completed: "bg-green-100 text-green-600",
+    completed: "bg-green-100 text-green-600",
+  };
+
+  // Update status and paymentStatus together
+  const handleUpdateStatus = async (id, action) => {
+    let status, paymentStatus;
+    if (action === "completed") {
+      status = "completed";
+      paymentStatus = "completed";
+    } else if (action === "cancelled") {
+      status = "cancelled";
+      paymentStatus = "cancelled";
+    }
+    try {
+      await axios.put(
+        `${baseURL}/booking/update/${id}`,
+        {
+          status,
+          paymentStatus,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      getBookings();
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
   };
 
   return (
     <div className="sm:p-4">
-      <main className="mb-10">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-          <h2 className="text-xl md:text-3xl font-semibold">
-            Vehicle Bookings <span className="text-blue-700">(Bus)</span>
-          </h2>
-          <input
-            type="text"
-            placeholder="Search client name, car etc..."
-            className="w-full md:w-[250px] border border-gray-500 bg-gray-300 px-2 py-1 outline-none rounded-sm"
-          />
-        </div>
-
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <button className="border cursor-pointer border-gray-700 rounded-sm px-2.5 py-1">
-              Car
-            </button>
-            <button className="border cursor-pointer border-gray-700 rounded-sm px-2.5 py-1">
-              Bus
-            </button>
-            <button className="border cursor-pointer border-gray-700 rounded-sm px-2.5 py-1">
-              Tourist bus
-            </button>
-            <button className="border cursor-pointer border-gray-700 rounded-sm px-2.5 py-1">
-              Toyota Hiace
-            </button>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-4">
-            <button className="bg-gray-200 text-black rounded-sm border-none px-3 py-2">
-              Sort by
-            </button>
-            <button className="bg-blue-600 text-white px-3 py-2 rounded-sm">
-              Add bookings
-            </button>
-          </div>
-        </div>
-      </main>
+      <main className="mb-10">{/* ...header and search... */}</main>
 
       <div className="overflow-x-auto w-full">
         <table className="min-w-[800px] w-full bg-white shadow-md rounded-md overflow-hidden">
@@ -85,11 +85,11 @@ const page = () => {
               <th className="p-2">Booking Date</th>
               <th className="p-2">Client Name</th>
               <th className="p-2">Vehicle</th>
-              <th className="p-2">Plan</th>
               <th className="p-2">Date</th>
-              <th className="p-2">Driver</th>
               <th className="p-2">Payment</th>
               <th className="p-2">Status</th>
+              <th className="p-2">Update Status</th>
+              <th className="p-2">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -107,14 +107,16 @@ const page = () => {
                 <tr key={ride.id} className="text-sm">
                   <td className="p-2 border-b border-gray-500">
                     <div
-                      className="line-clamp-1 max-w-[150px] overflow-hidden"
+                      className="line-clamp-1 max-w-[100px] overflow-hidden"
                       title={ride.id}
                     >
                       {ride.id}
                     </div>
                   </td>
                   <td className="p-2 border-b border-gray-500">
-                    {ride.bookingDate}
+                    {ride.bookingDate
+                      ? new Date(ride.bookingDate).toISOString().split("T")[0]
+                      : ""}
                   </td>
                   <td className="p-2 border-b border-gray-500">
                     {ride.passengerInfo.firstName} {ride.passengerInfo.lastName}
@@ -127,23 +129,23 @@ const page = () => {
                       {ride.vehicleName}
                     </div>
                   </td>
-                  <td className="p-2 border-b border-gray-500">1d</td>
+                  <td className="p-2 border-b border-gray-500 ">
+                    <div className="line-clamp-1 max-w-[180px] overflow-hidden">
+                      {ride.pickupDate?.split("T")[0]}{" "}
+                      <span className="text-gray-500 ">-</span>{" "}
+                      {ride.returnDate?.split("T")[0]}
+                    </div>
+                  </td>
                   <td className="p-2 border-b border-gray-500">
-                    {ride.pickupDate.split("T")[0]}{" "}
-                    <span className="text-gray-500">-</span>{" "}
-                    {ride.returnDate.split("T")[0]}
-                  </td>
-                  <td className="p-2 border-b border-gray-500 text-center">
-                    <PaidIcon />
-                  </td>
-                  <td className="p-2 border-b border-gray-500 flex items-center gap-2">
-                    {ride.payment}
-                    <div
-                      className={`inline-block px-2 py-1.5 rounded-md font-medium ${
-                        paymentColor[ride.paymentStatus]
-                      }`}
-                    >
-                      {ride.paymentStatus}
+                    <div className="flex items-center gap-2">
+                      {ride.payment}
+                      <span
+                        className={`inline-block px-2 py-1.5 rounded-md font-medium ${
+                          paymentColor[ride.paymentStatus]
+                        }`}
+                      >
+                        {ride.paymentStatus}
+                      </span>
                     </div>
                   </td>
                   <td className="p-2 border-b border-gray-500">
@@ -154,6 +156,32 @@ const page = () => {
                     >
                       {ride.status}
                     </div>
+                  </td>
+                  <td className="p-2 border-b border-gray-500">
+                    <button
+                      className="bg-green-500 text-white px-2 py-1 rounded mr-2 hover:bg-green-600 cursor-pointer"
+                      onClick={() => handleUpdateStatus(ride.id, "completed")}
+                      disabled={ride.status === "completed"}
+                    >
+                      Confirm
+                    </button>
+                    <button
+                      className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 cursor-pointer"
+                      onClick={() => handleUpdateStatus(ride.id, "cancelled")}
+                      disabled={ride.status === "cancelled"}
+                    >
+                      Cancel
+                    </button>
+                  </td>
+                  <td className="p-2 border-b border-gray-500">
+                    <button
+                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-white border border-gray-300 text-sm text-gray-800 hover:bg-gray-100 hover:text-black transition-all duration-200 shadow-sm"
+                      title="View"
+                      onClick={() => router.push(`/admin/booking/${ride.id}`)}
+                    >
+                      <EyeIcon className="w-4 h-4" />
+                      <span className="hidden sm:inline">View</span>
+                    </button>
                   </td>
                 </tr>
               ))

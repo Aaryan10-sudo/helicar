@@ -16,7 +16,7 @@ export default function TimePicker({ type, selectedTime, onSelect }) {
           </Popover.Button>
 
           {open && (
-            <Popover.Panel className="absolute z-10 mt-2 w-56 bg-white rounded shadow-lg p-4">
+            <Popover.Panel className="absolute z-10 mt-2 w-56 bg-white rounded shadow-lg p-4 sm:left-0 left-[-130px]">
               <div className="font-bold text-center mb-2">
                 {type === "pickup" ? "Select pickup time" : ""}
                 {type === "return" ? "Select return time" : ""}

@@ -24,7 +24,6 @@ exports.createPopularDestination = async (req, res, next) => {
 exports.getPopularDestinations = async (req, res, next) => {
   try {
     const destinations = await getPopularDestinationsService();
-    console.log(destinations);
     res.status(200).json({
       success: true,
       data: destinations,

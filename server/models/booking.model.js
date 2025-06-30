@@ -54,8 +54,9 @@ Booking.init(
     anotherDestination: {
       type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: "",
+      defaultValue: null,
     },
+
     vehicleId: {
       type: DataTypes.UUID,
       allowNull: false,

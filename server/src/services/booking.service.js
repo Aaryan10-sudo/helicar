@@ -29,8 +29,35 @@ async function getAllBookingService() {
   }
 }
 
+async function updateBookingService(id, updateData) {
+  try {
+    const allowedFields = {};
+    if (updateData.paymentStatus !== undefined)
+      allowedFields.paymentStatus = updateData.paymentStatus;
+    if (updateData.status !== undefined)
+      allowedFields.status = updateData.status;
+
+    const [updatedRowsCount, [updatedBooking]] = await Booking.update(
+      allowedFields,
+      {
+        where: { id },
+        returning: true,
+      }
+    );
+
+    if (updatedRowsCount === 0) {
+      throw new Error("Booking not found or nothing to update.");
+    }
+
+    return updatedBooking;
+  } catch (error) {
+    throw new Error("Error updating booking: " + error.message);
+  }
+}
+
 module.exports = {
   createBookingService,
   getAllBookingService,
   getBookingByIdService,
+  updateBookingService,
 };

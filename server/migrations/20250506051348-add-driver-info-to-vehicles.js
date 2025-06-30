@@ -12,6 +12,11 @@ module.exports = {
       type: Sequelize.JSON,
       allowNull: true,
     });
+
+    await queryInterface.addColumn("PopularDestinations", "pricing", {
+      type: Sequelize.STRING,
+      allowNull: true,
+    });
   },
 
   async down(queryInterface, Sequelize) {

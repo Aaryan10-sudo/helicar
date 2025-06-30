@@ -136,7 +136,6 @@ exports.getBlogSection = async (req, res) => {
 exports.updateBlogSection = async (req, res) => {
   try {
     const { content } = req.body;
-    console.log(content);
 
     // Validate
     if (
@@ -398,18 +397,6 @@ exports.updateOurCompany = async (req, res) => {
     const { content } = req.body;
 
     // Validate structure
-    if (
-      !content ||
-      typeof content !== "object" ||
-      !content.image ||
-      !content.header ||
-      !content.paragraph
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid format. Must include image, header, and paragraph.",
-      });
-    }
 
     let section = await CmsContent.findOne({
       where: { section: "ourCompany" },
@@ -443,53 +430,14 @@ exports.updateOurCompany = async (req, res) => {
 
 exports.updateTariffRates = async (req, res) => {
   try {
-    const { header, paragraph, rates } = req.body;
-
-    if (
-      !header ||
-      typeof header !== "string" ||
-      !paragraph ||
-      typeof paragraph !== "string" ||
-      !Array.isArray(rates) ||
-      rates.length === 0
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Invalid payload. Expected header, paragraph, and rates array.",
-      });
-    }
-
-    // Required fields for each rate (excluding `sn` as it will be auto-generated)
-    const requiredFields = [
-      "description",
-      "time",
-      "car",
-      "van",
-      "hiaceJeep",
-      "minibus",
-      "coaster",
-      "sutlejBus",
-    ];
-
-    const validatedRates = rates.map((rate, index) => {
-      const hasAllFields = requiredFields.every((key) => key in rate);
-      if (!hasAllFields) {
-        throw new Error(`Rate at index ${index} is missing required fields.`);
-      }
-
-      // roll no ho hai guys
-      return {
-        sn: index + 1,
-        ...rate,
-      };
-    });
+    const { header, paragraph } = req.body;
 
     const content = {
       header,
       paragraph,
-      rates: validatedRates,
     };
+
+    console.log(content);
 
     let section = await CmsContent.findOne({
       where: { section: "tariffRates" },
@@ -548,7 +496,6 @@ exports.getTrekkingSection = async (req, res) => {
       data: section.content,
     });
   } catch (error) {
-    console.error("Error in getTrekkingSection:", error);
     return res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -558,52 +505,15 @@ exports.getTrekkingSection = async (req, res) => {
 // controllers/cmsController.js
 exports.updateTrekkingSection = async (req, res) => {
   try {
-    const { header, headerDescription, image, imageDescription, regions } =
+    const { header, headerDescription, image, imageDescription, paragraph } =
       req.body;
-
-    if (
-      !header ||
-      !headerDescription ||
-      !image ||
-      !imageDescription ||
-      !Array.isArray(regions) ||
-      regions.length === 0
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Invalid payload. Provide header, headerDescription, image, imageDescription, and regions array.",
-      });
-    }
-
-    // Validate region and packages
-    for (const region of regions) {
-      if (!region.region || !Array.isArray(region.packages)) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "Each region must have a 'region' name and 'packages' array.",
-        });
-      }
-
-      for (const pkg of region.packages) {
-        const required = ["title", "duration", "price", "image"];
-        const hasAll = required.every((key) => key in pkg);
-        if (!hasAll) {
-          return res.status(400).json({
-            success: false,
-            message: `Each package must include: ${required.join(", ")}`,
-          });
-        }
-      }
-    }
 
     const content = {
       header,
       headerDescription,
       image,
       imageDescription,
-      regions,
+      paragraph,
     };
 
     let section = await CmsContent.findOne({ where: { section: "trekking" } });

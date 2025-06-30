@@ -26,7 +26,7 @@ async function verifyOtpService({ OTP, email }) {
       throw new Error("Invalid OTP ");
     }
     const booking = await Booking.update(
-      { status: "verified" },
+      { status: "ongoing" },
       {
         where: {
           "passengerInfo.email": email,
@@ -41,27 +41,7 @@ async function verifyOtpService({ OTP, email }) {
       where: { id: updatedBooking.vehicleId },
     });
 
-    console.log(
-      vehicleData.vehicleName,
-      vehicleData.vehicleImage,
-      vehicleData.vehicleType
-    );
-    console.log({
-      vehicleName: vehicleData.vehicleName,
-      vehicleImage: vehicleData.vehicleImage,
-      vehicleType: vehicleData.vehicleType,
-      seats: vehicleData.features?.seats,
-      numberPlate: vehicleData.numberPlate,
-      pickupLocation: updatedBooking.pickUp,
-      pickupDate: updatedBooking.pickupDate,
-      destinationLocation: updatedBooking.destination,
-      destinationDate: updatedBooking.returnDate,
-      mail: updatedBooking.passengerInfo?.email,
-    });
-
     await Otp.destroy({ where: { email, otp: OTP } });
-
-    console.log(`vehicle ko data ${vehicleData}`);
 
     await verifiedBookingNotification({
       vehicleName: vehicleData.vehicleName,

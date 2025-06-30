@@ -7,14 +7,14 @@ import { baseURL } from "@/config/config";
 
 export default function Page() {
   const params = useParams();
-  const id = params.id;
+  const slug = params.slug;
   const [blogData, setBlogData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchBlog() {
       try {
-        const res = await axios.get(`${baseURL}/blog/by-name?name=${id}`);
+        const res = await axios.get(`${baseURL}/blog/by-name?name=${slug}`);
         setBlogData(res.data.data);
       } catch (err) {
         setBlogData(null);
@@ -22,8 +22,8 @@ export default function Page() {
         setLoading(false);
       }
     }
-    if (id) fetchBlog();
-  }, [id]);
+    if (slug) fetchBlog();
+  }, [slug]);
 
   if (loading) {
     return (

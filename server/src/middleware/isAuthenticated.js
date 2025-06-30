@@ -4,7 +4,6 @@ const { verifyJwtToken } = require("../lib/jwt/jwt");
 async function isAuthenticated(req, res, next) {
   try {
     let tokenString = req.headers.authorization || req.cookies.token;
-    console.log(tokenString);
 
     if (!tokenString) {
       return res.status(401).json({

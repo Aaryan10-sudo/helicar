@@ -81,6 +81,8 @@ function BookingConfirmation() {
             <p className="font-semibold">📍 Destination</p>
             <p>{bookingDetails.destination}</p>
             <p>{bookingDetails.returnDate}</p>
+            <p>{bookingDetails.anotherDestination}</p>
+            <p>{bookingDetails.returnDate}</p>
           </div>
           <div className="mt-4">
             <p className="font-semibold">Your booking overview:</p>

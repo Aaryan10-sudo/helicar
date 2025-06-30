@@ -15,7 +15,6 @@ import { useSearchParams } from "next/navigation";
 const PopularDestinationPage = () => {
   const searchParams = useSearchParams();
   const destination = searchParams.get("destination");
-  console.log(destination);
   const [dataDestination, setDestinationData] = useState({});
   const [openItinerary, setOpenItinerary] = useState({});
   const vehicleTypes = [
@@ -60,7 +59,6 @@ const PopularDestinationPage = () => {
           url: `${baseURL}/popular-destination/get-by-name?name=${destination}`,
           method: "GET",
         });
-        console.log(result);
         setDestinationData(result.data.data);
       } catch (error) {
         setDestinationData({});
@@ -75,7 +73,6 @@ const PopularDestinationPage = () => {
       ? dataDestination
       : Destination.find((item) => item.name === destination);
 
-  console.log(destinationData.location);
   if (!destinationData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -100,7 +97,6 @@ const PopularDestinationPage = () => {
               Kathmandu
             </Link>
             <span>›</span>
-
             <span className="text-gray-900">{destinationData.name}</span>
           </nav>
         </div>
@@ -135,7 +131,7 @@ const PopularDestinationPage = () => {
               {vehicleTypes.map((vehicle, index) => (
                 <Link
                   key={index}
-                  href={`/booking?vehicle=${vehicle.slug}&pickUp=${destinationData.name}&destination=${destinationData.name}`}
+                  href={`/booking?vehicle=${vehicle.slug}&pickUp=Kathmandu&package=${destinationData.name}`}
                   className="flex items-center gap-3 p-3 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors duration-200 group"
                 >
                   <div className="text-2xl group-hover:scale-110 transition-transform duration-200">
@@ -224,6 +220,33 @@ const PopularDestinationPage = () => {
                   </div>
                 </div>
               )}
+
+              {/* --- Price Section: One Way & Two Way --- */}
+              <div className="mt-8 rounded-xl p-6 bg-blue-50 border border-blue-100">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <span className="text-blue-600">💸</span>
+                  Price
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white rounded-lg shadow p-4 flex flex-col items-center">
+                    <span className="text-lg font-semibold text-gray-700 mb-2">
+                      One Way
+                    </span>
+                    <span className="text-2xl font-bold text-blue-700">
+                      Rs. 10,000
+                    </span>
+                  </div>
+                  <div className="bg-white rounded-lg shadow p-4 flex flex-col items-center">
+                    <span className="text-lg font-semibold text-gray-700 mb-2">
+                      Two Way
+                    </span>
+                    <span className="text-2xl font-bold text-blue-700">
+                      Rs. 20,000
+                    </span>
+                  </div>
+                </div>
+              </div>
+              {/* --- End Price Section --- */}
 
               {/* Trip Details */}
             </div>

@@ -9,7 +9,7 @@ const bookingSchema = Joi.object({
   paymentStatus: Joi.string().required(),
   pickUp: Joi.string().required(),
   destination: Joi.string().required(),
-  anotherDestination: Joi.string().optional(),
+  anotherDestination: Joi.string().allow(null, ""),
   passengerInfo: Joi.object({
     firstName: Joi.string().min(2).max(30).required(),
     lastName: Joi.string().min(2).max(30).required(),
@@ -18,6 +18,7 @@ const bookingSchema = Joi.object({
     address: Joi.string().min(5).max(100).required(),
     message: Joi.string().min(5).max(500).optional(),
   }).required(),
+
   vehicleId: Joi.string().guid({ version: "uuidv4" }).required(),
 }).unknown(true);
 

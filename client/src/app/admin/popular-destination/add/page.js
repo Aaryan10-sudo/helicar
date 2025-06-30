@@ -14,6 +14,7 @@ export default function PopularDestinationForm() {
     description: "",
     itinerary: initialItinerary,
     location: "",
+    pricing: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [preview, setPreview] = useState("");
@@ -91,7 +92,11 @@ export default function PopularDestinationForm() {
     }
 
     try {
-      await axios.post(`${baseURL}/popular-destination/create`, form);
+      await axios.post(`${baseURL}/popular-destination/create`, form, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       setSuccess("Destination added successfully!");
       setForm({
         name: "",
@@ -193,6 +198,21 @@ export default function PopularDestinationForm() {
               value={form.location}
               onChange={handleChange}
               className="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-base"
+            />
+          </div>
+
+          <div>
+            <label className="block font-semibold mb-1 text-gray-700">
+              Pricing
+            </label>
+            <input
+              type="text"
+              name="pricing"
+              value={form.pricing}
+              onChange={handleChange}
+              className="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-base"
+              placeholder="Enter pricing (e.g. 5000)"
+              required
             />
           </div>
         </div>
