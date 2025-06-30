@@ -9,7 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Swal from "sweetalert2";
 
-const roles = ["Admin", "Driver", "Manager"];
+const roles = ["admin", "driver", "manager"];
 
 const UsersPanel = () => {
   const [users, setUsers] = useState([]);
