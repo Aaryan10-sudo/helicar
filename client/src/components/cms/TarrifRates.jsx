@@ -1,15 +1,13 @@
 "use client";
 import { baseURL } from "@/config/config";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { FaImage, FaTrash } from "react-icons/fa";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const TarrifRates = () => {
   const [formData, setFormData] = useState({
     heading: "",
-    subTitle: "",
+    paragraph: "",
   });
 
   console.log(formData);
@@ -22,20 +20,19 @@ const TarrifRates = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${baseURL}/cms/tarrif-rates`);
+      const response = await axios.get(`${baseURL}/cms/tariff-rates`);
 
       if (response.data.data.content) {
         setFormData({
           heading: response.data.data.content.heading || "",
-          subTitle: response.data.data.content.subTitle || "",
+          paragraph: response.data.data.content.paragraph || "",
         });
       }
     } catch (error) {
       console.error("Error fetching company rental data:", error);
-      // Initialize with empty state to avoid render errors
       setFormData({
         heading: "",
-        subTitle: "",
+        paragraph: "",
       });
     }
   };
@@ -51,11 +48,8 @@ const TarrifRates = () => {
       const result = await axios.put(
         `${baseURL}/cms/tariff-rates`,
         {
-          section: "company Rental",
-          content: {
-            heading: formData.heading,
-            subTitle: formData.subTitle,
-          },
+          header: formData.heading,
+          paragraph: formData.paragraph,
         },
         {
           headers: {
@@ -64,10 +58,8 @@ const TarrifRates = () => {
           },
         }
       );
-      console.log(result);
-      toast.success("company  section updated successfully!");
+      toast.success("Tariff Rate section updated successfully!");
     } catch (error) {
-      console.error("Error updating company rental section:", error);
       toast.error(
         "Failed to update section: " +
           (error.response?.data?.message || error.message)
@@ -141,8 +133,8 @@ const TarrifRates = () => {
             </label>
             <input
               type="text"
-              name="subTitle"
-              value={formData.subTitle}
+              name="paragraph"
+              value={formData.paragraph}
               onChange={handleChange}
               placeholder="Enter section description..."
               className="w-full border border-blue-200 px-4 py-2 rounded-lg bg-blue-50 focus:bg-white focus:ring-2 focus:ring-blue-300 transition-all"

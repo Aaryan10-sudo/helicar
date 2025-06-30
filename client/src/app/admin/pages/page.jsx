@@ -20,7 +20,6 @@ const Page = () => {
     "Company",
     "Tarrif Rates",
     "Trekking",
-    "Blogs",
   ];
 
   const [activeTab, setActiveTab] = useState("Home");
@@ -128,25 +127,43 @@ const Page = () => {
               <button
                 onClick={handleUpdate}
                 disabled={loading}
-                className={`transition-all duration-200 mr-2 px-6 py-2 rounded-lg font-semibold shadow-md text-white bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 focus:ring-2 focus:ring-blue-300 focus:outline-none ${loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : ""
+                className={`transition-all duration-200 mr-2 px-6 py-2 rounded-lg font-semibold shadow-md text-white bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 focus:ring-2 focus:ring-blue-300 focus:outline-none ${
+                  loading ? "bg-gray-400 cursor-not-allowed" : ""
                 }`}
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
-                    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v8z"
+                      />
                     </svg>
                     Updating...
                   </span>
-                ) : "Update"}
+                ) : (
+                  "Update"
+                )}
               </button>
             </div>
 
             <div className="mb-8 relative">
-              <label className="block font-semibold mb-2 text-blue-700 text-lg">Hero Image</label>
+              <label className="block font-semibold mb-2 text-blue-700 text-lg">
+                Hero Image
+              </label>
               <div
                 {...getRootProps()}
                 className="transition-all duration-200 w-full h-[220px] border-2 border-dashed border-blue-300 flex items-center justify-center cursor-pointer rounded-lg bg-blue-50 hover:bg-blue-100 hover:border-blue-500 group relative"
@@ -154,18 +171,37 @@ const Page = () => {
                 <input {...getInputProps()} />
                 {imageUploading ? (
                   <div className="flex flex-col items-center justify-center w-full h-full">
-                    <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                    <svg
+                      className="animate-spin h-10 w-10 text-blue-600"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v8z"
+                      />
                     </svg>
-                    <span className="mt-2 text-blue-600 font-medium">Uploading...</span>
+                    <span className="mt-2 text-blue-600 font-medium">
+                      Uploading...
+                    </span>
                   </div>
                 ) : (
                   <>
                     {!form?.image && (
                       <div className="flex flex-col items-center text-blue-400 group-hover:text-blue-600 transition-all">
                         <FaImage size={56} className="animate-bounce mb-2" />
-                        <p className="mt-2 text-blue-500 font-medium">Drag & drop image here, or click to select</p>
+                        <p className="mt-2 text-blue-500 font-medium">
+                          Drag & drop image here, or click to select
+                        </p>
                       </div>
                     )}
                     {form?.image && (
@@ -177,7 +213,7 @@ const Page = () => {
                         />
                         <button
                           type="button"
-                          onClick={e => {
+                          onClick={(e) => {
                             e.stopPropagation();
                             setForm({ ...form, image: "", imageFile: null });
                           }}
@@ -194,36 +230,36 @@ const Page = () => {
             </div>
 
             <div className="heading-section my-4">
-              <label className="block font-medium mb-2 text-blue-700">Heading</label>
+              <label className="block font-medium mb-2 text-blue-700">
+                Heading
+              </label>
               <input
                 type="text"
                 value={form.heading || ""}
-                onChange={(e) =>
-                  setForm({ ...form, heading: e.target.value })
-                }
+                onChange={(e) => setForm({ ...form, heading: e.target.value })}
                 className="w-full border border-blue-200 px-4 py-2 rounded-lg bg-blue-50 focus:bg-white focus:ring-2 focus:ring-blue-300 transition-all"
                 placeholder="Enter hero heading..."
               />
             </div>
 
             <div className="sub-title my-4">
-              <label className="block font-medium mb-2 text-blue-700">Subtitle</label>
+              <label className="block font-medium mb-2 text-blue-700">
+                Subtitle
+              </label>
               <input
                 type="text"
                 value={form.subtitle || ""}
-                onChange={(e) =>
-                  setForm({ ...form, subtitle: e.target.value })
-                }
+                onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
                 className="w-full border border-blue-200 px-4 py-2 rounded-lg bg-blue-50 focus:bg-white focus:ring-2 focus:ring-blue-300 transition-all"
                 placeholder="Enter hero subtitle..."
               />
             </div>
             <div className="whychooseus-section">
-          <WhyChooseUs />
-        </div>
-        <div className="ClientReview">
-          <ClientReview />
-        </div>
+              <WhyChooseUs />
+            </div>
+            <div className="ClientReview">
+              <ClientReview />
+            </div>
           </div>
         );
 
@@ -253,10 +289,11 @@ const Page = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2 cursor-pointer rounded shadow ${activeTab === tab
+                className={`px-4 py-2 cursor-pointer rounded shadow ${
+                  activeTab === tab
                     ? "bg-blue-600 text-white"
                     : "bg-white hover:bg-blue-100"
-                  }`}
+                }`}
               >
                 {tab}
               </button>
@@ -266,8 +303,6 @@ const Page = () => {
 
         <h2 className="text-2xl font-bold mb-4">{activeTab}</h2>
         {renderForm()}
-
-        
       </div>
     </section>
   );

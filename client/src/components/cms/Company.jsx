@@ -94,7 +94,7 @@ const Company = () => {
     setLoading(true);
     try {
       await axios.put(
-        `${baseURL}/cms/out-company`,
+        `${baseURL}/cms/our-company`,
         {
           section: "company Rental",
           content: {

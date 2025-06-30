@@ -1,12 +1,9 @@
-// components/TariffRates.js
-"use client"; // This is required for using Hooks like useState and useEffect
+"use client";
 
 import React, { useState, useEffect } from "react";
-import { baseURL } from "@/config/config"; // Make sure this path is correct
+import { baseURL } from "@/config/config";
 import axios from "axios";
 
-// NOTE: I've added some sample data for the table to render.
-// You should replace this with your actual data, probably from another API call.
 const tariffData = [
   {
     sn: 1,
@@ -35,21 +32,18 @@ const tariffData = [
 ];
 
 const TariffRates = () => {
-  const [pageContent, setPageContent] = useState({
-    heading: "Loading...", // Initial loading text for heading
-    subTitle: "Please wait while we fetch the latest information...", // Initial loading text for description
-  });
+  const [pageContent, setPageContent] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${baseURL}/cms/tariff-rates`);
-        console.log(response);
-        if (response.data.data.content) {
+
+        if (response.data.data) {
           setPageContent({
-            heading: response.data.data.content.heading || "Tariff Rates",
+            heading: response.data.data.header || "Tariff Rates", // <-- use .header
             subTitle:
-              response.data.data.content.subTitle ||
+              response.data.data.paragraph ||
               "Find the best rates for your travel needs.",
           });
         }
@@ -64,8 +58,7 @@ const TariffRates = () => {
     };
 
     fetchData();
-  }, []); // The empty array [] means this effect runs only once after the component mounts
-
+  }, []);
   const handleBookNow = (sn) => {
     alert(`Booking for S.N ${sn}`);
   };
@@ -74,7 +67,6 @@ const TariffRates = () => {
     <div className="flex justify-center items-start p-5 bg-slate-100 min-h-screen">
       <section className="w-full max-w-6xl">
         <header className="text-center mb-8">
-          {/* 3. Using state to display dynamic heading and subtitle */}
           <h1 className="text-4xl font-bold text-blue-600 mb-3 font-Comfortaa">
             {pageContent.heading}
           </h1>

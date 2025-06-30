@@ -1,10 +1,30 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { assets } from "../../../assets/assets";
 import Head from "next/head";
+import axios from "axios";
+import { baseURL } from "@/config/config";
 
 const Company = () => {
+  const [company, setCompany] = useState({});
+  useEffect(() => {
+    async function fetchCompanyCMS() {
+      try {
+        const result = await axios({
+          url: `${baseURL}/cms/our-company`,
+          method: "GET",
+        });
+        setCompany(result.data.data);
+        console.log(result.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchCompanyCMS();
+  }, []);
   return (
     <>
       <Head>
@@ -20,25 +40,22 @@ const Company = () => {
           {/* Heading & Paragraph */}
           <header className="text-center">
             <h1 className="font-Comfortaa font-bold text-primary text-[36px] md:text-[48px]">
-              Our Company
+              {company?.content?.heading || "Our Company"}
             </h1>
             <p className="text-[14px] font-light leading-[18px] max-w-[90%] md:max-w-[785px] text-subheading mx-auto">
-              Lorem ipsum dolor sit amet consectetur. Malesuada a purus eu
-              dignissim morbi egestas interdum viverra. Ac sed in egestas mattis
-              eros. Lorem ipsum dolor sit amet consectetur. Malesuada a purus eu
-              dignissim morbi egestas interdum viverra. Ac sed in egestas mattis
-              eros.
+              {company?.content?.subTitle ||
+                "Lorem ipsum dolor sit amet consectetur. Malesuada a purus eu dignissim morbi egestas interdum viverra. Ac sed in egestas mattis  eros. Lorem ipsum dolor sit amet consectetur. Malesuada a purus eu dignissim morbi egestas interdum viverra. Ac sed in egestas mattis eros."}
             </p>
           </header>
 
           {/* Image */}
           <div className="flex justify-center">
             <Image
-              src={assets.contact1.src} // Use .src
+              src={company?.content?.backgroundImage || assets.contact1.src} // Use .src
               alt="Contact our company for more information."
               width={assets.contact1.width}
               height={assets.contact1.height}
-              className="w-full max-w-[600px] md:max-w-[1190px] h-auto"
+              className="w-full max-w-[600px] md:max-w-[1190px] h-auto rounded-xl"
             />
           </div>
         </article>
