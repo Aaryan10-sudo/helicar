@@ -58,8 +58,6 @@ async function getAllAdminsService() {
 }
 
 async function changePasswordService(password, id) {
-  console.log(password);
-  console.log(id);
   try {
     const hashedPassword = await hashPassword(password);
     const result = await Admin.update(

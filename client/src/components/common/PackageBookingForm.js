@@ -1,6 +1,8 @@
 "use client";
 
 import { baseURL } from "@/config/config";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import CalenderIcon from "@/ui/CalenderIcon";
 import Loader from "@/ui/Loader";
 import LocationIcon from "@/ui/LocationIcon";
@@ -30,7 +32,7 @@ const CheckIcon = () => (
   </svg>
 );
 
-const BookingForm = () => {
+const PackageBookingForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const carId = searchParams.get("carId");
@@ -47,14 +49,12 @@ const BookingForm = () => {
   const [details, setDetails] = useState("");
 
   const pickUp = searchParams.get("pickUp");
-  const destination = searchParams.get("destination");
-  const pickUpDate = searchParams.get("pickUpDate");
-  const returnDate = searchParams.get("returnDate");
-  const pickUpTime = searchParams.get("pickUpTime");
-  const returnTime = searchParams.get("returnTime");
-  const anotherDestination = searchParams.get("anotherDestination");
+  const pkg = searchParams.get("package");
 
-  console.log(`${anotherDestination} destination`);
+  const anotherDestination = searchParams.get("anotherDestination");
+  const [destinationData, setDestinationData] = useState({});
+  const [pickUpDate, setPickUpDate] = useState(null);
+  const [returnDate, setReturnDate] = useState(null);
 
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -82,6 +82,23 @@ const BookingForm = () => {
     }
   }, [carId]);
 
+  useEffect(() => {
+    async function getDestinationDetails() {
+      try {
+        const result = await axios({
+          url: `${baseURL}/popular-destination/get-by-name?name=${pkg}`,
+          method: "GET",
+        });
+        console.log(result);
+        setDestinationData(result.data.data);
+      } catch (error) {
+        setDestinationData({});
+      }
+    }
+
+    if (pkg) getDestinationDetails();
+  }, [pkg]);
+
   const getVehicleDetails = async () => {
     try {
       const response = await axios.get(`${baseURL}/vehicle/get/${carId}`);
@@ -91,10 +108,9 @@ const BookingForm = () => {
     }
   };
 
-  function formatDate(dateString) {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+  function formatDate(dateObj) {
+    if (!dateObj) return "";
+    return dateObj.toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
@@ -294,11 +310,10 @@ const BookingForm = () => {
       },
       status: "pending",
       bookingDate: new Date().toISOString(),
-      anotherDestination,
-      pickupDate: `${formattedPickupDate} | ${pickUpTime}`,
-      returnDate: `${formattedReturnDate} | ${returnTime}`,
+      pickupDate: `${formattedPickupDate}`,
+      returnDate: `${formattedReturnDate}`,
       pickUp,
-      destination,
+      destination: pkg,
       totalAmount: selectedCar?.vehiclePrice,
       paymentStatus: "pending",
       vehicleId: carId,
@@ -443,11 +458,12 @@ const BookingForm = () => {
                   <span className="pl-3 text-gray-500">
                     <CalenderIcon />
                   </span>
-                  <input
-                    type="date"
-                    id="pickupDate"
+                  <DatePicker
+                    selected={pickUpDate}
+                    onChange={(date) => setPickUpDate(date)}
+                    dateFormat="yyyy-MM-dd"
                     className="flex-grow p-3 bg-transparent focus:outline-none"
-                    value={toDateInputValue(pickUpDate)}
+                    placeholderText="Select pick-up date"
                   />
                 </div>
               </div>
@@ -462,11 +478,12 @@ const BookingForm = () => {
                   <span className="pl-3 text-gray-500">
                     <CalenderIcon />
                   </span>
-                  <input
-                    type="date"
-                    id="returnDate"
+                  <DatePicker
+                    selected={returnDate}
+                    onChange={(date) => setReturnDate(date)}
+                    dateFormat="yyyy-MM-dd"
                     className="flex-grow p-3 bg-transparent focus:outline-none"
-                    value={toDateInputValue(returnDate)}
+                    placeholderText="Select return date"
                   />
                 </div>
               </div>
@@ -580,7 +597,7 @@ const BookingForm = () => {
                 )}
               </div>
               <p className="text-2xl font-bold text-gray-800">
-                ${carPrice.toFixed(2)}
+                Rs.{destinationData.pricing}
               </p>
             </div>
           </div>
@@ -656,51 +673,36 @@ const BookingForm = () => {
 
               <hr className="my-4 border-gray-300" />
 
-              <div className="py-3">
-                <div className="flex items-start gap-3 mb-3">
-                  <LocationIcon className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold text-gray-700">Pickup</p>
-                    <p className="text-sm text-gray-600">
-                      {pickUp || "Kathmandu, KMC hospital"} {/* Example */}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {pickUpDate && pickUpTime
-                        ? `${formattedPickupDate} | ${pickUpTime}`
-                        : "April 14, 2025 | 12:00 PM"}
-                    </p>
+              <div className="py-3 flex gap-5">
+                <img
+                  src={destinationData.image}
+                  className="h-[200px] rounded-lg"
+                />
+                <span className="flex-col ">
+                  <h1 className="font-bold text-[25px]">
+                    {destinationData.name}
+                  </h1>
+                  <div className="flex text-[14px]">
+                    <p>Kathmandu</p>
+                    -to-
+                    <p>{destinationData.name}</p>
                   </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <LocationIcon className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold text-gray-700">
-                      Destination / Return
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {destination || "Kathmandu, KMC hospital"}
-                    </p>
+                  <div className="flex text-[14px]">
+                    <p>{destinationData.name}</p>
+                    -to-
+                    <p>Kathmandu</p>
+                  </div>
 
-                    <p className="text-xs text-gray-500">
-                      {returnDate && returnTime
-                        ? `${formattedReturnDate} | ${returnTime}`
-                        : "April 14, 2025 | 12:00 PM"}
-                    </p>
-                    <br />
-                    {anotherDestination ? (
-                      <>
-                        <p className="text-sm text-gray-600">
-                          {anotherDestination}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {returnDate && returnTime
-                            ? `${formattedReturnDate} | ${returnTime}`
-                            : "April 14, 2025 | 12:00 PM"}
-                        </p>
-                      </>
-                    ) : null}
+                  <div className="my-5">
+                    <h1 className="font-bold">Pricing</h1>
+                    <div className="flex gap-5 items-center">
+                      <p className="text-[17px]">
+                        Rs. {destinationData.pricing}
+                      </p>
+                      <span className="text-gray-500">(Round Trip)</span>
+                    </div>
                   </div>
-                </div>
+                </span>
               </div>
 
               <hr className="my-4 border-gray-300" />
@@ -852,4 +854,4 @@ const BookingFormWithSuspense = () => (
   </Suspense>
 );
 
-export default BookingForm;
+export default PackageBookingForm;

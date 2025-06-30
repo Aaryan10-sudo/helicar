@@ -16,7 +16,12 @@ router.post("/create", isAuthenticated, isAuthorized("admin"), createAdmin);
 router.get("/getAll", isAuthenticated, isAuthorized("admin"), getAllAdmins);
 router.post("/login", loginAdmin);
 router.put("/logout", logoutAdmin);
-router.patch("/reset-password", isAuthenticated, changePassword);
+router.patch(
+  "/reset-password",
+  isAuthenticated,
+  isAuthorized("admin"),
+  changePassword
+);
 router.delete("/delete", isAuthenticated, isAuthorized("admin"), deleteAdmin);
 
 module.exports = router;

@@ -17,6 +17,7 @@ const PopularDestinationForm = () => {
     description: "",
     itinerary: initialItinerary,
     location: "",
+    pricing: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [preview, setPreview] = useState("");
@@ -31,7 +32,12 @@ const PopularDestinationForm = () => {
       if (!destinationName) return;
       try {
         const res = await axios.get(
-          `${baseURL}/popular-destination/get-by-name?name=${destinationName}`
+          `${baseURL}/popular-destination/get-by-name?name=${destinationName}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
         );
         const data = res.data.data;
         setForm({
@@ -216,6 +222,19 @@ const PopularDestinationForm = () => {
               type="url"
               name="location"
               value={form.location}
+              onChange={handleChange}
+              className="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-base"
+            />
+          </div>
+
+          <div>
+            <label className="block font-semibold mb-1 text-gray-700">
+              Pricing
+            </label>
+            <input
+              type="text"
+              name="pricing"
+              value={form.pricing}
               onChange={handleChange}
               className="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-base"
             />

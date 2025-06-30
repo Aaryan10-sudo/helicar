@@ -88,7 +88,6 @@ async function getAllBusService() {
 async function getSpecificVehicleService(id) {
   try {
     const result = await Vehicle.findByPk(id);
-    console.log(result);
 
     return result;
   } catch (error) {

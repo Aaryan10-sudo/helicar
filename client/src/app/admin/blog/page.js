@@ -163,9 +163,18 @@ const BlogAdminPage = () => {
         await axios.put(
           `${baseURL}/blog/by-name?name=${encodeURIComponent(editTitle)}`,
           form
-        );
+        ),
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          };
       } else {
-        await axios.post(`${baseURL}/blog/`, form);
+        await axios.post(`${baseURL}/blog/`, form, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
       }
       setForm(initialBlog);
       setCoverPreview("");
@@ -194,7 +203,11 @@ const BlogAdminPage = () => {
 
   const handleDelete = async (mainTitle) => {
     if (!window.confirm("Delete this blog?")) return;
-    await axios.delete(`${baseURL}/blog/by-name?name=${mainTitle}`);
+    await axios.delete(`${baseURL}/blog/by-name?name=${mainTitle}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
     fetchBlogs();
   };
 

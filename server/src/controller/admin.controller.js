@@ -75,8 +75,6 @@ exports.changePassword = async (req, res, next) => {
   const id = req._id;
   const password = req.body.password;
 
-  console.log(password);
-
   try {
     const result = await changePasswordService(password, id);
     res.status(200).json({

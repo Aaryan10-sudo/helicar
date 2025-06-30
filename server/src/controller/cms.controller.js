@@ -136,7 +136,6 @@ exports.getBlogSection = async (req, res) => {
 exports.updateBlogSection = async (req, res) => {
   try {
     const { content } = req.body;
-    console.log(content);
 
     // Validate
     if (

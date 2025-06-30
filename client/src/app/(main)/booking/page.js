@@ -23,6 +23,7 @@ const VehicleBooking = () => {
   const returnDate = searchParams.get("returnDate");
   const pickUpTime = searchParams.get("pickupTime");
   const returnTime = searchParams.get("returnTime");
+  const pkg = searchParams.get("package");
   const anotherDestination = searchParams.get("anotherDestination");
 
   const lineItems = [
@@ -32,16 +33,24 @@ const VehicleBooking = () => {
   ];
 
   const handleBookNow = (cardId) => {
-    router.push(
-      `/complete-booking?cardId=${cardId}` +
-        `&pickUp=${pickUp}` +
-        `&destination=${destination}` +
-        `&pickUpDate=${pickUpDate}` +
-        `&returnDate=${returnDate}` +
-        `&pickUpTime=${pickUpTime}` +
-        `&returnTime=${returnTime}` +
-        `&anotherDestination=${anotherDestination}`
-    );
+    if (pkg) {
+      router.push(
+        `/complete-booking/popular-destination?carId=${cardId}` +
+          `&pickUp=${pickUp}` +
+          `&package=${pkg}`
+      );
+    } else {
+      router.push(
+        `/complete-booking?carId=${cardId}` +
+          `&pickUp=${pickUp}` +
+          `&destination=${destination}` +
+          `&pickUpDate=${pickUpDate}` +
+          `&returnDate=${returnDate}` +
+          `&pickUpTime=${pickUpTime}` +
+          `&returnTime=${returnTime}` +
+          `&anotherDestination=${anotherDestination}`
+      );
+    }
   };
 
   const handleVehicleClick = (vehicle) => {
@@ -88,19 +97,10 @@ const VehicleBooking = () => {
     <div className="bg-[#f8f9fa] text-black w-full py-10 min-h-screen">
       <section className="max-w-[1900px] mx-auto">
         <h2 className="font-Comfortaa text-2xl sm:text-3xl font-semibold border-b-2 px-4 sm:px-8 md:px-16 lg:px-[120px] pb-4 border-gray-400">
-          Which bus do you want to ride?
+          Which vehicle do you want to ride?
         </h2>
 
         <div className="flex flex-col md:flex-row px-4 sm:px-8 md:px-16 lg:px-[120px] gap-4 md:gap-10 pt-6">
-          <span className="flex flex-col w-full md:w-auto">
-            <label className="mb-2 font-bold text-base sm:text-lg">
-              Price Range
-            </label>
-            <input
-              placeholder="Select as per choice"
-              className="px-3 h-10 border border-slate-400 w-full md:w-[250px] rounded-md"
-            />
-          </span>
           <span className="flex flex-col w-full md:w-auto">
             <label className="mb-2 font-bold text-base sm:text-lg">
               Sort By

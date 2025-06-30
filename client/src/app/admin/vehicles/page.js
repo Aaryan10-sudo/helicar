@@ -65,7 +65,7 @@ const page = () => {
           await deleteVehicle(id);
           Swal.fire({
             title: "Deleted!",
-            text: "Your enquiry has been deleted.",
+            text: "Vehicle has been deleted.",
             icon: "success",
           });
           handleDetails();
@@ -83,9 +83,7 @@ const page = () => {
     <div className="py-4 sm:px-3">
       <main className="mb-10">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
-          <h2 className="text-2xl sm:text-3xl font-semibold">
-            Vehicles <span className="text-blue-700">(Car)</span>
-          </h2>
+          <h2 className="text-2xl sm:text-3xl font-semibold">Vehicles</h2>
           <input
             type="text"
             placeholder="Search client name, car etc..."
@@ -94,16 +92,7 @@ const page = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0 mb-5">
-          <div className="flex flex-wrap gap-2 sm:gap-3">
-            {["Car", "Bus", "Tourist bus", "Toyota Hiace"].map((type) => (
-              <button
-                key={type}
-                className="border border-gray-700 rounded-sm px-3 py-1 text-sm"
-              >
-                {type}
-              </button>
-            ))}
-          </div>
+          <div className="flex flex-wrap gap-2 sm:gap-3"></div>
           <div className="flex items-center gap-4">
             <button className="bg-gray-200 text-black rounded-sm border-none px-3 py-2 text-sm">
               Sort by

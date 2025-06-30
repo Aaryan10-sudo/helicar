@@ -3,14 +3,13 @@ const path = require("path");
 const sendMail = require("../../utils/sendMail");
 const { ADMIN_MAIL } = require("../../../config/env");
 
-async function confirmedBooking({ username, receiver, OTP }) {
-  console.log(OTP);
-  console.log(receiver);
+async function confirmedBooking({ username, receiver, OTP, vehicleModel }) {
   const htmlContent = pug.renderFile(
     path.join(__dirname, "./template/confirmed-booking.jade"),
     {
       customerName: username,
       OTP: OTP,
+      vehicleModel,
     }
   );
   try {
@@ -81,7 +80,7 @@ async function verifiedBookingNotification({
     await sendMail({
       from: '"Helicar Booking" <helicarbooking@gmail.com>',
       to: mail,
-      subject: "Your bookng is confirmed",
+      subject: "Your booking is confirmed",
       html: htmlContent,
     });
   } catch (error) {

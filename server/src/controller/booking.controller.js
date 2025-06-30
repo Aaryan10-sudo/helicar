@@ -6,6 +6,7 @@ const {
   createBookingService,
   getAllBookingService,
   getBookingByIdService,
+  updateBookingService,
 } = require("../services/booking.service");
 const { saveOtpService, verifyOtpService } = require("../services/otp.service");
 const generateOTP = require("../utils/generateOTP");
@@ -20,6 +21,7 @@ exports.createBooking = async (req, res, next) => {
         username: result.passengerInfo.firstName,
         receiver: result.passengerInfo.email,
         OTP: OTP,
+        vehicleModel: result.vehicleName,
       });
       await adminBookingNotification({
         customerName: result.passengerInfo.firstName,
@@ -51,7 +53,6 @@ exports.createBooking = async (req, res, next) => {
 
 exports.verifyBooking = async (req, res, next) => {
   const { OTP, email } = req.body;
-  console.log("OTP:", OTP, "Email:", email);
   try {
     const result = await verifyOtpService({ OTP, email });
     if (result) {
@@ -103,6 +104,34 @@ exports.getAllBooking = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.updateBooking = async (req, res, next) => {
+  const bookingId = req.params.id;
+  const { paymentStatus, status } = req.body;
+
+  try {
+    const updatedBooking = await updateBookingService(bookingId, {
+      paymentStatus,
+      status,
+    });
+    if (!updatedBooking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found or nothing to update",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Booking updated successfully",
+      data: updatedBooking,
     });
   } catch (error) {
     res.status(400).json({
