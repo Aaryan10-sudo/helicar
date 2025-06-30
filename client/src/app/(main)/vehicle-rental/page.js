@@ -19,6 +19,25 @@ const VehicleRental = () => {
   const { loading } = useGetVehicle();
   const [allVehicles, setAllVehicles] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [formData, setFormData] = useState({
+    heading: "",
+    subTitle: "",
+    backgroundImage: "",
+  });
+
+  useEffect(() => {
+    const getVehicleRental = async () => {
+      try {
+        const result = await axios.get(`${baseURL}/cms/rent-vechicle`);
+        if (result.data && result.data.data && result.data.data.content) {
+          setFormData(result.data.data.content);
+        }
+      } catch (error) {
+        console.error("Failed to fetch vehicle rental data:", error);
+      }
+    };
+    getVehicleRental();
+  }, []);
 
   const filterButton = [
     { title: "All", icon: null },
@@ -60,16 +79,16 @@ const VehicleRental = () => {
         {/* Hero Section */}
         <div
           className="flex flex-col items-center bg-cover bg-center py-12 lg:py-24 px-4 sm:px-6 lg:px-8 gap-8 md:gap-16 xl:gap-[500px]"
-          style={{ backgroundImage: `url(${assets.vehicle.src})` }}
+          style={{
+            backgroundImage: `url(${formData.backgroundImage || assets.vehicle.src})`,
+          }}
         >
           <div className="flex flex-col items-center w-full max-w-4xl xl:max-w-6xl gap-4">
             <h1 className="text-3xl sm:text-4xl font-Comfortaa md:text-5xl text-primary font-bold text-center">
-              Vehicle Rental Service
+              {formData.heading}
             </h1>
-            <p className="text-gray-200  text-sm stext-center font-light leading-3 text-justify max-w-[785px]">
-              Lorem ipsum dolor sit amet consectetur. Malesuada a purus eu
-              dignissim morbi egestas interdum viverra. Ac sed in egestas mattis
-              eros.
+            <p className="text-gray-200 text-sm stext-center font-light leading-3 text-justify max-w-[785px]">
+              {formData.subTitle}
             </p>
           </div>
         </div>

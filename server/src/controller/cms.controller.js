@@ -344,18 +344,6 @@ exports.updateVehicleRentalService = async (req, res) => {
     const { content } = req.body;
 
     // Validation
-    if (
-      !content ||
-      typeof content !== "object" ||
-      !content.image ||
-      !content.header ||
-      !content.paragraph
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid format. Must include image, header, and paragraph.",
-      });
-    }
 
     let section = await CmsContent.findOne({
       where: { section: "vehicleRentalService" },
