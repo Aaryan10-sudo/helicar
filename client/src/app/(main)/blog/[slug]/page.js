@@ -1,42 +1,20 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import BlogCard from "@/components/common/BlogCard";
-import axios from "axios";
 import { baseURL } from "@/config/config";
 
-export default function Page() {
-  const params = useParams();
-  const slug = params.slug;
-  const [blogData, setBlogData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchBlog() {
-      try {
-        console.log("Base URL:", baseURL);
-        console.log("Fetching blog with slug:", slug);
-        console.log("Encoded slug:", encodeURIComponent(slug));
-        const res = await axios.get(`${baseURL}/blog/by-name?name=${encodeURIComponent(slug)}`);
-        console.log("API Response:", res.data);
-        setBlogData(res.data.data);
-      } catch (error) {
-        console.error("Error fetching blog:", error);
-        setBlogData(null);
-      } finally {
-        setLoading(false);
-      }
-    }
-    if (slug) fetchBlog();
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <section className="flex flex-col max-w-[1700px] mx-auto min-h-screen">
-        <div className="text-center py-10 text-xl">Loading...</div>
-      </section>
-    );
+async function getBlog(slug) {
+  try {
+    const res = await fetch(`${baseURL}/blog/by-name?name=${slug}`, {
+      cache: "no-store", // or revalidate: 0 if using next 14+ cache strategy
+    });
+    const data = await res.json();
+    return data.data || null;
+  } catch {
+    return null;
   }
+}
+
+export default async function Page({ params }) {
+  const blogData = await getBlog(params.slug);
 
   if (!blogData) {
     return (
