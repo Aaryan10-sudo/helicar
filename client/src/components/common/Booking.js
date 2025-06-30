@@ -91,10 +91,28 @@ export default function Booking() {
     !destinationLocation ||
     destinationError;
 
+  const getSearchUrl = () => {
+    const params = new URLSearchParams();
+    params.append("vehicle", vehicleSlugMap[selectedVehicle]);
+    if (pickupLocation) params.append("pickUp", pickupLocation);
+    if (destinationLocation) params.append("destination", destinationLocation);
+    if (range.from) params.append("date", range.from.toISOString());
+    if (range.to) params.append("returnDate", range.to.toISOString());
+    if (pickupTime) params.append("pickupTime", pickupTime);
+    if (returnTime) params.append("returnTime", returnTime);
+
+    if (showAnotherDestination) {
+      if (anotherDestination1)
+        params.append("anotherDestination1", anotherDestination1);
+      if (anotherDestination2)
+        params.append("anotherDestination2", anotherDestination2);
+    }
+    return `/booking?${params.toString()}`;
+  };
+
   return (
     <div className="sm:p-4 md:p-8">
       <div className="p-6 bg-white rounded-xl relative shadow-2xl max-w-8xl mx-auto">
-        {/* Vehicle selection */}
         <div className="flex flex-wrap gap-2 mb-6">
           {vehicleTypes.map((type) => (
             <button
@@ -111,9 +129,7 @@ export default function Booking() {
           ))}
         </div>
 
-        {/* Main form grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
-          {/* Pick-up Location */}
           <div className="lg:col-span-1">
             <LocationAutocomplete
               id="pickup"
@@ -204,16 +220,7 @@ export default function Booking() {
 
           {/* Search Button */}
           <Link
-            href={`/booking?vehicle=${vehicleSlugMap[selectedVehicle]}&pickUp=${pickupLocation}&destination=${destinationLocation}&anotherDestination=${anotherDestination2}&date=${
-              range.from ? range.from.toISOString() : ""
-            }&returnDate=${
-              range.to ? range.to.toISOString() : ""
-            }&pickupTime=${pickupTime}&returnTime=${returnTime}${
-              showAnotherDestination &&
-              (anotherDestination1 || anotherDestination2)
-                ? `&anotherDestination1=${anotherDestination1}&anotherDestination2=${anotherDestination2}`
-                : ""
-            }`}
+            href={getSearchUrl()} // Use the new function here
             className={`bg-gradient-to-r from-[#006ba6] to-[#009acb] text-white font-bold h-10 px-6 rounded-lg hover:opacity-90 flex items-center justify-center w-full lg:w-auto ${
               isSearchDisabled ? "opacity-50 pointer-events-none" : ""
             }`}
@@ -223,12 +230,13 @@ export default function Booking() {
         </div>
 
         {showAnotherDestination && (
-          <div className="mt-4 flex flex-wrap  gap-4 ">
+          <div className="mt-4 flex flex-wrap gap-4">
             <div className="w-full sm:w-[230px]">
               <LocationAutocomplete
                 id="another-destination-1"
                 label="Another Destination 1"
-                value={destinationLocation}
+                value={anotherDestination1}
+                onSelect={handleSelectArea}
               />
             </div>
             <div className="w-full sm:w-[230px]">
