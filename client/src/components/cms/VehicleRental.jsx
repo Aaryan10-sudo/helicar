@@ -13,18 +13,18 @@ const VehicleRental = () => {
     backgroundImage: "",
   });
 
-  console.log(formData)
-  const [loading, setLoading] = useState(false); // For the main update button
-  const [imageUploading, setImageUploading] = useState(false); // For the dropzone uploader
+  const [loading, setLoading] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
 
+  // Fetch data from backend on mount
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${baseURL}/cms/ren-vehicle`);
-      if (response.data.data.content) {
+      const response = await axios.get(`${baseURL}/cms/rent-vechicle`);
+      if (response.data && response.data.data && response.data.data.content) {
         setFormData({
           heading: response.data.data.content.heading || "",
           subTitle: response.data.data.content.subTitle || "",
@@ -32,8 +32,10 @@ const VehicleRental = () => {
         });
       }
     } catch (error) {
-      console.error("Error fetching vehicle rental data:", error);
-      // Initialize with empty state to avoid render errors
+      toast.error(
+        "Error fetching vehicle rental data: " +
+          (error.response?.data?.message || error.message)
+      );
       setFormData({
         heading: "",
         subTitle: "",
@@ -104,8 +106,8 @@ const VehicleRental = () => {
         }
       );
       toast.success("Vehicle rental section updated successfully!");
+      fetchData(); // Refresh data after update
     } catch (error) {
-      console.error("Error updating vehicle rental section:", error);
       toast.error(
         "Failed to update section: " +
           (error.response?.data?.message || error.message)
