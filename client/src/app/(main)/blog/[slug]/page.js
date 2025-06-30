@@ -1,42 +1,36 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import BlogCard from "@/components/common/BlogCard";
-import axios from "axios";
 import { baseURL } from "@/config/config";
 
-export default function Page() {
-  const params = useParams();
-  const slug = params.slug;
-  const [blogData, setBlogData] = useState(null);
-  const [loading, setLoading] = useState(true);
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const res = await fetch(`${baseURL}/blog/by-name?name=${slug}`);
+  const data = await res.json();
 
-  useEffect(() => {
-    async function fetchBlog() {
-      try {
-        console.log("Base URL:", baseURL);
-        console.log("Fetching blog with slug:", slug);
-        console.log("Encoded slug:", encodeURIComponent(slug));
-        const res = await axios.get(`${baseURL}/blog/by-name?name=${encodeURIComponent(slug)}`);
-        console.log("API Response:", res.data);
-        setBlogData(res.data.data);
-      } catch (error) {
-        console.error("Error fetching blog:", error);
-        setBlogData(null);
-      } finally {
-        setLoading(false);
-      }
-    }
-    if (slug) fetchBlog();
-  }, [slug]);
+  return {
+    title: data?.data?.mainTitle || "Blog Post",
+  };
+}
 
-  if (loading) {
-    return (
-      <section className="flex flex-col max-w-[1700px] mx-auto min-h-screen">
-        <div className="text-center py-10 text-xl">Loading...</div>
-      </section>
-    );
+export async function generateStaticParams() {
+  try {
+    const res = await fetch(`${baseURL}/blog/all`);
+    const data = await res.json();
+
+    return (data.data || []).map((blog) => ({
+      slug: blog.slug || blog.name,
+    }));
+  } catch (e) {
+    return [];
   }
+}
+
+export default async function BlogPage({ params }) {
+  const { slug } = await params;
+  const res = await fetch(`${baseURL}/blog/by-name?name=${slug}`, {
+    cache: "no-store",
+  });
+  const data = await res.json();
+  const blogData = data?.data;
 
   if (!blogData) {
     return (
@@ -72,7 +66,7 @@ export default function Page() {
               )}
               {section.imageUrl && (
                 <img
-                  src={section.imageUrl}
+                  src={section.imageUrl || "/placeholder.svg"}
                   className="py-5 rounded-lg w-full"
                   alt={section.title || "Blog Section"}
                 />

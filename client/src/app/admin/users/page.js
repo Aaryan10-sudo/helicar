@@ -173,7 +173,7 @@ const UsersPanel = () => {
               <td className="p-3 text-black ">Active</td>
               <td className="mx-[20px]">
                 <button
-                  className="mx-[20px] cursor-pointer"
+                  className="mx-[20px] cursor-pointer text-red-700"
                   onClick={() => handleDelete(u.id)}
                 >
                   <DeleteIcon />
