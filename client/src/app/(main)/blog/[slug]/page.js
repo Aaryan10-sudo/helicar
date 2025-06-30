@@ -3,81 +3,96 @@ import { baseURL } from "@/config/config";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  const decodedSlug = decodeURIComponent(slug);
+export async function generateStaticParams() {
+  console.log("=== GENERATING STATIC PARAMS ===");
+  console.log("BaseURL:", baseURL);
 
   try {
-    console.log(
-      `Fetching metadata for: ${baseURL}/blog/by-name?name=${decodedSlug}`
-    );
-    const res = await fetch(`${baseURL}/blog/by-name?name=${decodedSlug}`);
+    const fullUrl = `${baseURL}/blog/all`;
+    console.log("Fetching from:", fullUrl);
+
+    const res = await fetch(fullUrl, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("Response status:", res.status);
+    console.log("Response headers:", Object.fromEntries(res.headers.entries()));
 
     if (!res.ok) {
-      console.error(`Metadata fetch failed: ${res.status} ${res.statusText}`);
-      return {
-        title: "Blog Post",
-        description: "Read our latest blog post",
-      };
+      console.error(`API call failed: ${res.status} ${res.statusText}`);
+      // Return empty array to let Next.js handle dynamic routing
+      return [];
+    }
+
+    // Check if response is JSON
+    const contentType = res.headers.get("content-type");
+    console.log("Content-Type:", contentType);
+
+    if (!contentType || !contentType.includes("application/json")) {
+      console.error("Response is not JSON!");
+      const text = await res.text();
+      console.error("Response body (first 500 chars):", text.substring(0, 500));
+      return [];
     }
 
     const data = await res.json();
-    return {
-      title: data?.data?.mainTitle || "Blog Post",
-      description: data?.data?.description || "Read our latest blog post",
-    };
+    console.log("API Response:", data);
+
+    if (!data || !data.data || !Array.isArray(data.data)) {
+      console.error("Invalid data structure:", data);
+      return [];
+    }
+
+    const params = data.data.map((blog) => {
+      const slug = blog.slug || blog.name;
+      console.log(
+        "Processing blog:",
+        blog.name || blog.title,
+        "-> slug:",
+        slug
+      );
+      return {
+        slug: encodeURIComponent(slug),
+      };
+    });
+
+    console.log("Generated params:", params);
+    return params;
   } catch (error) {
-    console.error("Error in generateMetadata:", error);
-    return {
-      title: "Blog Post",
-      description: "Read our latest blog post",
-    };
+    console.error("=== ERROR IN GENERATE STATIC PARAMS ===");
+    console.error("Error:", error.message);
+    console.error("Stack:", error.stack);
+    console.error("BaseURL:", baseURL);
+
+    // Return empty array to fallback to dynamic routing
+    return [];
   }
 }
-
-// Comment out generateStaticParams for now
-// export async function generateStaticParams() {
-//   try {
-//     console.log(`Fetching all blogs from: ${baseURL}/blog/all`)
-//     const res = await fetch(`${baseURL}/blog/all`)
-
-//     // Check if the response is ok
-//     if (!res.ok) {
-//       console.error(`Static params fetch failed: ${res.status} ${res.statusText}`)
-//       return []
-//     }
-
-//     // Check content type
-//     const contentType = res.headers.get("content-type")
-//     if (!contentType || !contentType.includes("application/json")) {
-//       console.error(`Expected JSON but got: ${contentType}`)
-//       const text = await res.text()
-//       console.error("Response body:", text.substring(0, 200) + "...")
-//       return []
-//     }
-
-//     const data = await res.json()
-//     console.log(`Found ${data?.data?.length || 0} blogs`)
-
-//     return (data.data || []).map((blog) => ({
-//       slug: encodeURIComponent(blog.slug || blog.name),
-//     }))
-//   } catch (error) {
-//     console.error("Error generating static params:", error)
-//     console.error("BaseURL:", baseURL)
-//     return []
-//   }
-// }
 
 export default async function BlogPage({ params }) {
   const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);
 
+  console.log("=== BLOG PAGE RENDER ===");
+  console.log("Original slug:", slug);
+  console.log("Decoded slug:", decodedSlug);
+
   try {
-    console.log(`Fetching blog: ${baseURL}/blog/by-name?name=${decodedSlug}`);
-    const res = await fetch(`${baseURL}/blog/by-name?name=${decodedSlug}`, {
+    const fullUrl = `${baseURL}/blog/by-name?name=${decodedSlug}`;
+    console.log("Fetching blog from:", fullUrl);
+
+    const res = await fetch(fullUrl, {
       cache: "no-store",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
     });
+
+    console.log("Blog fetch status:", res.status);
 
     if (!res.ok) {
       console.error(`Blog fetch failed: ${res.status} ${res.statusText}`);
@@ -85,9 +100,12 @@ export default async function BlogPage({ params }) {
     }
 
     const data = await res.json();
+    console.log("Blog data received:", !!data?.data);
+
     const blogData = data?.data;
 
     if (!blogData) {
+      console.error("No blog data found");
       return (
         <section className="flex flex-col max-w-[1700px] mx-auto min-h-screen">
           <div className="text-center py-10 text-xl text-red-500">
@@ -96,6 +114,8 @@ export default async function BlogPage({ params }) {
         </section>
       );
     }
+
+    console.log("Rendering blog:", blogData.mainTitle);
 
     return (
       <section className="flex flex-col max-w-[1700px] mx-auto min-h-screen px-2 sm:px-4">
@@ -142,7 +162,11 @@ export default async function BlogPage({ params }) {
       </section>
     );
   } catch (error) {
-    console.error("Error fetching blog data:", error);
+    console.error("=== ERROR FETCHING BLOG ===");
+    console.error("Error:", error.message);
+    console.error("Slug:", decodedSlug);
+    console.error("BaseURL:", baseURL);
+
     return (
       <section className="flex flex-col max-w-[1700px] mx-auto min-h-screen">
         <div className="text-center py-10 text-xl text-red-500">
