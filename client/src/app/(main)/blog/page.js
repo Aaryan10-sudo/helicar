@@ -9,7 +9,6 @@ const bloglanding = {
   description:
     "Welcome to our blog  and here you can explore all the recent activities of the week or the monthWelcome to our blog  and here you can explore all the recent activities of the week or the month",
 };
-const categories = [{ title: "Recent", link: "" }];
 
 const page = () => {
   return (
