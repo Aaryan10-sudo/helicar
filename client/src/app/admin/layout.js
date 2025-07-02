@@ -1,20 +1,9 @@
-import { Geist, Geist_Mono, Comfortaa, Lexend } from "next/font/google";
+import { Comfortaa, Lexend } from "next/font/google";
 import "../globals.css";
 import AdminSidebar from "@/components/layout/AdminSidebar";
 import AdminNavbar from "@/components/layout/AdminNavbar";
-import Navbar from "@/components/layout/navbar";
 import ProtectedAdmin from "./ProtectedAdmin";
 import { ToastContainer } from "react-toastify";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata = {
   title: "Admin",
@@ -36,16 +25,20 @@ const lexend = Lexend({
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning suppressContentEditableWarning>
-      <body className={`${comfortaa.variable} ${lexend.variable} font-Lexend`} suppressHydrationWarning suppressContentEditableWarning>
+      <body
+        className={`${comfortaa.variable} ${lexend.variable} font-Lexend`}
+        suppressHydrationWarning
+        suppressContentEditableWarning
+      >
         <ProtectedAdmin>
           <section className="flex w-full h-screen overflow-hidden">
             <AdminSidebar />
             <div className="flex flex-col flex-1 h-screen overflow-hidden">
               <AdminNavbar />
               <div className="flex-1 overflow-y-auto px-4 py-2">
-                    <ToastContainer />
-                    {children}</div>
-
+                <ToastContainer />
+                {children}
+              </div>
             </div>
           </section>
         </ProtectedAdmin>
