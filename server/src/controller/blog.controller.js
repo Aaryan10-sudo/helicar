@@ -1,24 +1,28 @@
 const {
   createBlog,
   getAllBlogs,
-  getBlogByName,
+  getBlogBySlug: getBlogBySlugService,
   updateBlogByName,
   deleteBlogByName,
 } = require("../services/blog.service");
 const { blogSchema } = require("../validator/blog.validator");
 
 exports.createBlog = async (req, res, next) => {
-  const data = req.body;
-  try {
-    const { error } = blogSchema.validate(data);
-    if (error) {
-      return res.status(400).json({
-        success: false,
-        message: error.details[0].message,
-      });
-    }
+  let data = req.body;
+  data = {
+    slug: data.mainTitle
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/[\s_]+/g, "-")
+      .replace(/--+/g, "-"),
 
+    ...data,
+  };
+  console.log(data);
+  try {
     const blog = await createBlog(data);
+    console.log(data);
 
     res.status(201).json({
       success: true,
@@ -42,10 +46,11 @@ exports.getBlogs = async (req, res, next) => {
   }
 };
 
-exports.getBlogByName = async (req, res, next) => {
-  const { name: mainTitle } = req.query;
+exports.getBlogBySlug = async (req, res, next) => {
+  const { slug } = req.query;
+  console.log(slug);
   try {
-    const blog = await getBlogByName(mainTitle);
+    const blog = await getBlogBySlugService(slug);
     if (!blog) {
       return res.status(404).json({
         success: false,
@@ -58,6 +63,7 @@ exports.getBlogByName = async (req, res, next) => {
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+    console.log(error);
   }
 };
 

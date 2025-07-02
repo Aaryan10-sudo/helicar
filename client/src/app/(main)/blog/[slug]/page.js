@@ -39,21 +39,9 @@ export async function generateStaticParams() {
 
 export default async function BlogPage({ params }) {
   const { slug } = await params;
-  const decodedSlug = decodeURIComponent(slug);
-
-  // Add extensive debugging
-  console.log("=== BLOG PAGE DEBUG ===");
-  console.log("🔍 Environment:", process.env.NODE_ENV);
-  console.log("🔍 BaseURL:", baseURL);
-  console.log("🔍 Raw slug:", slug);
-  console.log("🔍 Decoded slug:", decodedSlug);
-  console.log(
-    "🔍 Full API URL:",
-    `${baseURL}/blog/by-name?name=${decodedSlug}`
-  );
 
   try {
-    const res = await fetch(`${baseURL}/blog/by-name?name=${decodedSlug}`, {
+    const res = await fetch(`${baseURL}/blog/by-slug?slug=${slug}`, {
       cache: "no-store",
       headers: {
         Accept: "application/json",
@@ -139,7 +127,7 @@ export default async function BlogPage({ params }) {
           alt={blogData.mainTitle || "Blog cover"}
         />
         <div className="flex flex-col lg:flex-row justify-center items-start gap-8 lg:gap-[50px] mb-5 w-full">
-          <div className="w-full lg:w-[750px]">
+          <div className="w-full lg:w-[850px]">
             <h1 className="text-primary font-Comfortaa text-2xl sm:text-3xl font-medium">
               {blogData.mainTitle}
             </h1>

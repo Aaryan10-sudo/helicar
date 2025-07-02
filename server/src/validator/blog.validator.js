@@ -8,6 +8,7 @@ const contentItemSchema = Joi.object({
 
 const blogSchema = Joi.object({
   mainTitle: Joi.string().required(),
+  slug: Joi.string().required(),
   coverImage: Joi.string().required(),
   date: Joi.date().iso().required(),
   content: Joi.array().items(contentItemSchema).min(1).required(),

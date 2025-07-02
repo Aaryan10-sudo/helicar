@@ -8,8 +8,8 @@ const getAllBlogs = async () => {
   return await Blog.findAll({ order: [["createdAt", "DESC"]] });
 };
 
-const getBlogByName = async (mainTitle) => {
-  return await Blog.findOne({ where: { mainTitle } });
+const getBlogBySlug = async (slug) => {
+  return await Blog.findOne({ where: { slug } });
 };
 
 const updateBlogByName = async (mainTitle, data) => {
@@ -29,7 +29,7 @@ const deleteBlogByName = async (mainTitle) => {
 module.exports = {
   createBlog,
   getAllBlogs,
-  getBlogByName,
+  getBlogBySlug,
   updateBlogByName,
   deleteBlogByName,
 };

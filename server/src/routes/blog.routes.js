@@ -13,7 +13,7 @@ blogRouter.post(
 
 blogRouter.get("/", blogController.getBlogs);
 
-blogRouter.get("/by-name", blogController.getBlogByName);
+blogRouter.get("/by-slug", blogController.getBlogBySlug);
 
 blogRouter.put(
   "/by-name",

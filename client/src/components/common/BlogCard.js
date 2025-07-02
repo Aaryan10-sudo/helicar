@@ -46,7 +46,7 @@ const BlogCard = () => {
             {value.content?.[0]?.description || ""}
           </p>
           <Link
-            href={`/blog/${value.mainTitle}`}
+            href={`/blog/${value.slug}`}
             className="p-5 float-right text-xl font-medium flex items-center gap-2 cursor-pointer font-Comfortaa"
           >
             Read more
